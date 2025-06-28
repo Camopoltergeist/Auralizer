@@ -41,8 +41,23 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 }
 
 SDL_AppResult SDL_AppEvent(void* app_state, SDL_Event* event) {
-	if (event->type == SDL_EVENT_QUIT) {
-		return SDL_APP_SUCCESS;
+	switch (event->type)
+	{
+		case SDL_EVENT_QUIT: {
+			return SDL_APP_SUCCESS;
+		}
+
+		case SDL_EVENT_WINDOW_RESIZED: {
+			Sint32 w = event->window.data1;
+			Sint32 h = event->window.data2;
+
+			glViewport(0, 0, w, h);
+
+			return SDL_APP_CONTINUE;
+		}
+
+		default:
+			break;
 	}
 
 	return SDL_APP_CONTINUE;
