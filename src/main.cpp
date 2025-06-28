@@ -17,7 +17,9 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 		return SDL_APP_FAILURE;
 	}
 
-	SDL_Window* main_window = SDL_CreateWindow("Hello Window!", 1280, 720, 0);
+	SDL_WindowFlags window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
+
+	SDL_Window* main_window = SDL_CreateWindow("Hello Window!", 1280, 720, window_flags);
 
 	if (main_window == nullptr) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create window: %s", SDL_GetError());
