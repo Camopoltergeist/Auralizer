@@ -3,6 +3,10 @@
 
 #include "AppState.hpp"
 
+void debug_message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+	SDL_Log("GL Message: %s", message);
+}
+
 bool init_video_subsystem() {
 	if (!SDL_InitSubSystem(SDL_INIT_VIDEO)) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL Video subsystem: %s", SDL_GetError());
@@ -38,7 +42,7 @@ bool init_opengl(AppState* app_state) {
 
 	if (gl_context == nullptr) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create OpenGL context: %s", SDL_GetError());
-		return SDL_APP_FAILURE;
+		return false;
 	}
 
 	app_state->gl_context = gl_context;
@@ -47,7 +51,7 @@ bool init_opengl(AppState* app_state) {
 
 	if (version == 0) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load OpenGL functions");
-		return SDL_APP_FAILURE;
+		return false;
 	}
 
 	int opengl_major_version = 0;
@@ -63,4 +67,8 @@ bool init_opengl(AppState* app_state) {
 	if ((context_flags & SDL_GL_CONTEXT_DEBUG_FLAG) != 0) {
 		SDL_Log("Debug Context");
 	}
+
+	glDebugMessageCallback(debug_message_callback, nullptr);
+
+	return true;
 }
