@@ -70,5 +70,61 @@ bool init_opengl(AppState* app_state) {
 
 	glDebugMessageCallback(debug_message_callback, nullptr);
 
+	GLuint vertex_array_object = 0;
+
+	glCreateVertexArrays(1, &vertex_array_object);
+
+	if (vertex_array_object == 0) {
+		SDL_Log("Failed to create vertex array object");
+		return false;
+	}
+
+	glVertexArrayAttribFormat(vertex_array_object, 0, 2, GL_FLOAT, GL_FALSE, 0);
+	glVertexArrayAttribFormat(vertex_array_object, 1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2);
+
+	app_state->vertex_array_object = vertex_array_object;
+
+	GLuint vertex_buffer = 0;
+
+	glCreateBuffers(1, &vertex_buffer);
+
+	if (vertex_buffer == 0) {
+		SDL_Log("Failed to create vertex buffer");
+		return false;
+	}
+
+	GLfloat vertices[] = {
+		-1.f, -1.f, 0.f, 0.f,
+		1.f, -1.f, 1.f, 0.f,
+		1.f, 1.f, 1.f, 1.f,
+		-1.f, 1.f, 0.f, 1.f
+	};
+
+	glNamedBufferStorage(vertex_buffer, sizeof(vertices), vertices, 0);
+
+	glVertexArrayVertexBuffer(vertex_array_object, 0, vertex_buffer, 0, sizeof(GLfloat) * 4);
+	glVertexArrayAttribBinding(vertex_array_object, 0, 0);
+	glVertexArrayAttribBinding(vertex_array_object, 1, 0);
+
+	GLuint index_buffer = 0;
+
+	glCreateBuffers(1, &index_buffer);
+
+	if (index_buffer == 0) {
+		SDL_Log("Failed to create index buffer");
+		return false;
+	}
+
+	GLuint indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	glNamedBufferStorage(index_buffer, sizeof(indices), indices, 0);
+
+	glVertexArrayElementBuffer(vertex_array_object, index_buffer);
+
+	app_state->vertex_buffer = vertex_buffer;
+
 	return true;
 }
