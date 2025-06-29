@@ -70,6 +70,8 @@ bool init_opengl(AppState* app_state) {
 	}
 
 	glDebugMessageCallback(debug_message_callback, nullptr);
+	
+	SDL_GL_SetSwapInterval(1);
 
 	GLuint vertex_array_object = 0;
 
@@ -152,8 +154,6 @@ bool init_opengl(AppState* app_state) {
 	glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, fragment_shader);
 
 	app_state->pipeline = pipeline;
-
-	glBindProgramPipeline(pipeline);
 
 	return true;
 }

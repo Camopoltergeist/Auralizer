@@ -36,6 +36,7 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glBindVertexArray(state->vertex_array_object);
+	glBindProgramPipeline(state->pipeline);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 	SDL_GL_SwapWindow(state->main_window);

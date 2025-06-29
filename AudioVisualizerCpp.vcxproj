@@ -50,7 +50,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -68,7 +68,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -83,10 +83,31 @@
     <ClCompile Include="src\load_shader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="third_party\glad\glad.c" />
+    <ClCompile Include="third_party\imgui-1.92.0\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="third_party\imgui-1.92.0\backends\imgui_impl_sdl3.cpp" />
+    <ClCompile Include="third_party\imgui-1.92.0\imgui.cpp" />
+    <ClCompile Include="third_party\imgui-1.92.0\imgui_demo.cpp" />
+    <ClCompile Include="third_party\imgui-1.92.0\imgui_draw.cpp" />
+    <ClCompile Include="third_party\imgui-1.92.0\imgui_tables.cpp" />
+    <ClCompile Include="third_party\imgui-1.92.0\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\init.hpp" />
     <ClInclude Include="src\load_shader.hpp" />
+    <ClInclude Include="third_party\imgui-1.92.0\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="third_party\imgui-1.92.0\backends\imgui_impl_sdl3.h" />
+    <ClInclude Include="third_party\imgui-1.92.0\imconfig.h" />
+    <ClInclude Include="third_party\imgui-1.92.0\imgui.h" />
+    <ClInclude Include="third_party\imgui-1.92.0\imgui_internal.h" />
+    <ClInclude Include="third_party\imgui-1.92.0\imstb_rectpack.h" />
+    <ClInclude Include="third_party\imgui-1.92.0\imstb_textedit.h" />
+    <ClInclude Include="third_party\imgui-1.92.0\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="third_party\imgui-1.92.0\misc\debuggers\imgui.natstepfilter" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="third_party\imgui-1.92.0\misc\debuggers\imgui.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
