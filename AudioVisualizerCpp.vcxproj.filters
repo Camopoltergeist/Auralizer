@@ -27,9 +27,15 @@
     <ClCompile Include="src\AppState.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\load_shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\init.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\load_shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
