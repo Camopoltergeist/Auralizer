@@ -6,6 +6,10 @@
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL_main.h>
 
+#include <imgui.h>
+#include <backends/imgui_impl_sdl3.h>
+#include <backends/imgui_impl_opengl3.h>
+
 #include "AppState.hpp"
 #include "init.hpp"
 
@@ -26,8 +30,12 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 		return SDL_APP_FAILURE;
 	}
 
+	init_imgui(new_state);
+
 	return SDL_APP_CONTINUE;
 }
+
+int count = 0;
 
 SDL_AppResult SDL_AppIterate(void* app_state) {
 	AppState* state = static_cast<AppState*>(app_state);
@@ -39,12 +47,33 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	glBindProgramPipeline(state->pipeline);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL3_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::Begin("Hello ImGui!");
+
+	ImGui::Text("Cool Beans");
+
+	if (ImGui::Button("Add")) {
+		count++;
+	}
+
+	ImGui::Text("%i", count);
+	ImGui::End();
+
+	ImGui::Render();
+
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 	SDL_GL_SwapWindow(state->main_window);
 
 	return SDL_APP_CONTINUE;
 }
 
 SDL_AppResult SDL_AppEvent(void* app_state, SDL_Event* event) {
+	ImGui_ImplSDL3_ProcessEvent(event);
+
 	switch (event->type)
 	{
 		case SDL_EVENT_QUIT: {
@@ -68,5 +97,9 @@ SDL_AppResult SDL_AppEvent(void* app_state, SDL_Event* event) {
 }
 
 void SDL_AppQuit(void* app_state, SDL_AppResult result) {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL3_Shutdown();
+	ImGui::DestroyContext();
+
 	delete app_state;
 }

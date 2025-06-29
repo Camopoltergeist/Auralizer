@@ -1,6 +1,10 @@
 #include <glad.h>
 #include <SDL3/SDL.h>
 
+#include <imgui.h>
+#include <backends/imgui_impl_sdl3.h>
+#include <backends/imgui_impl_opengl3.h>
+
 #include "AppState.hpp"
 #include "load_shader.hpp"
 
@@ -156,4 +160,19 @@ bool init_opengl(AppState* app_state) {
 	app_state->pipeline = pipeline;
 
 	return true;
+}
+
+void init_imgui(AppState* app_state) {
+	IMGUI_CHECKVERSION();
+
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+
+	float main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	style.ScaleAllSizes(main_scale);
+
+	ImGui_ImplSDL3_InitForOpenGL(app_state->main_window, app_state->gl_context);
+	ImGui_ImplOpenGL3_Init("#version 460 core");
 }
