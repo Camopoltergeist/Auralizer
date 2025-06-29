@@ -181,3 +181,59 @@ void init_imgui(AppState* app_state) {
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontFromFileTTF("./fonts/NotoSans/NotoSans.ttf");
 }
+
+bool init_audio_subsystem() {
+	if (!SDL_InitSubSystem(SDL_INIT_AUDIO)) {
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL Audio subsystem: %s", SDL_GetError());
+		return false;
+	}
+
+	return true;
+}
+
+bool init_audio_device(AppState* app_state) {
+	SDL_AudioDeviceID audio_device = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+
+	if (audio_device == 0) {
+		SDL_Log("Failed to open audio device: %s", SDL_GetError());
+		return false;
+	}
+
+	SDL_AudioSpec device_spec;
+	SDL_zero(device_spec);
+
+	if (!SDL_GetAudioDeviceFormat(audio_device, &device_spec, nullptr)) {
+		SDL_Log("Failed to get audio device format: %s", SDL_GetError());
+		return false;
+	}
+
+	app_state->audio_device = audio_device;
+
+	SDL_AudioSpec file_spec;
+	SDL_zero(file_spec);
+
+	Uint8* audio_data = nullptr;
+	Uint32 audio_length = 0;
+
+	if (!SDL_LoadWAV("./test.wav", &file_spec, &audio_data, &audio_length)) {
+		SDL_Log("Failed to load test.wav: %s", SDL_GetError());
+		return false;
+	}
+
+	app_state->audio_data = audio_data;
+	app_state->audio_data_length = audio_length;
+
+	SDL_AudioStream* stream = SDL_CreateAudioStream(&file_spec, &device_spec);
+	
+	if (stream == nullptr) {
+		SDL_Log("Failed to create audio stream: %s", SDL_GetError());
+		return false;
+	}
+
+	app_state->audio_stream = stream;
+
+	SDL_BindAudioStream(audio_device, stream);
+	SDL_PutAudioStreamData(stream, audio_data, audio_length);
+
+	return true;
+}
