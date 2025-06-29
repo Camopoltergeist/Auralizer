@@ -172,7 +172,11 @@ void init_imgui(AppState* app_state) {
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.ScaleAllSizes(main_scale);
+	style.FontScaleDpi = main_scale;
 
 	ImGui_ImplSDL3_InitForOpenGL(app_state->main_window, app_state->gl_context);
 	ImGui_ImplOpenGL3_Init("#version 460 core");
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.Fonts->AddFontFromFileTTF("./fonts/NotoSans/NotoSans.ttf");
 }
