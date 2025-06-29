@@ -2,6 +2,7 @@
 #include <SDL3/SDL.h>
 
 #include "AppState.hpp"
+#include "load_shader.hpp"
 
 void debug_message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
 	SDL_Log("GL Message: %s", message);
@@ -79,6 +80,9 @@ bool init_opengl(AppState* app_state) {
 		return false;
 	}
 
+	glEnableVertexArrayAttrib(vertex_array_object, 0);
+	glEnableVertexArrayAttrib(vertex_array_object, 1);
+
 	glVertexArrayAttribFormat(vertex_array_object, 0, 2, GL_FLOAT, GL_FALSE, 0);
 	glVertexArrayAttribFormat(vertex_array_object, 1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2);
 
@@ -125,6 +129,31 @@ bool init_opengl(AppState* app_state) {
 	glVertexArrayElementBuffer(vertex_array_object, index_buffer);
 
 	app_state->vertex_buffer = vertex_buffer;
+
+	GLuint vertex_shader = load_shader("./shaders/vertex.glsl", GL_VERTEX_SHADER);
+	
+	if (vertex_shader == 0) {
+		return false;
+	}
+
+	GLuint fragment_shader = load_shader("./shaders/fragment.glsl", GL_FRAGMENT_SHADER);
+
+	if (fragment_shader == 0) {
+		return false;
+	}
+
+	app_state->vertex_shader = vertex_shader;
+	app_state->fragment_shader = fragment_shader;
+
+	GLuint pipeline = 0;
+	glCreateProgramPipelines(1, &pipeline);
+
+	glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, vertex_shader);
+	glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, fragment_shader);
+
+	app_state->pipeline = pipeline;
+
+	glBindProgramPipeline(pipeline);
 
 	return true;
 }

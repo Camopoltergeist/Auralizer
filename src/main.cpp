@@ -32,7 +32,7 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 SDL_AppResult SDL_AppIterate(void* app_state) {
 	AppState* state = static_cast<AppState*>(app_state);
 
-	glClearColor(1.0, 0.0, 0.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glBindVertexArray(state->vertex_array_object);

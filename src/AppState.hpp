@@ -9,6 +9,9 @@ struct AppState {
 	GLuint vertex_buffer;
 	GLuint index_buffer;
 	GLuint vertex_array_object;
+	GLuint vertex_shader;
+	GLuint fragment_shader;
+	GLuint pipeline;
 
 	AppState() {
 		main_window = nullptr;
@@ -16,6 +19,9 @@ struct AppState {
 		vertex_buffer = 0;
 		index_buffer = 0;
 		vertex_array_object = 0;
+		vertex_shader = 0;
+		fragment_shader = 0;
+		pipeline = 0;
 	}
 
 	~AppState() {
@@ -31,5 +37,16 @@ struct AppState {
 			glDeleteBuffers(1, &index_buffer);
 		}
 
+		if (pipeline != 0) {
+			glDeleteProgramPipelines(1, &pipeline);
+		}
+		
+		if (vertex_shader != 0) {
+			glDeleteProgram(vertex_shader);
+		}
+
+		if (fragment_shader != 0) {
+			glDeleteProgram(fragment_shader);
+		}
 	}
 };
