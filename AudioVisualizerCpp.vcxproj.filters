@@ -83,6 +83,9 @@
     <ClInclude Include="third_party\imgui-1.92.0\backends\imgui_impl_opengl3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="third_party\imgui-1.92.0\misc\debuggers\imgui.natstepfilter" />
