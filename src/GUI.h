@@ -3,19 +3,28 @@
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_opengl3.h>
 
+#include <codecvt>
+
 #include "miniaudio.h"
 
 #include "AppState.hpp"
 
-void load_audio_file(AppState* app_state) {
+void load_audio_file(AppState* app_state, const std::string& file_path) {
 	ma_sound* sound = new ma_sound();
 
 	ma_result result;
 
-	result = ma_sound_init_from_file(app_state->audio_engine, app_state->audio_file_path.c_str(), 0, nullptr, nullptr, sound);
+	// Very deprecated, but no better option exists in C++ at the moment.
+	// Needed as SDL3's file dialog returns UTF8 string, but miniaudio expects either ASCII or UTF-16 on Windows.
+	// Just fucking shoot me.
+	// No idea how cross platform this piece of code is.
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	std::wstring wide_path = converter.from_bytes(file_path);
+
+	result = ma_sound_init_from_file_w(app_state->audio_engine, wide_path.c_str(), 0, nullptr, nullptr, sound);
 
 	if (result != MA_SUCCESS) {
-		SDL_Log("Failed to load %s", app_state->audio_file_path.c_str());
+		SDL_Log("Failed to load %s", file_path.c_str());
 		return;
 	}
 
@@ -25,6 +34,10 @@ void load_audio_file(AppState* app_state) {
 	}
 
 	app_state->sound = sound;
+	app_state->audio_file_path = file_path;
+	app_state->is_audio_file_selected = true;
+
+	ma_sound_set_looping(sound, true);
 	ma_sound_start(sound);
 }
 
@@ -35,10 +48,7 @@ void file_dialog_callback(void* userdata, const char* const* file_list, int filt
 		return;
 	}
 
-	state->audio_file_path = *file_list;
-	state->is_audio_file_selected = true;
-
-	load_audio_file(state);
+	load_audio_file(state, *file_list);
 }
 
 void draw_gui(AppState* app_state) {
@@ -58,7 +68,7 @@ void draw_gui(AppState* app_state) {
 	ImGui::SameLine();
 
 	const SDL_DialogFileFilter file_filters[] = {
-		{ "Wave files (*.wav)", "wav" }
+		{ "Audio files (*.wav, *.flac, *.mp3)", "wav;flac;mp3" }
 	};
 
 	if (ImGui::Button("Select")) {
