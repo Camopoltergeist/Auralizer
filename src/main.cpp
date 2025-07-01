@@ -12,7 +12,7 @@
 
 #include "AppState.hpp"
 #include "init.hpp"
-#include "GUI.h"
+#include "GUI.hpp"
 
 
 SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {

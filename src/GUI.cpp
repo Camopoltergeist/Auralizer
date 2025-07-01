@@ -1,9 +1,11 @@
-#pragma once
 #include <imgui.h>
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_opengl3.h>
 
 #include <codecvt>
+#include <cmath>
+#include <sstream>
+#include <iomanip>
 
 #include "miniaudio.h"
 
@@ -51,6 +53,23 @@ void file_dialog_callback(void* userdata, const char* const* file_list, int filt
 	load_audio_file(state, *file_list);
 }
 
+void generate_time_text(std::stringstream& time_stream, float cursor_pos, float sound_length) {
+	int total_minutes = std::floor(sound_length / 60.f);
+	float total_seconds = std::fmod(sound_length, 60.f);
+
+	int current_minutes = std::floor(cursor_pos / 60.f);
+	float current_seconds = std::fmod(cursor_pos, 60.f);
+
+	time_stream << std::setprecision(2) << std::fixed
+		<< std::setfill('0') << std::setw(2) << current_minutes
+		<< ':'
+		<< std::setfill('0') << std::setw(5) << current_seconds
+		<< " - "
+		<< std::setfill('0') << std::setw(2) << total_minutes
+		<< ':'
+		<< std::setfill('0') << std::setw(5) << total_seconds;
+}
+
 void draw_gui(AppState* app_state) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
@@ -81,6 +100,20 @@ void draw_gui(AppState* app_state) {
 	if (volume != app_state->audio_volume) {
 		ma_engine_set_volume(app_state->audio_engine, volume);
 		app_state->audio_volume = volume;
+	}
+
+	float sound_length = 0.f;
+	float cursor = 0.f;
+
+	if (app_state->sound != nullptr) {
+		ma_sound_get_length_in_seconds(app_state->sound, &sound_length);
+		ma_sound_get_cursor_in_seconds(app_state->sound, &cursor);
+
+		std::stringstream time_stream;
+
+		generate_time_text(time_stream, cursor, sound_length);
+
+		ImGui::SliderFloat("##time_slider", &cursor, 0.f, sound_length, time_stream.str().c_str());
 	}
 
 	ImGui::End();

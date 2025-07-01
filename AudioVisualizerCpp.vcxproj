@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AppState.hpp" />
+    <ClCompile Include="src\GUI.cpp" />
     <ClCompile Include="src\init.cpp" />
     <ClCompile Include="src\load_shader.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -93,7 +94,7 @@
     <ClCompile Include="third_party\miniaudio\miniaudio.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\GUI.h" />
+    <ClInclude Include="src\GUI.hpp" />
     <ClInclude Include="src\init.hpp" />
     <ClInclude Include="src\load_shader.hpp" />
     <ClInclude Include="third_party\imgui-1.92.0\backends\imgui_impl_opengl3.h" />

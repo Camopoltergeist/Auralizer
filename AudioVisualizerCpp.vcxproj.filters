@@ -54,6 +54,9 @@
     <ClCompile Include="third_party\miniaudio\miniaudio.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\init.hpp">
@@ -86,10 +89,10 @@
     <ClInclude Include="third_party\imgui-1.92.0\backends\imgui_impl_opengl3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI.h">
+    <ClInclude Include="third_party\miniaudio\miniaudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="third_party\miniaudio\miniaudio.h">
+    <ClInclude Include="src\GUI.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
