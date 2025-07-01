@@ -50,7 +50,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)third_party\miniaudio;$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -68,7 +68,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)third_party\miniaudio;$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -90,6 +90,7 @@
     <ClCompile Include="third_party\imgui-1.92.0\imgui_draw.cpp" />
     <ClCompile Include="third_party\imgui-1.92.0\imgui_tables.cpp" />
     <ClCompile Include="third_party\imgui-1.92.0\imgui_widgets.cpp" />
+    <ClCompile Include="third_party\miniaudio\miniaudio.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GUI.h" />
@@ -103,6 +104,7 @@
     <ClInclude Include="third_party\imgui-1.92.0\imstb_rectpack.h" />
     <ClInclude Include="third_party\imgui-1.92.0\imstb_textedit.h" />
     <ClInclude Include="third_party\imgui-1.92.0\imstb_truetype.h" />
+    <ClInclude Include="third_party\miniaudio\miniaudio.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="third_party\imgui-1.92.0\misc\debuggers\imgui.natstepfilter" />

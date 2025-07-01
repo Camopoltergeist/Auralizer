@@ -33,11 +33,7 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 
 	init_imgui(new_state);
 
-	if (!init_audio_subsystem()) {
-		return SDL_APP_FAILURE;
-	}
-
-	if (!init_audio_device(new_state)) {
+	if (!init_audio(new_state)) {
 		return SDL_APP_FAILURE;
 	}
 

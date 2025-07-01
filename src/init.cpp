@@ -7,6 +7,7 @@
 
 #include "AppState.hpp"
 #include "load_shader.hpp"
+#include "miniaudio.h"
 
 void debug_message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
 	SDL_Log("GL Message: %s", message);
@@ -182,33 +183,19 @@ void init_imgui(AppState* app_state) {
 	io.Fonts->AddFontFromFileTTF("./fonts/NotoSans/NotoSans.ttf");
 }
 
-bool init_audio_subsystem() {
-	if (!SDL_InitSubSystem(SDL_INIT_AUDIO)) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL Audio subsystem: %s", SDL_GetError());
+bool init_audio(AppState* app_state) {
+	ma_result result;
+	ma_engine* audio_engine = new ma_engine();
+
+	result = ma_engine_init(nullptr, audio_engine);
+
+	if (result != MA_SUCCESS) {
+		SDL_Log("Failed to initialize audio engine");
 		return false;
 	}
 
-	return true;
-}
-
-bool init_audio_device(AppState* app_state) {
-	SDL_AudioDeviceID audio_device = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
-
-	if (audio_device == 0) {
-		SDL_Log("Failed to open audio device: %s", SDL_GetError());
-		return false;
-	}
-
-	SDL_AudioSpec device_spec;
-	SDL_zero(device_spec);
-
-	if (!SDL_GetAudioDeviceFormat(audio_device, &device_spec, nullptr)) {
-		SDL_Log("Failed to get audio device format: %s", SDL_GetError());
-		return false;
-	}
-
-	app_state->audio_device = audio_device;
-	app_state->audio_device_spec = device_spec;
+	app_state->audio_engine = audio_engine;
+	ma_engine_set_volume(app_state->audio_engine, app_state->audio_volume);
 
 	return true;
 }

@@ -3,36 +3,29 @@
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_opengl3.h>
 
+#include "miniaudio.h"
+
 #include "AppState.hpp"
 
 void load_audio_file(AppState* app_state) {
-	SDL_AudioSpec file_spec;
-	SDL_zero(file_spec);
+	ma_sound* sound = new ma_sound();
 
-	Uint8* audio_data = nullptr;
-	Uint32 audio_length = 0;
+	ma_result result;
 
-	if (!SDL_LoadWAV(app_state->audio_file_path.c_str(), &file_spec, &audio_data, &audio_length)) {
-		SDL_Log("Failed to load test.wav: %s", SDL_GetError());
+	result = ma_sound_init_from_file(app_state->audio_engine, app_state->audio_file_path.c_str(), 0, nullptr, nullptr, sound);
+
+	if (result != MA_SUCCESS) {
+		SDL_Log("Failed to load %s", app_state->audio_file_path.c_str());
 		return;
 	}
 
-	SDL_AudioStream* stream = SDL_CreateAudioStream(&file_spec, &app_state->audio_device_spec);
-
-	if (stream == nullptr) {
-		SDL_Log("Failed to create audio stream: %s", SDL_GetError());
-		return;
+	if (app_state->sound != nullptr) {
+		ma_sound_stop(app_state->sound);
+		ma_sound_uninit(app_state->sound);
 	}
 
-	SDL_DestroyAudioStream(app_state->audio_stream);
-	SDL_free(app_state->audio_data);
-
-	app_state->audio_stream = stream;
-	app_state->audio_data = audio_data;
-	app_state->audio_data_length = audio_length;
-
-	SDL_BindAudioStream(app_state->audio_device, stream);
-	SDL_PutAudioStreamData(stream, audio_data, audio_length);
+	app_state->sound = sound;
+	ma_sound_start(sound);
 }
 
 void file_dialog_callback(void* userdata, const char* const* file_list, int filter) {
@@ -76,7 +69,7 @@ void draw_gui(AppState* app_state) {
 	ImGui::SliderFloat("Volume", &volume, 0.f, 1.f);
 
 	if (volume != app_state->audio_volume) {
-		SDL_SetAudioDeviceGain(app_state->audio_device, volume);
+		ma_engine_set_volume(app_state->audio_engine, volume);
 		app_state->audio_volume = volume;
 	}
 
