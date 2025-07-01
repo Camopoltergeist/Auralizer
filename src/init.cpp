@@ -179,8 +179,16 @@ void init_imgui(AppState* app_state) {
 	ImGui_ImplSDL3_InitForOpenGL(app_state->main_window, app_state->gl_context);
 	ImGui_ImplOpenGL3_Init("#version 460 core");
 
+	ImFontConfig font_config;
+	font_config.MergeMode = true;
+
 	ImGuiIO& io = ImGui::GetIO();
-	io.Fonts->AddFontFromFileTTF("./fonts/NotoSans/NotoSans.ttf");
+	io.Fonts->AddFontFromFileTTF("./fonts/Noto_Sans/NotoSans-Regular.ttf");
+	io.Fonts->AddFontFromFileTTF("./fonts/Noto_Sans_JP/NotoSansJP-Regular.ttf", 0.0, &font_config);
+	io.Fonts->AddFontFromFileTTF("./fonts/Noto_Sans_KR/NotoSansKR-Regular.ttf", 0.0, &font_config);
+	io.Fonts->AddFontFromFileTTF("./fonts/Noto_Sans_SC/NotoSansSC-Regular.ttf", 0.0, &font_config);
+	io.Fonts->AddFontFromFileTTF("./fonts/Noto_Sans_TC/NotoSansTC-Regular.ttf", 0.0, &font_config);
+	io.Fonts->Build();
 }
 
 bool init_audio(AppState* app_state) {
