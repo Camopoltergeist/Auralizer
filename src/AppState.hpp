@@ -14,6 +14,7 @@ struct AppState {
 	Uint8* audio_data;
 	Uint32 audio_data_length;
 	SDL_AudioStream* audio_stream;
+	float audio_volume;
 
 	GLuint vertex_buffer;
 	GLuint index_buffer;
@@ -42,6 +43,7 @@ struct AppState {
 		pipeline = 0;
 		is_audio_file_selected = false;
 		audio_file_path = "";
+		audio_volume = 0.5f;
 	}
 
 	~AppState() {

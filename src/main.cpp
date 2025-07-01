@@ -119,8 +119,15 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 		SDL_ShowOpenFileDialog(file_dialog_callback, app_state, state->main_window, file_filters, 1, nullptr, false);
 	}
 
-	ImGui::End();
+	float volume = state->audio_volume;
+	ImGui::SliderFloat("Volume", &volume, 0.f, 1.f);
 
+	if (volume != state->audio_volume) {
+		SDL_SetAudioDeviceGain(state->audio_device, volume);
+		state->audio_volume = volume;
+	}
+
+	ImGui::End();
 	ImGui::Render();
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
