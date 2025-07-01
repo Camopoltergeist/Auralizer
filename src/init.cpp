@@ -208,32 +208,7 @@ bool init_audio_device(AppState* app_state) {
 	}
 
 	app_state->audio_device = audio_device;
-
-	SDL_AudioSpec file_spec;
-	SDL_zero(file_spec);
-
-	Uint8* audio_data = nullptr;
-	Uint32 audio_length = 0;
-
-	if (!SDL_LoadWAV("./test.wav", &file_spec, &audio_data, &audio_length)) {
-		SDL_Log("Failed to load test.wav: %s", SDL_GetError());
-		return false;
-	}
-
-	app_state->audio_data = audio_data;
-	app_state->audio_data_length = audio_length;
-
-	SDL_AudioStream* stream = SDL_CreateAudioStream(&file_spec, &device_spec);
-	
-	if (stream == nullptr) {
-		SDL_Log("Failed to create audio stream: %s", SDL_GetError());
-		return false;
-	}
-
-	app_state->audio_stream = stream;
-
-	SDL_BindAudioStream(audio_device, stream);
-	SDL_PutAudioStreamData(stream, audio_data, audio_length);
+	app_state->audio_device_spec = device_spec;
 
 	return true;
 }

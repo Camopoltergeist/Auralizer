@@ -3,11 +3,14 @@
 #include <glad.h>
 #include <SDL3/SDL.h>
 
+#include <string>
+
 struct AppState {
 	SDL_Window* main_window;
 	SDL_GLContext gl_context;
 
 	SDL_AudioDeviceID audio_device;
+	SDL_AudioSpec audio_device_spec;
 	Uint8* audio_data;
 	Uint32 audio_data_length;
 	SDL_AudioStream* audio_stream;
@@ -19,10 +22,15 @@ struct AppState {
 	GLuint fragment_shader;
 	GLuint pipeline;
 
+	bool is_audio_file_selected;
+	std::string audio_file_path;
+
 	AppState() {
 		main_window = nullptr;
 		gl_context = nullptr;
 		audio_device = 0;
+		audio_device_spec = {};
+		SDL_zero(audio_device_spec);
 		audio_data = nullptr;
 		audio_data_length = 0;
 		audio_stream = nullptr;
@@ -32,6 +40,8 @@ struct AppState {
 		vertex_shader = 0;
 		fragment_shader = 0;
 		pipeline = 0;
+		is_audio_file_selected = false;
+		audio_file_path = "";
 	}
 
 	~AppState() {

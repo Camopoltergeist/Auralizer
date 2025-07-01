@@ -43,7 +43,48 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 	return SDL_APP_CONTINUE;
 }
 
-int count = 0;
+void load_audio_file(AppState* app_state) {
+	SDL_AudioSpec file_spec;
+	SDL_zero(file_spec);
+
+	Uint8* audio_data = nullptr;
+	Uint32 audio_length = 0;
+
+	if (!SDL_LoadWAV(app_state->audio_file_path.c_str(), &file_spec, &audio_data, &audio_length)) {
+		SDL_Log("Failed to load test.wav: %s", SDL_GetError());
+		return;
+	}
+
+	SDL_AudioStream* stream = SDL_CreateAudioStream(&file_spec, &app_state->audio_device_spec);
+
+	if (stream == nullptr) {
+		SDL_Log("Failed to create audio stream: %s", SDL_GetError());
+		return;
+	}
+
+	SDL_DestroyAudioStream(app_state->audio_stream);
+	SDL_free(app_state->audio_data);
+
+	app_state->audio_stream = stream;
+	app_state->audio_data = audio_data;
+	app_state->audio_data_length = audio_length;
+
+	SDL_BindAudioStream(app_state->audio_device, stream);
+	SDL_PutAudioStreamData(stream, audio_data, audio_length);
+}
+
+void file_dialog_callback(void* userdata, const char* const* file_list, int filter) {
+	AppState* state = static_cast<AppState*>(userdata);
+
+	if (file_list == nullptr || *file_list == nullptr) {
+		return;
+	}
+
+	state->audio_file_path = *file_list;
+	state->is_audio_file_selected = true;
+
+	load_audio_file(state);
+}
 
 SDL_AppResult SDL_AppIterate(void* app_state) {
 	AppState* state = static_cast<AppState*>(app_state);
@@ -61,13 +102,23 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 
 	ImGui::Begin("Hello ImGui!");
 
-	ImGui::Text("Cool Beans");
-
-	if (ImGui::Button("Add")) {
-		count++;
+	if (state->is_audio_file_selected) {
+		ImGui::Text(state->audio_file_path.c_str());
+	}
+	else {
+		ImGui::Text("No file selected");
 	}
 
-	ImGui::Text("%i", count);
+	ImGui::SameLine();
+
+	const SDL_DialogFileFilter file_filters[] = {
+		{ "Wave files (*.wav)", "wav" }
+	};
+
+	if (ImGui::Button("Select")) {
+		SDL_ShowOpenFileDialog(file_dialog_callback, app_state, state->main_window, file_filters, 1, nullptr, false);
+	}
+
 	ImGui::End();
 
 	ImGui::Render();
