@@ -15,6 +15,8 @@ AppState::AppState() {
 	audio_engine = nullptr;
 	sound = nullptr;
 	is_imgui_window_open = true;
+	is_playing = false;
+	audio_file_name = "";
 }
 
 AppState::~AppState() {

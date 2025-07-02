@@ -6,6 +6,7 @@
 #include <cmath>
 #include <sstream>
 #include <iomanip>
+#include <filesystem>
 
 #include "miniaudio.h"
 
@@ -35,12 +36,17 @@ void load_audio_file(AppState* app_state, const std::string& file_path) {
 		ma_sound_uninit(app_state->sound);
 	}
 
+	std::string audio_file_name = std::filesystem::path(file_path).stem().string();
+
 	app_state->sound = sound;
 	app_state->audio_file_path = file_path;
+	app_state->audio_file_name = audio_file_name;
 	app_state->is_audio_file_selected = true;
 
 	ma_sound_set_looping(sound, true);
 	ma_sound_start(sound);
+
+	app_state->is_playing = true;
 }
 
 void file_dialog_callback(void* userdata, const char* const* file_list, int filter) {
@@ -81,20 +87,53 @@ void draw_gui(AppState* app_state) {
 		ImGui::Begin("Hello ImGui!", &app_state->is_imgui_window_open);
 
 		if (app_state->is_audio_file_selected) {
-			ImGui::Text(app_state->audio_file_path.c_str());
+			ImGui::Text(app_state->audio_file_name.c_str());
 		}
 		else {
 			ImGui::Text("No file selected");
 		}
 
-		ImGui::SameLine();
-
 		const SDL_DialogFileFilter file_filters[] = {
 			{ "Audio files (*.wav, *.flac, *.mp3)", "wav;flac;mp3" }
 		};
 
-		if (ImGui::Button("Select")) {
+		if (ImGui::Button("Select Audio File")) {
 			SDL_ShowOpenFileDialog(file_dialog_callback, app_state, app_state->main_window, file_filters, 1, nullptr, false);
+		}
+
+		float sound_length = 0.00001f;
+		float cursor = 0.f;
+
+		if (app_state->sound != nullptr) {
+			ma_sound_get_length_in_seconds(app_state->sound, &sound_length);
+			ma_sound_get_cursor_in_seconds(app_state->sound, &cursor);
+		}
+
+		std::stringstream time_stream;
+
+		generate_time_text(time_stream, cursor, sound_length);
+
+		ImGui::SliderFloat("##time_slider", &cursor, 0.f, sound_length, time_stream.str().c_str());
+
+		if (app_state->sound == nullptr) {
+			ImGui::BeginDisabled();
+		}
+		
+		const char* play_button_string = app_state->is_playing ? "Pause" : "Play";
+
+		if (ImGui::Button(play_button_string)) {
+			if (app_state->is_playing) {
+				ma_sound_stop(app_state->sound);
+			}
+			else {
+				ma_sound_start(app_state->sound);
+			}
+
+			app_state->is_playing = !app_state->is_playing;
+		}
+
+		if (app_state->sound == nullptr) {
+			ImGui::EndDisabled();
 		}
 
 		float volume = app_state->audio_volume;
@@ -103,20 +142,6 @@ void draw_gui(AppState* app_state) {
 		if (volume != app_state->audio_volume) {
 			ma_engine_set_volume(app_state->audio_engine, volume);
 			app_state->audio_volume = volume;
-		}
-
-		float sound_length = 0.f;
-		float cursor = 0.f;
-
-		if (app_state->sound != nullptr) {
-			ma_sound_get_length_in_seconds(app_state->sound, &sound_length);
-			ma_sound_get_cursor_in_seconds(app_state->sound, &cursor);
-
-			std::stringstream time_stream;
-
-			generate_time_text(time_stream, cursor, sound_length);
-
-			ImGui::SliderFloat("##time_slider", &cursor, 0.f, sound_length, time_stream.str().c_str());
 		}
 
 		ImGui::End();

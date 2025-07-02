@@ -13,6 +13,7 @@ struct AppState {
 	ma_engine* audio_engine;
 	ma_sound* sound;
 	float audio_volume;
+	bool is_playing;
 
 	GLuint vertex_buffer;
 	GLuint index_buffer;
@@ -23,6 +24,7 @@ struct AppState {
 
 	bool is_audio_file_selected;
 	std::string audio_file_path;
+	std::string audio_file_name;
 
 	bool is_imgui_window_open;
 
