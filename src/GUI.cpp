@@ -75,7 +75,7 @@ void draw_gui(AppState* app_state) {
 	ImGui_ImplSDL3_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("Hello ImGui!");
+	ImGui::Begin("Hello ImGui!", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
 	if (app_state->is_audio_file_selected) {
 		ImGui::Text(app_state->audio_file_path.c_str());
