@@ -24,6 +24,8 @@ struct AppState {
 	bool is_audio_file_selected;
 	std::string audio_file_path;
 
+	bool is_imgui_window_open;
+
 	AppState() {
 		main_window = nullptr;
 		gl_context = nullptr;
@@ -38,6 +40,7 @@ struct AppState {
 		audio_volume = 0.5f;
 		audio_engine = nullptr;
 		sound = nullptr;
+		is_imgui_window_open = false;
 	}
 
 	~AppState() {

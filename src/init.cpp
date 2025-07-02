@@ -175,7 +175,8 @@ void init_imgui(AppState* app_state) {
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.ScaleAllSizes(main_scale);
 	style.FontScaleDpi = main_scale;
-	style.WindowMenuButtonPosition = ImGuiDir_None;
+	style.Colors[ImGuiCol_WindowBg] = ImVec4(0.f, 0.f, 0.f, 0.5f);
+	style.Colors[ImGuiCol_ChildBg] = ImVec4(0.f, 0.f, 0.f, 0.5f);
 
 	ImGui_ImplSDL3_InitForOpenGL(app_state->main_window, app_state->gl_context);
 	ImGui_ImplOpenGL3_Init("#version 460 core");
@@ -184,14 +185,15 @@ void init_imgui(AppState* app_state) {
 	font_config.MergeMode = true;
 
 	ImGuiIO& io = ImGui::GetIO();
+
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
 	io.Fonts->AddFontFromFileTTF("./fonts/Noto_Sans/NotoSans-Regular.ttf");
 	io.Fonts->AddFontFromFileTTF("./fonts/Noto_Sans_JP/NotoSansJP-Regular.ttf", 0.0, &font_config);
 	io.Fonts->AddFontFromFileTTF("./fonts/Noto_Sans_KR/NotoSansKR-Regular.ttf", 0.0, &font_config);
 	io.Fonts->AddFontFromFileTTF("./fonts/Noto_Sans_SC/NotoSansSC-Regular.ttf", 0.0, &font_config);
 	io.Fonts->AddFontFromFileTTF("./fonts/Noto_Sans_TC/NotoSansTC-Regular.ttf", 0.0, &font_config);
 	io.Fonts->Build();
-
-	io.IniFilename = nullptr;
 }
 
 bool init_audio(AppState* app_state) {
