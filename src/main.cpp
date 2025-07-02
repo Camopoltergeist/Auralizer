@@ -58,6 +58,8 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 }
 
 SDL_AppResult SDL_AppEvent(void* app_state, SDL_Event* event) {
+	AppState* state = static_cast<AppState*>(app_state);
+
 	ImGui_ImplSDL3_ProcessEvent(event);
 
 	switch (event->type)
@@ -71,6 +73,14 @@ SDL_AppResult SDL_AppEvent(void* app_state, SDL_Event* event) {
 			Sint32 h = event->window.data2;
 
 			glViewport(0, 0, w, h);
+
+			return SDL_APP_CONTINUE;
+		}
+		
+		case SDL_EVENT_KEY_DOWN: {
+			if (event->key.key == SDLK_F10) {
+				state->is_imgui_window_open = !state->is_imgui_window_open;
+			}
 
 			return SDL_APP_CONTINUE;
 		}

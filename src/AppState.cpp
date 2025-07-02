@@ -1,6 +1,6 @@
 #include "AppState.hpp"
 
-inline AppState::AppState() {
+AppState::AppState() {
 	main_window = nullptr;
 	gl_context = nullptr;
 	vertex_buffer = 0;
@@ -14,10 +14,10 @@ inline AppState::AppState() {
 	audio_volume = 0.5f;
 	audio_engine = nullptr;
 	sound = nullptr;
-	is_imgui_window_open = false;
+	is_imgui_window_open = true;
 }
 
-inline AppState::~AppState() {
+AppState::~AppState() {
 	if (sound != nullptr) {
 		ma_sound_uninit(sound);
 	}

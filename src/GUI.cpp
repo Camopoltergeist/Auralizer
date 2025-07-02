@@ -77,48 +77,51 @@ void draw_gui(AppState* app_state) {
 
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport()->ID, nullptr, ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_AutoHideTabBar);
 
-	ImGui::Begin("Hello ImGui!", &app_state->is_imgui_window_open);
+	if (app_state->is_imgui_window_open) {
+		ImGui::Begin("Hello ImGui!", &app_state->is_imgui_window_open);
 
-	if (app_state->is_audio_file_selected) {
-		ImGui::Text(app_state->audio_file_path.c_str());
+		if (app_state->is_audio_file_selected) {
+			ImGui::Text(app_state->audio_file_path.c_str());
+		}
+		else {
+			ImGui::Text("No file selected");
+		}
+
+		ImGui::SameLine();
+
+		const SDL_DialogFileFilter file_filters[] = {
+			{ "Audio files (*.wav, *.flac, *.mp3)", "wav;flac;mp3" }
+		};
+
+		if (ImGui::Button("Select")) {
+			SDL_ShowOpenFileDialog(file_dialog_callback, app_state, app_state->main_window, file_filters, 1, nullptr, false);
+		}
+
+		float volume = app_state->audio_volume;
+		ImGui::SliderFloat("Volume", &volume, 0.f, 1.f);
+
+		if (volume != app_state->audio_volume) {
+			ma_engine_set_volume(app_state->audio_engine, volume);
+			app_state->audio_volume = volume;
+		}
+
+		float sound_length = 0.f;
+		float cursor = 0.f;
+
+		if (app_state->sound != nullptr) {
+			ma_sound_get_length_in_seconds(app_state->sound, &sound_length);
+			ma_sound_get_cursor_in_seconds(app_state->sound, &cursor);
+
+			std::stringstream time_stream;
+
+			generate_time_text(time_stream, cursor, sound_length);
+
+			ImGui::SliderFloat("##time_slider", &cursor, 0.f, sound_length, time_stream.str().c_str());
+		}
+
+		ImGui::End();
 	}
-	else {
-		ImGui::Text("No file selected");
-	}
-
-	ImGui::SameLine();
-
-	const SDL_DialogFileFilter file_filters[] = {
-		{ "Audio files (*.wav, *.flac, *.mp3)", "wav;flac;mp3" }
-	};
-
-	if (ImGui::Button("Select")) {
-		SDL_ShowOpenFileDialog(file_dialog_callback, app_state, app_state->main_window, file_filters, 1, nullptr, false);
-	}
-
-	float volume = app_state->audio_volume;
-	ImGui::SliderFloat("Volume", &volume, 0.f, 1.f);
-
-	if (volume != app_state->audio_volume) {
-		ma_engine_set_volume(app_state->audio_engine, volume);
-		app_state->audio_volume = volume;
-	}
-
-	float sound_length = 0.f;
-	float cursor = 0.f;
-
-	if (app_state->sound != nullptr) {
-		ma_sound_get_length_in_seconds(app_state->sound, &sound_length);
-		ma_sound_get_cursor_in_seconds(app_state->sound, &cursor);
-
-		std::stringstream time_stream;
-
-		generate_time_text(time_stream, cursor, sound_length);
-
-		ImGui::SliderFloat("##time_slider", &cursor, 0.f, sound_length, time_stream.str().c_str());
-	}
-
-	ImGui::End();
+	
 	ImGui::Render();
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
