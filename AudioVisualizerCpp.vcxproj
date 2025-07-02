@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AppState.cpp" />
     <ClCompile Include="src\AppState.hpp" />
     <ClCompile Include="src\GUI.cpp" />
     <ClCompile Include="src\init.cpp" />
