@@ -24,7 +24,7 @@ void load_audio_file(AppState* app_state, const std::string& file_path) {
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 	std::wstring wide_path = converter.from_bytes(file_path);
 
-	result = ma_sound_init_from_file_w(app_state->audio_engine, wide_path.c_str(), 0, nullptr, nullptr, sound);
+	result = ma_sound_init_from_file_w(app_state->audio_engine, wide_path.c_str(), MA_SOUND_FLAG_NO_DEFAULT_ATTACHMENT, nullptr, nullptr, sound);
 
 	if (result != MA_SUCCESS) {
 		SDL_Log("Failed to load %s", file_path.c_str());
@@ -43,6 +43,7 @@ void load_audio_file(AppState* app_state, const std::string& file_path) {
 	app_state->audio_file_name = audio_file_name;
 	app_state->is_audio_file_selected = true;
 
+	ma_node_attach_output_bus(sound, 0, app_state->analysis_node, 0);
 	ma_sound_set_looping(sound, true);
 	ma_sound_start(sound);
 

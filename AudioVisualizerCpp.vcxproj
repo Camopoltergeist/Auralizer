@@ -69,6 +69,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)third_party\fftw3\include;$(ProjectDir)third_party\miniaudio;$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AnalysisNode.cpp" />
     <ClCompile Include="src\AppState.cpp" />
     <ClCompile Include="src\AppState.hpp" />
     <ClCompile Include="src\GUI.cpp" />
@@ -95,6 +97,7 @@
     <ClCompile Include="third_party\miniaudio\miniaudio.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AnalysisNode.hpp" />
     <ClInclude Include="src\GUI.hpp" />
     <ClInclude Include="src\init.hpp" />
     <ClInclude Include="src\load_shader.hpp" />

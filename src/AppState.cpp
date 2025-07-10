@@ -17,9 +17,14 @@ AppState::AppState() {
 	is_imgui_window_open = true;
 	is_playing = false;
 	audio_file_name = "";
+	analysis_node = nullptr;
 }
 
 AppState::~AppState() {
+	if (analysis_node != nullptr) {
+		ma_node_uninit(&analysis_node->base, nullptr);
+	}
+
 	if (sound != nullptr) {
 		ma_sound_uninit(sound);
 	}

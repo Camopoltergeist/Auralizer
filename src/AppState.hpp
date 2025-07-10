@@ -3,6 +3,7 @@
 #include <glad.h>
 #include <SDL3/SDL.h>
 #include "miniaudio.h"
+#include "AnalysisNode.hpp"
 
 #include <string>
 
@@ -12,6 +13,7 @@ struct AppState {
 
 	ma_engine* audio_engine;
 	ma_sound* sound;
+	AnalysisNode* analysis_node;
 	float audio_volume;
 	bool is_playing;
 

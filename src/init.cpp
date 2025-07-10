@@ -8,6 +8,7 @@
 #include "AppState.hpp"
 #include "load_shader.hpp"
 #include "miniaudio.h"
+#include "AnalysisNode.hpp"
 
 void debug_message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
 	SDL_Log("GL Message: %s", message);
@@ -209,6 +210,16 @@ bool init_audio(AppState* app_state) {
 
 	app_state->audio_engine = audio_engine;
 	ma_engine_set_volume(app_state->audio_engine, app_state->audio_volume);
+
+	AnalysisNode* analysis_node = initialize_analysis_node(ma_engine_get_node_graph(app_state->audio_engine));
+
+	if (analysis_node == nullptr) {
+		return false;
+	}
+
+	ma_node_attach_output_bus(analysis_node, 0, ma_engine_get_endpoint(app_state->audio_engine), 0);
+
+	app_state->analysis_node = analysis_node;
 
 	return true;
 }
