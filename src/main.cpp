@@ -43,6 +43,8 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 SDL_AppResult SDL_AppIterate(void* app_state) {
 	AppState* state = static_cast<AppState*>(app_state);
 
+	state->analysis_node->rolling_buffer.copy_buffer(state->buffer.data());
+
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 

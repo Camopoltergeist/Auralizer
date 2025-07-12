@@ -6,6 +6,7 @@
 #include "AnalysisNode.hpp"
 
 #include <string>
+#include <array>
 
 struct AppState {
 	SDL_Window* main_window;
@@ -16,6 +17,8 @@ struct AppState {
 	AnalysisNode* analysis_node;
 	float audio_volume;
 	bool is_playing;
+
+	std::array<float, ROLLING_BUFFER_SIZE> buffer;
 
 	GLuint vertex_buffer;
 	GLuint index_buffer;

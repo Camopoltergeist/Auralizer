@@ -13,9 +13,9 @@ static void process_node(ma_node* node, const float** frames_in, ma_uint32* fram
 	ma_uint32 channel_count = ma_node_get_input_channels(node, 0);
 	unsigned int element_count = *frame_count_out * channel_count;
 
-	for (int i = 0; i < element_count; i++) {
-		frames_out_0[i] = frames_in_0[i];
-	}
+	AnalysisNode* analysis_node = static_cast<AnalysisNode*>(node);
+
+	analysis_node->rolling_buffer.write_interleaved(frames_in_0, *frame_count_in, false);
 }
 
 static ma_node_vtable process_node_vtable = {

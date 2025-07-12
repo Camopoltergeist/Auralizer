@@ -97,6 +97,7 @@
     <ClCompile Include="third_party\miniaudio\miniaudio.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\RollingBuffer.hpp" />
     <ClInclude Include="src\AnalysisNode.hpp" />
     <ClInclude Include="src\GUI.hpp" />
     <ClInclude Include="src\init.hpp" />
