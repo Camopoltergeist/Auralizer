@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\AnalysisNode.cpp" />
     <ClCompile Include="src\AppState.cpp" />
     <ClCompile Include="src\AppState.hpp" />
@@ -95,8 +96,10 @@
     <ClCompile Include="third_party\imgui-1.92.0\imgui_tables.cpp" />
     <ClCompile Include="third_party\imgui-1.92.0\imgui_widgets.cpp" />
     <ClCompile Include="third_party\miniaudio\miniaudio.c" />
+    <ClCompile Include="src\gl\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Graphics.h" />
     <ClInclude Include="src\RollingBuffer.hpp" />
     <ClInclude Include="src\AnalysisNode.hpp" />
     <ClInclude Include="src\GUI.hpp" />
@@ -111,6 +114,7 @@
     <ClInclude Include="third_party\imgui-1.92.0\imstb_textedit.h" />
     <ClInclude Include="third_party\imgui-1.92.0\imstb_truetype.h" />
     <ClInclude Include="third_party\miniaudio\miniaudio.h" />
+    <ClInclude Include="src\gl\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="third_party\imgui-1.92.0\misc\debuggers\imgui.natstepfilter" />
