@@ -9,9 +9,9 @@ private:
 	GLuint gl_name;
 
 	VertexArray(GLuint gl_name);
-	VertexArray(const VertexArray&) = delete;
 
 public:
+	VertexArray(const VertexArray&) = delete;
 	VertexArray(VertexArray&&) noexcept;
 	~VertexArray();
 	
