@@ -1,13 +1,26 @@
 #include "Graphics.h"
 
+#include <string>
+#include <sstream>
+#include <fstream>
+
 #include <SDL3/SDL.h>
 
-Graphics::Graphics(VertexArray vertex_array, GLBuffer vertex_buffer, GLBuffer index_buffer) :
+Graphics::Graphics(VertexArray vertex_array, GLBuffer vertex_buffer, GLBuffer index_buffer, Shader vertex_shader, Shader fragment_shader) :
 	vertex_array(std::move(vertex_array)),
 	vertex_buffer(std::move(vertex_buffer)),
-	index_buffer(std::move(index_buffer))
-{
+	index_buffer(std::move(index_buffer)),
+	vertex_shader(std::move(vertex_shader)),
+	fragment_shader(std::move(fragment_shader))
+{ }
 
+std::string load_text_file(const std::string& file_path) {
+	std::ifstream file(file_path);
+	std::ostringstream sstream;
+
+	sstream << file.rdbuf();
+
+	return sstream.str();
 }
 
 std::optional<Graphics> Graphics::init()
@@ -55,7 +68,17 @@ std::optional<Graphics> Graphics::init()
 		return std::optional<Graphics>();
 	}
 
-	return std::make_optional<Graphics>(std::move(vertex_array_opt.value()), std::move(vertex_buffer_opt.value()), std::move(index_buffer_opt.value()));
+	std::string vertex_source = load_text_file("./shaders/vertex.glsl");
+	std::string fragment_source = load_text_file("./shaders/fragment.glsl");
+
+	auto vertex_shader_opt = Shader::create(GL_VERTEX_SHADER, vertex_source);
+	auto fragment_shader_opt = Shader::create(GL_FRAGMENT_SHADER, fragment_source);
+
+	if (!vertex_shader_opt.has_value() || !fragment_shader_opt.has_value()) {
+		return std::optional<Graphics>();
+	}
+
+	return std::make_optional<Graphics>(std::move(vertex_array_opt.value()), std::move(vertex_buffer_opt.value()), std::move(index_buffer_opt.value()), std::move(vertex_shader_opt.value()), std::move(fragment_shader_opt.value()));
 }
 
 Graphics::~Graphics()
