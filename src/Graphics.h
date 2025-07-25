@@ -3,20 +3,21 @@
 #include <optional>
 
 #include "gl/VertexArray.h"
+#include "gl/GLBuffer.h"
 
 class Graphics
 {
 private:
 	VertexArray vertex_array;
-	GLuint vertex_buffer;
-	GLuint index_buffer;
+	GLBuffer vertex_buffer;
+	GLBuffer index_buffer;
 	GLuint vertex_shader;
 	GLuint fragment_shader;
 	GLuint pipeline;
 
 
 public:
-	Graphics(VertexArray vertex_array);
+	Graphics(VertexArray vertex_array, GLBuffer vertex_buffer, GLBuffer index_buffer);
 
 	static std::optional<Graphics> init();
 

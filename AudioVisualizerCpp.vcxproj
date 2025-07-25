@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\gl\GLBuffer.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\AnalysisNode.cpp" />
     <ClCompile Include="src\AppState.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="src\gl\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\gl\GLBuffer.h" />
     <ClInclude Include="src\Graphics.h" />
     <ClInclude Include="src\RollingBuffer.hpp" />
     <ClInclude Include="src\AnalysisNode.hpp" />
