@@ -30,3 +30,7 @@ GLBuffer& GLBuffer::operator=(GLBuffer& other)
 
 	return *this;
 }
+
+GLuint GLBuffer::name() const {
+	return gl_name;
+}

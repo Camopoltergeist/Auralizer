@@ -6,12 +6,13 @@
 
 #include <SDL3/SDL.h>
 
-Graphics::Graphics(VertexArray vertex_array, GLBuffer vertex_buffer, GLBuffer index_buffer, Shader vertex_shader, Shader fragment_shader) :
+Graphics::Graphics(VertexArray vertex_array, GLBuffer vertex_buffer, GLBuffer index_buffer, Shader vertex_shader, Shader fragment_shader, Pipeline pipeline) :
 	vertex_array(std::move(vertex_array)),
 	vertex_buffer(std::move(vertex_buffer)),
 	index_buffer(std::move(index_buffer)),
 	vertex_shader(std::move(vertex_shader)),
-	fragment_shader(std::move(fragment_shader))
+	fragment_shader(std::move(fragment_shader)),
+	pipeline(std::move(pipeline))
 { }
 
 std::string load_text_file(const std::string& file_path) {
@@ -78,7 +79,20 @@ std::optional<Graphics> Graphics::init()
 		return std::optional<Graphics>();
 	}
 
-	return std::make_optional<Graphics>(std::move(vertex_array_opt.value()), std::move(vertex_buffer_opt.value()), std::move(index_buffer_opt.value()), std::move(vertex_shader_opt.value()), std::move(fragment_shader_opt.value()));
+	auto pipeline_opt = Pipeline::create(vertex_shader_opt.value(), fragment_shader_opt.value());
+
+	if (!pipeline_opt.has_value()) {
+		return std::optional<Graphics>();
+	}
+
+	return std::make_optional<Graphics>(
+		std::move(vertex_array_opt.value()),
+		std::move(vertex_buffer_opt.value()),
+		std::move(index_buffer_opt.value()),
+		std::move(vertex_shader_opt.value()),
+		std::move(fragment_shader_opt.value()),
+		std::move(pipeline_opt.value())
+	);
 }
 
 Graphics::~Graphics()

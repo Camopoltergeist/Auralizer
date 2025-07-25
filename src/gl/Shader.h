@@ -22,5 +22,7 @@ public:
 	Shader& operator=(Shader& other);
 
 	static std::optional<Shader> create(GLenum shader_type, const std::string& shader_source);
+
+	GLuint name() const;
 };
 

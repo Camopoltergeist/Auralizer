@@ -5,6 +5,7 @@
 #include "gl/VertexArray.h"
 #include "gl/GLBuffer.h"
 #include "gl/Shader.h"
+#include "gl/Pipeline.h"
 
 class Graphics
 {
@@ -14,10 +15,10 @@ private:
 	GLBuffer index_buffer;
 	Shader vertex_shader;
 	Shader fragment_shader;
-	GLuint pipeline;
+	Pipeline pipeline;
 
 public:
-	Graphics(VertexArray vertex_array, GLBuffer vertex_buffer, GLBuffer index_buffer, Shader vertex_shader, Shader fragment_shader);
+	Graphics(VertexArray vertex_array, GLBuffer vertex_buffer, GLBuffer index_buffer, Shader vertex_shader, Shader fragment_shader, Pipeline pipeline);
 
 	static std::optional<Graphics> init();
 

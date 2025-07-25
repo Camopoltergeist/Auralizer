@@ -116,3 +116,8 @@ std::optional<Shader> Shader::create(GLenum shader_type, const std::string& shad
 
 	return std::make_optional<Shader>(program_name);
 }
+
+GLuint Shader::name() const
+{
+	return gl_name;
+}
