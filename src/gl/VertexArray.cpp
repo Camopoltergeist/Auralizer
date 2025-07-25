@@ -67,3 +67,18 @@ void VertexArray::set_attrib_format(GLuint attrib_index, GLint size, GLenum type
 {
 	glVertexArrayAttribFormat(gl_name, attrib_index, size, type, normalized, relative_offset);
 }
+
+void VertexArray::bind_buffer_to_binding_index(GLuint binding_index, const GLBuffer& buffer, GLintptr offset, GLsizei stride) const
+{
+	glVertexArrayVertexBuffer(gl_name, binding_index, buffer.name(), offset, stride);
+}
+
+void VertexArray::bind_attrib_to_binding_index(GLuint binding_index, GLuint attrib_index) const
+{
+	glVertexArrayAttribBinding(gl_name, attrib_index, binding_index);
+}
+
+void VertexArray::bind_element_buffer(const GLBuffer& element_buffer) const
+{
+	glVertexArrayElementBuffer(gl_name, element_buffer.name());
+}
