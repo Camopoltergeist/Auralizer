@@ -4,6 +4,7 @@ GLBuffer::GLBuffer(GLuint gl_name) : gl_name(gl_name) { }
 
 GLBuffer::GLBuffer()
 {
+	gl_name = 0;
 }
 
 GLBuffer::GLBuffer(GLBuffer&& other) noexcept : gl_name(0)

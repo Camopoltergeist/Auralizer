@@ -28,6 +28,7 @@ bool Pipeline::validate_pipeline(GLuint pipeline_name)
 
 Pipeline::Pipeline()
 {
+	gl_name = 0;
 }
 
 Pipeline::Pipeline(Pipeline&& other) noexcept

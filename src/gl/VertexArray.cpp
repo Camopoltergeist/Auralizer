@@ -6,6 +6,7 @@ VertexArray::VertexArray(GLuint gl_name) : gl_name(gl_name) { }
 
 VertexArray::VertexArray()
 {
+	gl_name = 0;
 }
 
 VertexArray::VertexArray(VertexArray&& other) noexcept : gl_name(0)

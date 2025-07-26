@@ -46,6 +46,7 @@ bool Shader::check_program_link_status(GLuint program_name)
 
 Shader::Shader()
 {
+	gl_name = 0;
 }
 
 Shader::Shader(Shader&& other) noexcept : gl_name(0)
