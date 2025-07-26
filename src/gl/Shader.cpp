@@ -14,7 +14,7 @@ bool Shader::check_shader_compilation(GLuint shader_name)
 		glGetShaderiv(shader_name, GL_INFO_LOG_LENGTH, &info_log_length);
 
 		std::string info_log(info_log_length, ' ');
-		glGetShaderInfoLog(shader_name, info_log.size(), nullptr, info_log.data());
+		glGetShaderInfoLog(shader_name, static_cast<GLsizei>(info_log.size()), nullptr, info_log.data());
 
 		SDL_Log("Shader failed to compile:\n%s", info_log.c_str());
 
@@ -34,7 +34,7 @@ bool Shader::check_program_link_status(GLuint program_name)
 		glGetProgramiv(program_name, GL_INFO_LOG_LENGTH, &info_log_length);
 
 		std::string info_log(info_log_length, ' ');
-		glGetProgramInfoLog(program_name, info_log.size(), nullptr, info_log.data());
+		glGetProgramInfoLog(program_name, static_cast<GLsizei>(info_log.size()), nullptr, info_log.data());
 
 		SDL_Log("Program failed to link:\n%s", info_log.c_str());
 

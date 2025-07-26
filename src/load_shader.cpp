@@ -13,7 +13,7 @@ GLuint load_shader(std::string filepath, GLenum shader_type) {
 
 	std::string shader_source = sstream.str();
 	const char* source_ptr = shader_source.c_str();
-	const GLint source_size = shader_source.size();
+	const GLint source_size = static_cast<int>(shader_source.size());
 
 	GLuint shader = glCreateShader(shader_type);
 	glShaderSource(shader, 1, &source_ptr, &source_size);
@@ -28,7 +28,7 @@ GLuint load_shader(std::string filepath, GLenum shader_type) {
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &info_log_length);
 
 		std::string info_log(info_log_length, ' ');
-		glGetShaderInfoLog(shader, info_log.size(), nullptr, info_log.data());
+		glGetShaderInfoLog(shader, static_cast<GLsizei>(info_log.size()), nullptr, info_log.data());
 
 		SDL_Log("Shader failed to compile:\n%s", info_log.c_str());
 		glDeleteShader(shader);
@@ -50,7 +50,7 @@ GLuint load_shader(std::string filepath, GLenum shader_type) {
 		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &info_log_length);
 
 		std::string info_log(info_log_length, ' ');
-		glGetProgramInfoLog(program, info_log.size(), nullptr, info_log.data());
+		glGetProgramInfoLog(program, static_cast<GLsizei>(info_log.size()), nullptr, info_log.data());
 
 		SDL_Log("Program failed to link:\n%s", info_log.c_str());
 		glDeleteShader(shader);

@@ -61,10 +61,10 @@ void file_dialog_callback(void* userdata, const char* const* file_list, int filt
 }
 
 void generate_time_text(std::stringstream& time_stream, float cursor_pos, float sound_length) {
-	int total_minutes = std::floor(sound_length / 60.f);
+	int total_minutes = static_cast<int>(std::floor(sound_length / 60.f));
 	float total_seconds = std::fmod(sound_length, 60.f);
 
-	int current_minutes = std::floor(cursor_pos / 60.f);
+	int current_minutes = static_cast<int>(std::floor(cursor_pos / 60.f));
 	float current_seconds = std::fmod(cursor_pos, 60.f);
 
 	time_stream << std::setprecision(2) << std::fixed

@@ -20,7 +20,7 @@ public:
 	void write_interleaved(const float* data, int frame_count, bool odd) {
 		mutex.lock();
 
-		int space_left = buffer.size() - end;
+		int space_left = static_cast<int>(buffer.size()) - end;
 
 		int write_start = std::max(0, frame_count - (int)buffer.size());
 
@@ -41,7 +41,7 @@ public:
 			buffer[i] = data[offset];
 		}
 
-		end = (buffer.size() + write_2_size) % buffer.size();
+		end = static_cast<int>((buffer.size() + write_2_size) % buffer.size());
 
 		mutex.unlock();
 	}
@@ -53,10 +53,10 @@ public:
 	void copy_buffer(float* dest) {
 		mutex.lock();
 
-		int space_left = buffer.size() - end;
+		int space_left = static_cast<int>(buffer.size()) - end;
 
 		int copy_1_size = space_left;
-		int copy_2_size = buffer.size() - space_left;
+		int copy_2_size = static_cast<int>(buffer.size()) - space_left;
 
 		for (int i = 0; i < copy_1_size; i++) {
 			int offset = end + i;

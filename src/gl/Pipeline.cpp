@@ -16,7 +16,7 @@ bool Pipeline::validate_pipeline(GLuint pipeline_name)
 		glGetProgramPipelineiv(pipeline_name, GL_INFO_LOG_LENGTH, &info_log_length);
 
 		std::string info_log(info_log_length, ' ');
-		glGetProgramPipelineInfoLog(pipeline_name, info_log.size(), nullptr, info_log.data());
+		glGetProgramPipelineInfoLog(pipeline_name, static_cast<GLsizei>(info_log.size()), nullptr, info_log.data());
 
 		SDL_Log("Program pipeline failed to validate:\n%s", info_log.c_str());
 
