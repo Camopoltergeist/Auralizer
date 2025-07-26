@@ -73,6 +73,8 @@ std::optional<Graphics> Graphics::init()
 		return std::optional<Graphics>();
 	}
 
+	vertex_array.bind_element_buffer(index_buffer_opt.value());
+
 	std::string vertex_source = load_text_file("./shaders/vertex.glsl");
 	std::string fragment_source = load_text_file("./shaders/fragment.glsl");
 
