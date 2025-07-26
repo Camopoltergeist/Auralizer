@@ -29,4 +29,6 @@ public:
 	void bind_buffer_to_binding_index(GLuint binding_index, const GLBuffer& buffer, GLintptr offset, GLsizei stride) const;
 	void bind_attrib_to_binding_index(GLuint binding_index, GLuint attrib_index) const;
 	void bind_element_buffer(const GLBuffer& element_buffer) const;
+
+	void bind() const;
 };

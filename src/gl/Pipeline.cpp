@@ -86,3 +86,7 @@ GLuint Pipeline::name() const
 {
 	return gl_name;
 }
+
+void Pipeline::bind() const {
+	glBindProgramPipeline(gl_name);
+}

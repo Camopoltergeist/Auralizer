@@ -25,5 +25,7 @@ public:
 	static std::optional<Pipeline> create(const Shader& vertex_shader, const Shader& fragment_shader);
 
 	GLuint name() const;
+
+	void bind() const;
 };
 

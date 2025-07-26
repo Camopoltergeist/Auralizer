@@ -87,3 +87,8 @@ void VertexArray::bind_element_buffer(const GLBuffer& element_buffer) const
 {
 	glVertexArrayElementBuffer(gl_name, element_buffer.name());
 }
+
+void VertexArray::bind() const
+{
+	glBindVertexArray(gl_name);
+}

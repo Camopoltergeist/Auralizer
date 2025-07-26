@@ -56,8 +56,8 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glBindVertexArray(state->graphics.vertex_array.name());
-	glBindProgramPipeline(state->graphics.pipeline.name());
+	state->graphics.vertex_array.bind();
+	state->graphics.pipeline.bind();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 	draw_gui(state);
