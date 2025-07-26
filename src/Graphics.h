@@ -9,7 +9,7 @@
 
 class Graphics
 {
-private:
+public:
 	VertexArray vertex_array;
 	GLBuffer vertex_buffer;
 	GLBuffer index_buffer;
@@ -18,6 +18,7 @@ private:
 	Pipeline pipeline;
 
 public:
+	Graphics();
 	Graphics(VertexArray vertex_array, GLBuffer vertex_buffer, GLBuffer index_buffer, Shader vertex_shader, Shader fragment_shader, Pipeline pipeline);
 
 	static std::optional<Graphics> init();

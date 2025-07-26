@@ -15,6 +15,7 @@ private:
 	static bool check_program_link_status(GLuint program_name);
 
 public:
+	Shader();
 	Shader(const Shader&) = delete;
 	Shader(Shader&&) noexcept;
 	~Shader();

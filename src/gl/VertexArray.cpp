@@ -4,6 +4,10 @@
 
 VertexArray::VertexArray(GLuint gl_name) : gl_name(gl_name) { }
 
+VertexArray::VertexArray()
+{
+}
+
 VertexArray::VertexArray(VertexArray&& other) noexcept : gl_name(0)
 {
 	gl_name = other.gl_name;
@@ -37,11 +41,11 @@ std::optional<VertexArray> VertexArray::create()
 		return std::optional<VertexArray>();
 	}
 
-	glEnableVertexArrayAttrib(vertex_array_object, 0);
+	/*glEnableVertexArrayAttrib(vertex_array_object, 0);
 	glEnableVertexArrayAttrib(vertex_array_object, 1);
 
 	glVertexArrayAttribFormat(vertex_array_object, 0, 2, GL_FLOAT, GL_FALSE, 0);
-	glVertexArrayAttribFormat(vertex_array_object, 1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2);
+	glVertexArrayAttribFormat(vertex_array_object, 1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2);*/
 
 	return std::make_optional<VertexArray>(vertex_array_object);
 }

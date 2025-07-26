@@ -2,6 +2,10 @@
 
 GLBuffer::GLBuffer(GLuint gl_name) : gl_name(gl_name) { }
 
+GLBuffer::GLBuffer()
+{
+}
+
 GLBuffer::GLBuffer(GLBuffer&& other) noexcept : gl_name(0)
 {
 	gl_name = other.gl_name;

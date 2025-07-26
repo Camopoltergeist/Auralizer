@@ -6,6 +6,10 @@
 
 #include <SDL3/SDL.h>
 
+Graphics::Graphics()
+{
+}
+
 Graphics::Graphics(VertexArray vertex_array, GLBuffer vertex_buffer, GLBuffer index_buffer, Shader vertex_shader, Shader fragment_shader, Pipeline pipeline) :
 	vertex_array(std::move(vertex_array)),
 	vertex_buffer(std::move(vertex_buffer)),
@@ -39,7 +43,7 @@ std::optional<Graphics> Graphics::init()
 	vertex_array.set_attrib_format(0, 2, GL_FLOAT, GL_FALSE, 0);
 	vertex_array.set_attrib_format(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2);
 
-	std::vector<float> vertices = {
+	std::vector<GLfloat> vertices = {
 		-1.f, -1.f, 0.f, 0.f,
 		1.f, -1.f, 1.f, 0.f,
 		1.f, 1.f, 1.f, 1.f,
@@ -86,8 +90,8 @@ std::optional<Graphics> Graphics::init()
 	}
 
 	return std::make_optional<Graphics>(
-		std::move(vertex_array_opt.value()),
-		std::move(vertex_buffer_opt.value()),
+		std::move(vertex_array),
+		std::move(vertex_buffer),
 		std::move(index_buffer_opt.value()),
 		std::move(vertex_shader_opt.value()),
 		std::move(fragment_shader_opt.value()),

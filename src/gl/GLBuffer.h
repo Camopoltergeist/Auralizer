@@ -13,6 +13,7 @@ private:
 	GLBuffer(GLuint gl_name);
 
 public:
+	GLBuffer();
 	GLBuffer(const GLBuffer&) = delete;
 	GLBuffer(GLBuffer&&) noexcept;
 	~GLBuffer();

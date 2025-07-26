@@ -15,6 +15,7 @@ private:
 	static bool validate_pipeline(GLuint pipeline_name);
 
 public:
+	Pipeline();
 	Pipeline(const Pipeline&) = delete;
 	Pipeline(Pipeline&&) noexcept;
 	~Pipeline();
@@ -22,5 +23,7 @@ public:
 	Pipeline& operator=(Pipeline& other);
 
 	static std::optional<Pipeline> create(const Shader& vertex_shader, const Shader& fragment_shader);
+
+	GLuint name() const;
 };
 

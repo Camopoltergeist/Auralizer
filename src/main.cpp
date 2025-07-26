@@ -31,6 +31,14 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 		return SDL_APP_FAILURE;
 	}
 
+	auto graphics = Graphics::init();
+
+	if (!graphics.has_value()) {
+		return SDL_APP_FAILURE;
+	}
+
+	new_state->graphics = graphics.value();
+
 	init_imgui(new_state);
 
 	if (!init_audio(new_state)) {
@@ -48,8 +56,8 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glBindVertexArray(state->vertex_array_object);
-	glBindProgramPipeline(state->pipeline);
+	glBindVertexArray(state->graphics.vertex_array.name());
+	glBindProgramPipeline(state->graphics.pipeline.name());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 	draw_gui(state);

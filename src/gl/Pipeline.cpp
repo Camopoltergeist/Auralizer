@@ -6,6 +6,8 @@ Pipeline::Pipeline(GLuint gl_name) : gl_name(gl_name) { }
 
 bool Pipeline::validate_pipeline(GLuint pipeline_name)
 {
+	glValidateProgramPipeline(pipeline_name);
+
 	GLint validate_status = 0;
 	glGetProgramPipelineiv(pipeline_name, GL_VALIDATE_STATUS, &validate_status);
 
@@ -22,6 +24,10 @@ bool Pipeline::validate_pipeline(GLuint pipeline_name)
 	}
 
 	return true;
+}
+
+Pipeline::Pipeline()
+{
 }
 
 Pipeline::Pipeline(Pipeline&& other) noexcept
@@ -73,4 +79,9 @@ std::optional<Pipeline> Pipeline::create(const Shader& vertex_shader, const Shad
 	}
 
 	return std::make_optional<Pipeline>(pipeline_name);
+}
+
+GLuint Pipeline::name() const
+{
+	return gl_name;
 }

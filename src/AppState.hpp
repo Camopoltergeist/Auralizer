@@ -4,6 +4,7 @@
 #include <SDL3/SDL.h>
 #include "miniaudio.h"
 #include "AnalysisNode.hpp"
+#include "Graphics.h"
 
 #include <string>
 #include <array>
@@ -20,12 +21,7 @@ struct AppState {
 
 	std::array<float, ROLLING_BUFFER_SIZE> buffer;
 
-	GLuint vertex_buffer;
-	GLuint index_buffer;
-	GLuint vertex_array_object;
-	GLuint vertex_shader;
-	GLuint fragment_shader;
-	GLuint pipeline;
+	Graphics graphics;
 
 	bool is_audio_file_selected;
 	std::string audio_file_path;

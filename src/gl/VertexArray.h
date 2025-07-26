@@ -13,6 +13,7 @@ private:
 	VertexArray(GLuint gl_name);
 
 public:
+	VertexArray();
 	VertexArray(const VertexArray&) = delete;
 	VertexArray(VertexArray&&) noexcept;
 	~VertexArray();

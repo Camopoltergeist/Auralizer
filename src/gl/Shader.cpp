@@ -44,6 +44,10 @@ bool Shader::check_program_link_status(GLuint program_name)
 	return true;
 }
 
+Shader::Shader()
+{
+}
+
 Shader::Shader(Shader&& other) noexcept : gl_name(0)
 {
 	gl_name = other.gl_name;
