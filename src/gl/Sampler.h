@@ -1,5 +1,5 @@
 #pragma once
-
+#include <optional>
 
 #include <glad.h>
 
@@ -17,5 +17,7 @@ public:
 	~Sampler();
 
 	Sampler& operator=(Sampler&);
+
+	static std::optional<Sampler> create();
 };
 
