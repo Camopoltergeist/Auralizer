@@ -58,6 +58,8 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 
 	state->graphics.vertex_array.bind();
 	state->graphics.pipeline.bind();
+	state->graphics.texture.bind(0);
+	state->graphics.sampler.bind(0);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 	draw_gui(state);

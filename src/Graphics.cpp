@@ -6,17 +6,31 @@
 
 #include <SDL3/SDL.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 Graphics::Graphics()
 {
 }
 
-Graphics::Graphics(VertexArray vertex_array, GLBuffer vertex_buffer, GLBuffer index_buffer, Shader vertex_shader, Shader fragment_shader, Pipeline pipeline) :
+Graphics::Graphics(
+	VertexArray vertex_array,
+	GLBuffer vertex_buffer,
+	GLBuffer index_buffer,
+	Shader vertex_shader,
+	Shader fragment_shader,
+	Pipeline pipeline,
+	Texture texture,
+	Sampler sampler
+) :
 	vertex_array(std::move(vertex_array)),
 	vertex_buffer(std::move(vertex_buffer)),
 	index_buffer(std::move(index_buffer)),
 	vertex_shader(std::move(vertex_shader)),
 	fragment_shader(std::move(fragment_shader)),
-	pipeline(std::move(pipeline))
+	pipeline(std::move(pipeline)),
+	texture(std::move(texture)),
+	sampler(std::move(sampler))
 { }
 
 std::string load_text_file(const std::string& file_path) {
@@ -91,13 +105,46 @@ std::optional<Graphics> Graphics::init()
 		return std::optional<Graphics>();
 	}
 
+	auto sampler_opt = Sampler::create();
+
+	if (!sampler_opt.has_value()) {
+		return std::optional<Graphics>();
+	}
+
+	sampler_opt.value().set_min_filtering(GL_LINEAR_MIPMAP_LINEAR);
+
+	int width = 0;
+	int height = 0;
+	int channel_count = 0;
+
+	const char* image_path = "test.png";
+
+	unsigned char* texture_data = stbi_load(image_path, &width, &height, &channel_count, 4);
+
+	if (texture_data == nullptr) {
+		SDL_Log("Failed to load image at \"%s\": %s", image_path, stbi_failure_reason());
+		return std::optional<Graphics>();
+	}
+
+	auto texture_opt = Texture::create(width, height, GL_RGBA8);
+
+	if (!texture_opt.has_value()) {
+		stbi_image_free(texture_data);
+		return std::optional<Graphics>();
+	}
+
+	texture_opt.value().upload_texture(GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
+	texture_opt.value().generate_mipmap();
+
 	return std::make_optional<Graphics>(
 		std::move(vertex_array),
 		std::move(vertex_buffer),
 		std::move(index_buffer_opt.value()),
 		std::move(vertex_shader_opt.value()),
 		std::move(fragment_shader_opt.value()),
-		std::move(pipeline_opt.value())
+		std::move(pipeline_opt.value()),
+		std::move(texture_opt.value()),
+		std::move(sampler_opt.value())
 	);
 }
 

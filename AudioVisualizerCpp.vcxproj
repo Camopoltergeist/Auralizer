@@ -50,7 +50,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)third_party\fftw3\include;$(ProjectDir)third_party\miniaudio;$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)third_party\stb-image;$(ProjectDir)third_party\fftw3\include;$(ProjectDir)third_party\miniaudio;$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -68,7 +68,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)third_party\fftw3\include;$(ProjectDir)third_party\miniaudio;$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)third_party\stb-image;$(ProjectDir)third_party\fftw3\include;$(ProjectDir)third_party\miniaudio;$(ProjectDir)third_party\imgui-1.92.0;$(ProjectDir)third_party\glad;$(ProjectDir)third_party\SDL3-3.2.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>

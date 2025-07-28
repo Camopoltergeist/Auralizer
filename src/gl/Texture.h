@@ -23,9 +23,8 @@ public:
 
 	static std::optional<Texture> create(GLsizei width, GLsizei height, GLenum internal_format);
 
-	template <typename T>
-	void upload_texture(GLenum format, GLenum type, const std::vector<T>& data) {
-		glTextureSubImage2D(gl_name, 0, 0, 0, width, height, format, type, data.data());
+	void upload_texture(GLenum format, GLenum type, const void* data) const {
+		glTextureSubImage2D(gl_name, 0, 0, 0, width, height, format, type, data);
 	}
 
 	void generate_mipmap() const;

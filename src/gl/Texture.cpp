@@ -2,6 +2,8 @@
 
 #include <SDL3/SDL.h>
 
+#include <cmath>
+
 Texture::Texture(GLuint gl_name, GLsizei width, GLsizei height) : gl_name(gl_name), width(width), height(height) { }
 
 Texture::Texture() : gl_name(0), width(0), height(0) { }
@@ -50,7 +52,10 @@ std::optional<Texture> Texture::create(GLsizei width, GLsizei height, GLenum int
 		return std::optional<Texture>();
 	}
 
-	glTextureStorage2D(texture, 1, internal_format, width, height);
+	int max_size = std::max(width, height);
+	int levels = std::floor(std::log2(max_size)) + 1;
+
+	glTextureStorage2D(texture, levels, internal_format, width, height);
 
 	return std::make_optional<Texture>(texture, width, height);
 }
