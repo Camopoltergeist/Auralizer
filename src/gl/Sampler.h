@@ -19,5 +19,9 @@ public:
 	Sampler& operator=(Sampler&);
 
 	static std::optional<Sampler> create();
-};
 
+	void set_min_filtering(GLenum filter_mode) const;
+	void set_mag_filtering(GLenum filter_mode) const;
+
+	void set_wrapping(GLenum wrap_mode) const;
+};

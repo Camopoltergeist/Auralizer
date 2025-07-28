@@ -47,3 +47,19 @@ std::optional<Sampler> Sampler::create() {
 
 	return std::make_optional<Sampler>(sampler);
 }
+
+void Sampler::set_min_filtering(GLenum filter_mode) const
+{
+	glSamplerParameteri(gl_name, GL_TEXTURE_MIN_FILTER, filter_mode);
+}
+
+void Sampler::set_mag_filtering(GLenum filter_mode) const
+{
+	glSamplerParameteri(gl_name, GL_TEXTURE_MAG_FILTER, filter_mode);
+}
+
+void Sampler::set_wrapping(GLenum wrap_mode) const
+{
+	glSamplerParameteri(gl_name, GL_TEXTURE_WRAP_S, wrap_mode);
+	glSamplerParameteri(gl_name, GL_TEXTURE_WRAP_T, wrap_mode);
+}

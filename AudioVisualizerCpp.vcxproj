@@ -91,6 +91,7 @@
     <ClCompile Include="src\init.cpp" />
     <ClCompile Include="src\load_shader.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\gl\Texture.cpp" />
     <ClCompile Include="third_party\glad\glad.c" />
     <ClCompile Include="third_party\imgui-1.92.0\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="third_party\imgui-1.92.0\backends\imgui_impl_sdl3.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="src\GUI.hpp" />
     <ClInclude Include="src\init.hpp" />
     <ClInclude Include="src\load_shader.hpp" />
+    <ClInclude Include="src\gl\Texture.h" />
     <ClInclude Include="third_party\imgui-1.92.0\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="third_party\imgui-1.92.0\backends\imgui_impl_sdl3.h" />
     <ClInclude Include="third_party\imgui-1.92.0\imconfig.h" />
