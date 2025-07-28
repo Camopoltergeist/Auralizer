@@ -63,3 +63,7 @@ void Sampler::set_wrapping(GLenum wrap_mode) const
 	glSamplerParameteri(gl_name, GL_TEXTURE_WRAP_S, wrap_mode);
 	glSamplerParameteri(gl_name, GL_TEXTURE_WRAP_T, wrap_mode);
 }
+
+void Sampler::bind(GLuint texture_unit) const {
+	glBindSampler(texture_unit, gl_name);
+}

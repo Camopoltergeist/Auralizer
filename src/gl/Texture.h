@@ -29,5 +29,7 @@ public:
 	}
 
 	void generate_mipmap() const;
+
+	void bind(GLuint texture_unit) const;
 };
 

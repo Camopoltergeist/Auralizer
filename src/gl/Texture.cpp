@@ -59,3 +59,8 @@ void Texture::generate_mipmap() const
 {
 	glGenerateTextureMipmap(gl_name);
 }
+
+void Texture::bind(GLuint texture_unit) const
+{
+	glBindTextureUnit(texture_unit, gl_name);
+}
