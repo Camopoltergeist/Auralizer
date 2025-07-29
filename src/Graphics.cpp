@@ -119,6 +119,7 @@ std::optional<Graphics> Graphics::init()
 
 	const char* image_path = "test.png";
 
+	stbi_set_flip_vertically_on_load(true);
 	unsigned char* texture_data = stbi_load(image_path, &width, &height, &channel_count, 4);
 
 	if (texture_data == nullptr) {
