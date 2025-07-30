@@ -36,6 +36,8 @@ public:
 
 	static std::optional<Graphics> init();
 
+	Graphics& operator=(Graphics&& other) noexcept;
+
 	~Graphics();
 };
 

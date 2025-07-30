@@ -20,7 +20,7 @@ GLBuffer::~GLBuffer()
 	}
 }
 
-GLBuffer& GLBuffer::operator=(GLBuffer& other)
+GLBuffer& GLBuffer::operator=(GLBuffer&& other) noexcept
 {
 	if (this == &other) {
 		return *this;

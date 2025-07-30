@@ -19,7 +19,7 @@ Sampler::~Sampler()
 	}
 }
 
-Sampler& Sampler::operator=(Sampler& other)
+Sampler& Sampler::operator=(Sampler&& other) noexcept
 {
 	if (this == &other) {
 		return *this;
@@ -42,28 +42,28 @@ std::optional<Sampler> Sampler::create() {
 
 	if (sampler == 0) {
 		SDL_Log("Failed to create sampler");
-		return std::optional<Sampler>();
+		return std::nullopt;
 	}
 
-	return std::make_optional<Sampler>(sampler);
+	return std::make_optional<Sampler>(Sampler(sampler));
 }
 
-void Sampler::set_min_filtering(GLenum filter_mode) const
+void Sampler::set_min_filtering(const GLint filter_mode) const
 {
 	glSamplerParameteri(gl_name, GL_TEXTURE_MIN_FILTER, filter_mode);
 }
 
-void Sampler::set_mag_filtering(GLenum filter_mode) const
+void Sampler::set_mag_filtering(const GLint filter_mode) const
 {
 	glSamplerParameteri(gl_name, GL_TEXTURE_MAG_FILTER, filter_mode);
 }
 
-void Sampler::set_wrapping(GLenum wrap_mode) const
+void Sampler::set_wrapping(const GLint wrap_mode) const
 {
 	glSamplerParameteri(gl_name, GL_TEXTURE_WRAP_S, wrap_mode);
 	glSamplerParameteri(gl_name, GL_TEXTURE_WRAP_T, wrap_mode);
 }
 
-void Sampler::bind(GLuint texture_unit) const {
+void Sampler::bind(const GLuint texture_unit) const {
 	glBindSampler(texture_unit, gl_name);
 }

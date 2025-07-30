@@ -37,7 +37,7 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 		return SDL_APP_FAILURE;
 	}
 
-	new_state->graphics = graphics.value();
+	new_state->graphics = std::move(graphics.value());
 
 	init_imgui(new_state);
 

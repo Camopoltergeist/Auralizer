@@ -19,11 +19,11 @@ public:
 	Texture(Texture&&) noexcept;
 	~Texture();
 
-	Texture& operator=(Texture&);
+	Texture& operator=(Texture&&) noexcept;
 
 	static std::optional<Texture> create(GLsizei width, GLsizei height, GLenum internal_format);
 
-	void upload_texture(GLenum format, GLenum type, const void* data) const {
+	void upload_texture(const GLenum format, GLenum type, const void* data) const {
 		glTextureSubImage2D(gl_name, 0, 0, 0, width, height, format, type, data);
 	}
 

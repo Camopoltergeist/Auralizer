@@ -9,9 +9,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-Graphics::Graphics()
-{
-}
+Graphics::Graphics() = default;
 
 Graphics::Graphics(
 	VertexArray vertex_array,
@@ -34,7 +32,7 @@ Graphics::Graphics(
 { }
 
 std::string load_text_file(const std::string& file_path) {
-	std::ifstream file(file_path);
+	const std::ifstream file(file_path);
 	std::ostringstream sstream;
 
 	sstream << file.rdbuf();
@@ -47,7 +45,7 @@ std::optional<Graphics> Graphics::init()
 	auto vertex_array_opt = VertexArray::create();
 
 	if (!vertex_array_opt.has_value()) {
-		return std::optional<Graphics>();
+		return std::nullopt;
 	}
 
 	VertexArray vertex_array = std::move(vertex_array_opt.value());
@@ -57,7 +55,7 @@ std::optional<Graphics> Graphics::init()
 	vertex_array.set_attrib_format(0, 2, GL_FLOAT, GL_FALSE, 0);
 	vertex_array.set_attrib_format(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2);
 
-	std::vector<GLfloat> vertices = {
+	const std::vector<GLfloat> vertices = {
 		-1.f, -1.f, 0.f, 0.f,
 		1.f, -1.f, 1.f, 0.f,
 		1.f, 1.f, 1.f, 1.f,
@@ -67,7 +65,7 @@ std::optional<Graphics> Graphics::init()
 	auto vertex_buffer_opt = GLBuffer::create(vertices);
 
 	if (!vertex_buffer_opt.has_value()) {
-		return std::optional<Graphics>();
+		return std::nullopt;
 	}
 
 	GLBuffer vertex_buffer = std::move(vertex_buffer_opt.value());
@@ -76,7 +74,7 @@ std::optional<Graphics> Graphics::init()
 	vertex_array.bind_attrib_to_binding_index(0, 0);
 	vertex_array.bind_attrib_to_binding_index(0, 1);
 
-	std::vector<GLuint> indices = {
+	const std::vector<GLuint> indices = {
 		0, 1, 2,
 		2, 3, 0
 	};
@@ -84,31 +82,31 @@ std::optional<Graphics> Graphics::init()
 	auto index_buffer_opt = GLBuffer::create(indices);
 
 	if (!index_buffer_opt.has_value()) {
-		return std::optional<Graphics>();
+		return std::nullopt;
 	}
 
 	vertex_array.bind_element_buffer(index_buffer_opt.value());
 
-	std::string vertex_source = load_text_file("./shaders/vertex.glsl");
-	std::string fragment_source = load_text_file("./shaders/fragment.glsl");
+	const std::string vertex_source = load_text_file("./shaders/vertex.glsl");
+	const std::string fragment_source = load_text_file("./shaders/fragment.glsl");
 
 	auto vertex_shader_opt = Shader::create(GL_VERTEX_SHADER, vertex_source);
 	auto fragment_shader_opt = Shader::create(GL_FRAGMENT_SHADER, fragment_source);
 
 	if (!vertex_shader_opt.has_value() || !fragment_shader_opt.has_value()) {
-		return std::optional<Graphics>();
+		return std::nullopt;
 	}
 
 	auto pipeline_opt = Pipeline::create(vertex_shader_opt.value(), fragment_shader_opt.value());
 
 	if (!pipeline_opt.has_value()) {
-		return std::optional<Graphics>();
+		return std::nullopt;
 	}
 
 	auto sampler_opt = Sampler::create();
 
 	if (!sampler_opt.has_value()) {
-		return std::optional<Graphics>();
+		return std::nullopt;
 	}
 
 	sampler_opt.value().set_min_filtering(GL_LINEAR_MIPMAP_LINEAR);
@@ -124,14 +122,14 @@ std::optional<Graphics> Graphics::init()
 
 	if (texture_data == nullptr) {
 		SDL_Log("Failed to load image at \"%s\": %s", image_path, stbi_failure_reason());
-		return std::optional<Graphics>();
+		return std::nullopt;
 	}
 
 	auto texture_opt = Texture::create(width, height, GL_RGBA8);
 
 	if (!texture_opt.has_value()) {
 		stbi_image_free(texture_data);
-		return std::optional<Graphics>();
+		return std::nullopt;
 	}
 
 	texture_opt.value().upload_texture(GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
@@ -149,6 +147,21 @@ std::optional<Graphics> Graphics::init()
 	);
 }
 
-Graphics::~Graphics()
-{
+Graphics& Graphics::operator=(Graphics &&other) noexcept {
+	if (this == &other) {
+		return *this;
+	}
+
+	vertex_array = std::move(other.vertex_array);
+	vertex_buffer = std::move(other.vertex_buffer);
+	index_buffer = std::move(other.index_buffer);
+	vertex_shader = std::move(other.vertex_shader);
+	fragment_shader = std::move(other.fragment_shader);
+	pipeline = std::move(other.pipeline);
+	texture = std::move(other.texture);
+	sampler = std::move(other.sampler);
+
+	return *this;
 }
+
+Graphics::~Graphics() = default;

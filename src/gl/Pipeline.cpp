@@ -4,7 +4,7 @@
 
 Pipeline::Pipeline(GLuint gl_name) : gl_name(gl_name) { }
 
-bool Pipeline::validate_pipeline(GLuint pipeline_name)
+bool Pipeline::validate_pipeline(const GLuint pipeline_name)
 {
 	glValidateProgramPipeline(pipeline_name);
 
@@ -44,7 +44,7 @@ Pipeline::~Pipeline()
 	}
 }
 
-Pipeline& Pipeline::operator=(Pipeline& other)
+Pipeline& Pipeline::operator=(Pipeline&& other) noexcept
 {
 	if (this == &other) {
 		return *this;
@@ -68,7 +68,7 @@ std::optional<Pipeline> Pipeline::create(const Shader& vertex_shader, const Shad
 
 	if (pipeline_name == 0) {
 		SDL_Log("Failed to create program pipeline");
-		return std::optional<Pipeline>();
+		return std::nullopt;
 	}
 
 	glUseProgramStages(pipeline_name, GL_VERTEX_SHADER_BIT, vertex_shader.name());
@@ -76,10 +76,10 @@ std::optional<Pipeline> Pipeline::create(const Shader& vertex_shader, const Shad
 
 	if (!Pipeline::validate_pipeline(pipeline_name)) {
 		glDeleteProgramPipelines(1, &pipeline_name);
-		return std::optional<Pipeline>();
+		return std::nullopt;
 	}
 
-	return std::make_optional<Pipeline>(pipeline_name);
+	return std::make_optional<Pipeline>(Pipeline(pipeline_name));
 }
 
 GLuint Pipeline::name() const

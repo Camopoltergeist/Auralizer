@@ -10,7 +10,7 @@ class VertexArray
 private:
 	GLuint gl_name;
 
-	VertexArray(GLuint gl_name);
+	explicit VertexArray(GLuint gl_name);
 
 public:
 	VertexArray();
@@ -18,11 +18,11 @@ public:
 	VertexArray(VertexArray&&) noexcept;
 	~VertexArray();
 	
-	VertexArray& operator=(VertexArray& other);
+	VertexArray& operator=(VertexArray&& other) noexcept;
 	
 	static std::optional<VertexArray> create();
 
-	GLuint name() const;
+	[[nodiscard]] GLuint name() const;
 
 	void enable_array_attrib(GLuint attrib_index) const;
 	void set_attrib_format(GLuint attrib_index, GLint size, GLenum type, GLboolean normalized, GLuint relative_offset) const;

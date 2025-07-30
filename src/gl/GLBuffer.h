@@ -10,7 +10,7 @@ class GLBuffer
 private:
 	GLuint gl_name;
 
-	GLBuffer(GLuint gl_name);
+	explicit GLBuffer(GLuint gl_name);
 
 public:
 	GLBuffer();
@@ -18,26 +18,26 @@ public:
 	GLBuffer(GLBuffer&&) noexcept;
 	~GLBuffer();
 
-	GLBuffer& operator=(GLBuffer&);
+	GLBuffer& operator=(GLBuffer&&) noexcept;
 
 	template <typename T>
 	static std::optional<GLBuffer> create(const std::vector<T>& buffer_data) {
-		GLuint vertex_buffer = 0;
+		GLuint buffer = 0;
 
-		glCreateBuffers(1, &vertex_buffer);
+		glCreateBuffers(1, &buffer);
 
-		if (vertex_buffer == 0) {
+		if (buffer == 0) {
 			SDL_Log("Failed to create vertex buffer");
-			return std::optional<GLBuffer>();
+			return std::nullopt;
 		}
 
-		size_t byte_size = buffer_data.size() * sizeof(T);
+		const size_t byte_size = buffer_data.size() * sizeof(T);
 
-		glNamedBufferStorage(vertex_buffer, byte_size, buffer_data.data(), 0);
+		glNamedBufferStorage(buffer, byte_size, buffer_data.data(), 0);
 
-		return std::make_optional<GLBuffer>(vertex_buffer);
+		return std::make_optional<GLBuffer>(GLBuffer(buffer));
 	}
 
-	GLuint name() const;
+	[[nodiscard]] GLuint name() const;
 };
 

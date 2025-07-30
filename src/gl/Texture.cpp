@@ -26,7 +26,7 @@ Texture::~Texture()
 	}
 }
 
-Texture& Texture::operator=(Texture& other)
+Texture& Texture::operator=(Texture&& other) noexcept
 {
 	if (this == &other) {
 		return *this;
@@ -49,11 +49,11 @@ std::optional<Texture> Texture::create(GLsizei width, GLsizei height, GLenum int
 
 	if (texture == 0) {
 		SDL_Log("Failed to create texture");
-		return std::optional<Texture>();
+		return std::nullopt;
 	}
 
-	int max_size = std::max(width, height);
-	int levels = std::floor(std::log2(max_size)) + 1;
+	const int max_size = std::max(width, height);
+	const int levels = std::floor(std::log2(max_size)) + 1;
 
 	glTextureStorage2D(texture, levels, internal_format, width, height);
 
@@ -65,7 +65,7 @@ void Texture::generate_mipmap() const
 	glGenerateTextureMipmap(gl_name);
 }
 
-void Texture::bind(GLuint texture_unit) const
+void Texture::bind(const GLuint texture_unit) const
 {
 	glBindTextureUnit(texture_unit, gl_name);
 }

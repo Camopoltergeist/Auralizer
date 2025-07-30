@@ -15,7 +15,7 @@ VertexArray::VertexArray(VertexArray&& other) noexcept : gl_name(0)
 	other.gl_name = 0;
 }
 
-VertexArray& VertexArray::operator=(VertexArray& other)
+VertexArray& VertexArray::operator=(VertexArray&& other) noexcept
 {
 	if (this == &other) {
 		return *this;
@@ -39,16 +39,10 @@ std::optional<VertexArray> VertexArray::create()
 
 	if (vertex_array_object == 0) {
 		SDL_Log("Failed to create vertex array object");
-		return std::optional<VertexArray>();
+		return std::nullopt;
 	}
 
-	/*glEnableVertexArrayAttrib(vertex_array_object, 0);
-	glEnableVertexArrayAttrib(vertex_array_object, 1);
-
-	glVertexArrayAttribFormat(vertex_array_object, 0, 2, GL_FLOAT, GL_FALSE, 0);
-	glVertexArrayAttribFormat(vertex_array_object, 1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2);*/
-
-	return std::make_optional<VertexArray>(vertex_array_object);
+	return std::make_optional<VertexArray>(VertexArray(vertex_array_object));
 }
 
 VertexArray::~VertexArray()
@@ -68,17 +62,17 @@ void VertexArray::enable_array_attrib(GLuint attrib_index) const
 	glEnableVertexArrayAttrib(gl_name, attrib_index);
 }
 
-void VertexArray::set_attrib_format(GLuint attrib_index, GLint size, GLenum type, GLboolean normalized, GLuint relative_offset) const
+void VertexArray::set_attrib_format(const GLuint attrib_index, const GLint size, GLenum type, const GLboolean normalized, const GLuint relative_offset) const
 {
 	glVertexArrayAttribFormat(gl_name, attrib_index, size, type, normalized, relative_offset);
 }
 
-void VertexArray::bind_buffer_to_binding_index(GLuint binding_index, const GLBuffer& buffer, GLintptr offset, GLsizei stride) const
+void VertexArray::bind_buffer_to_binding_index(const GLuint binding_index, const GLBuffer& buffer, const GLintptr offset, const GLsizei stride) const
 {
 	glVertexArrayVertexBuffer(gl_name, binding_index, buffer.name(), offset, stride);
 }
 
-void VertexArray::bind_attrib_to_binding_index(GLuint binding_index, GLuint attrib_index) const
+void VertexArray::bind_attrib_to_binding_index(const GLuint binding_index, const GLuint attrib_index) const
 {
 	glVertexArrayAttribBinding(gl_name, attrib_index, binding_index);
 }
