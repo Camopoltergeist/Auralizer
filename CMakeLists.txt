@@ -6,7 +6,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_subdirectory("libs/SDL/")
 add_subdirectory("libs/miniaudio")
-include_directories("libs/glad/" "libs/imgui" "libs/miniaudio" "libs/stb")
+include_directories("libs/glad/" "libs/imgui" "libs/miniaudio" "libs/stb" "libs/boost")
 
 add_executable(Auralizer src/main.cpp
         libs/imgui/imconfig.h
