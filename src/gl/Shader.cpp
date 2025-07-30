@@ -1,5 +1,7 @@
 #include "Shader.h"
 
+#include <vector>
+
 #include <SDL3/SDL.h>
 
 Shader::Shader(GLuint gl_name) : gl_name(gl_name) { }
@@ -42,6 +44,35 @@ bool Shader::check_program_link_status(const GLuint program_name)
 	}
 
 	return true;
+}
+
+void Shader::populate_uniforms() {
+	GLint active_uniforms = 0;
+
+	glGetProgramiv(gl_name, GL_ACTIVE_UNIFORMS, &active_uniforms);
+
+	for(unsigned int i = 0; i < active_uniforms; i++) {
+		GLint name_length = 0;
+
+		glGetActiveUniformsiv(gl_name, 1, &i, GL_UNIFORM_NAME_LENGTH, &name_length);
+
+		std::string buffer(name_length, ' ');
+
+		GLsizei _length = 0;
+		GLint _size = 0;
+		GLenum _type = 0;
+
+		glGetActiveUniform(gl_name, i, static_cast<GLsizei>(buffer.size()), &_length, &_size, &_type, buffer.data());
+
+		const GLint location = glGetUniformLocation(gl_name, buffer.c_str());
+
+		if(location == -1) {
+			SDL_Log("Failed to get uniform location for \"%s\"", buffer.c_str());
+			continue;
+		}
+
+		uniform_locations[buffer] = location;
+	}
 }
 
 Shader::Shader()
@@ -119,10 +150,14 @@ std::optional<Shader> Shader::create(const GLenum shader_type, const std::string
 
 	glDeleteShader(shader_name);
 
-	return std::make_optional<Shader>(Shader(program_name));
+	Shader shader = Shader(program_name);
+	shader.populate_uniforms();
+
+	return std::make_optional<Shader>(std::move(shader));
 }
 
 GLuint Shader::name() const
 {
 	return gl_name;
 }
+
