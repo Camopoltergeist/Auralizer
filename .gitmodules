@@ -1,0 +1,13 @@
+[submodule "libs/SDL"]
+	path = libs/SDL
+	url = git@github.com:libsdl-org/SDL.git
+[submodule "libs/imgui"]
+	path = libs/imgui
+	url = git@github.com:ocornut/imgui.git
+	branch = docking
+[submodule "libs/miniaudio"]
+	path = libs/miniaudio
+	url = git@github.com:mackron/miniaudio.git
+[submodule "libs/stb"]
+	path = libs/stb
+	url = git@github.com:nothings/stb.git

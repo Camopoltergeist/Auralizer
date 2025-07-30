@@ -104,10 +104,11 @@ SDL_AppResult SDL_AppEvent(void* app_state, SDL_Event* event) {
 	return SDL_APP_CONTINUE;
 }
 
+// ReSharper disable once CppParameterNamesMismatch
 void SDL_AppQuit(void* app_state, SDL_AppResult result) {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL3_Shutdown();
 	ImGui::DestroyContext();
 
-	delete app_state;
+	delete static_cast<AppState*>(app_state);
 }
