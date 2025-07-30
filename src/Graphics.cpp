@@ -9,6 +9,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+#include <optional>
+
 Graphics::Graphics() = default;
 
 Graphics::Graphics(
@@ -31,13 +33,19 @@ Graphics::Graphics(
 	sampler(std::move(sampler))
 { }
 
-std::string load_text_file(const std::string& file_path) {
+std::optional<std::string> load_text_file(const std::string& file_path) {
 	const std::ifstream file(file_path);
+
+	if(!file.is_open()) {
+		SDL_Log("Could not open file: %s", file_path.c_str());
+		return std::nullopt;
+	}
+
 	std::ostringstream sstream;
 
 	sstream << file.rdbuf();
 
-	return sstream.str();
+	return std::make_optional<std::string>(sstream.str());
 }
 
 std::optional<Graphics> Graphics::init()
@@ -87,8 +95,15 @@ std::optional<Graphics> Graphics::init()
 
 	vertex_array.bind_element_buffer(index_buffer_opt.value());
 
-	const std::string vertex_source = load_text_file("./shaders/vertex.glsl");
-	const std::string fragment_source = load_text_file("./shaders/fragment.glsl");
+	auto vertex_opt = load_text_file("./shaders/vertex.glsl");
+	auto fragment_opt = load_text_file("./shaders/fragment.glsl");
+
+	if(!vertex_opt.has_value() || !fragment_opt.has_value()) {
+		return std::nullopt;
+	}
+
+	const std::string& vertex_source = vertex_opt.value();
+	const std::string& fragment_source = fragment_opt.value();
 
 	auto vertex_shader_opt = Shader::create(GL_VERTEX_SHADER, vertex_source);
 	auto fragment_shader_opt = Shader::create(GL_FRAGMENT_SHADER, fragment_source);
