@@ -125,30 +125,13 @@ std::optional<Graphics> Graphics::init()
 	}
 
 	sampler_opt.value().set_min_filtering(GL_LINEAR_MIPMAP_LINEAR);
+	sampler_opt.value().set_wrapping(GL_CLAMP_TO_EDGE);
 
-	int width = 0;
-	int height = 0;
-	int channel_count = 0;
-
-	const char* image_path = "test.png";
-
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* texture_data = stbi_load(image_path, &width, &height, &channel_count, 4);
-
-	if (texture_data == nullptr) {
-		SDL_Log("Failed to load image at \"%s\": %s", image_path, stbi_failure_reason());
-		return std::nullopt;
-	}
-
-	auto texture_opt = Texture::create(width, height, GL_RGBA8);
+	auto texture_opt = Texture::create(1024, 1, GL_R32F);
 
 	if (!texture_opt.has_value()) {
-		stbi_image_free(texture_data);
 		return std::nullopt;
 	}
-
-	texture_opt.value().upload_texture(GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
-	texture_opt.value().generate_mipmap();
 
 	return std::make_optional<Graphics>(
 		std::move(vertex_array),

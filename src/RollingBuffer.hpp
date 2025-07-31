@@ -65,7 +65,7 @@ public:
 		}
 
 		for (int i = 0; i < copy_2_size; i++) {
-			dest[i] = buffer[i];
+			dest[i + copy_1_size] = buffer[i];
 		}
 
 		mutex.unlock();

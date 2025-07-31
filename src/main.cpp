@@ -52,6 +52,8 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	AppState* state = static_cast<AppState*>(app_state);
 
 	state->analysis_node->rolling_buffer.copy_buffer(state->buffer.data());
+	state->graphics.texture.upload_texture(GL_RED, GL_FLOAT, state->buffer.data());
+	state->graphics.texture.generate_mipmap();
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -61,9 +63,7 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	state->graphics.texture.bind(0);
 	state->graphics.sampler.bind(0);
 
-	auto location = state->graphics.fragment_shader.get_uniform_location(std::string("t"));
-
-	if(location.has_value()) {
+	if(const auto location = state->graphics.fragment_shader.get_uniform_location(std::string("t")); location.has_value()) {
 		glProgramUniform1i(state->graphics.fragment_shader.name(), location.value(), 0);
 	}
 	else {

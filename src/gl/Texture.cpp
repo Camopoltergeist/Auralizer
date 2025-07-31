@@ -39,6 +39,12 @@ Texture& Texture::operator=(Texture&& other) noexcept
 	gl_name = other.gl_name;
 	other.gl_name = 0;
 
+	width = other.width;
+	height = other.height;
+
+	other.width = 0;
+	other.height = 0;
+
 	return *this;
 }
 
