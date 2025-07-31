@@ -17,10 +17,6 @@ AppState::AppState() {
 }
 
 AppState::~AppState() {
-	if (analysis_node != nullptr) {
-		ma_node_uninit(&analysis_node->base, nullptr);
-	}
-
 	if (sound != nullptr) {
 		ma_sound_uninit(sound);
 	}

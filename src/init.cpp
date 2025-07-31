@@ -213,15 +213,15 @@ bool init_audio(AppState* app_state) {
 	app_state->audio_engine = audio_engine;
 	ma_engine_set_volume(app_state->audio_engine, app_state->audio_volume);
 
-	AnalysisNode* analysis_node = initialize_analysis_node(ma_engine_get_node_graph(app_state->audio_engine));
+	auto analysis_node_opt = AnalysisNode::create(ma_engine_get_node_graph(app_state->audio_engine), 2);
 
-	if (analysis_node == nullptr) {
+	if (!analysis_node_opt) {
 		return false;
 	}
 
-	ma_node_attach_output_bus(analysis_node, 0, ma_engine_get_endpoint(app_state->audio_engine), 0);
+	ma_node_attach_output_bus(analysis_node_opt.get(), 0, ma_engine_get_endpoint(app_state->audio_engine), 0);
 
-	app_state->analysis_node = analysis_node;
+	app_state->analysis_node = std::move(analysis_node_opt);
 
 	return true;
 }

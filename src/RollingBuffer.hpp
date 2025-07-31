@@ -22,8 +22,6 @@ public:
 
 		int space_left = static_cast<int>(buffer.size()) - end;
 
-		int write_start = std::max(0, frame_count - (int)buffer.size());
-
 		frame_count = std::min(frame_count, (int)buffer.size());
 
 		int write_1_size = std::min(space_left, frame_count);

@@ -43,7 +43,7 @@ void load_audio_file(AppState* app_state, const std::string& file_path) {
 	app_state->audio_file_name = audio_file_name;
 	app_state->is_audio_file_selected = true;
 
-	ma_node_attach_output_bus(sound, 0, app_state->analysis_node, 0);
+	ma_node_attach_output_bus(sound, 0, app_state->analysis_node.get(), 0);
 	ma_sound_set_looping(sound, true);
 	ma_sound_start(sound);
 
