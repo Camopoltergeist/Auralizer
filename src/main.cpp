@@ -10,6 +10,8 @@
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_opengl3.h>
 
+#include <fftw3.h>
+
 #include "AppState.hpp"
 #include "init.hpp"
 #include "GUI.hpp"
@@ -44,6 +46,14 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 	if (!init_audio(new_state)) {
 		return SDL_APP_FAILURE;
 	}
+
+	const int FFT_SIZE = 1024;
+
+	float in[FFT_SIZE];
+	fftwf_complex out[FFT_SIZE / 2 + 1];
+	fftwf_plan plan;
+
+	plan = fftwf_plan_dft_r2c_1d(FFT_SIZE, in, out, FFTW_ESTIMATE);
 
 	return SDL_APP_CONTINUE;
 }

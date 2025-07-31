@@ -6,7 +6,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_subdirectory("libs/SDL/")
 add_subdirectory("libs/miniaudio")
-include_directories("libs/glad/" "libs/imgui" "libs/miniaudio" "libs/stb")
+include_directories("libs/glad/" "libs/imgui" "libs/miniaudio" "libs/stb" "libs/fftw3/win32-x64")
+
+add_library(fftw3 SHARED IMPORTED)
+set_target_properties(fftw3 PROPERTIES
+    IMPORTED_LOCATION_DEBUG "${PROJECT_SOURCE_DIR}/libs/fftw3/win32-x64/"
+    IMPORTED_LOCATION_RELEASE "${PROJECT_SOURCE_DIR}/libs/fftw3/win32-x64/"
+    INTERFACE_INCLUDE_DIRECTORIES "${PROJECT_SOURCE_DIR}/libs/fftw3/win32-x64/"
+    IMPORTED_IMPLIB "${PROJECT_SOURCE_DIR}/libs/fftw3/win32-x64/libfftw3f-3.lib"
+)
 
 add_executable(Auralizer src/main.cpp
         libs/imgui/imconfig.h
@@ -50,4 +58,4 @@ add_executable(Auralizer src/main.cpp
         src/gl/VertexArray.h
         libs/glad/glad.c)
 
-target_link_libraries(Auralizer SDL3-shared miniaudio)
+target_link_libraries(Auralizer SDL3-shared miniaudio fftw3)
