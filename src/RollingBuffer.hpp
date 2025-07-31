@@ -17,24 +17,24 @@ public:
 		buffer.fill(0.0);
 	}
 
-	void write_interleaved(const float* data, int frame_count, bool odd) {
+	void write_interleaved(const float* data, int frame_count, const bool odd) {
 		mutex.lock();
 
-		int space_left = static_cast<int>(buffer.size()) - end;
+		const int space_left = static_cast<int>(buffer.size()) - end;
 
-		frame_count = std::min(frame_count, (int)buffer.size());
+		frame_count = std::min(frame_count, static_cast<int>(buffer.size()));
 
-		int write_1_size = std::min(space_left, frame_count);
-		int write_2_size = frame_count - space_left;
+		const int write_1_size = std::min(space_left, frame_count);
+		const int write_2_size = frame_count - space_left;
 
 		for (int i = 0; i < write_1_size; i++) {
-			int offset = i * 2 + (int)odd;
+			const int offset = i * 2 + static_cast<int>(odd);
 
 			buffer[end + i] = data[offset];
 		}
 
 		for (int i = 0; i < write_2_size; i++) {
-			int offset = (i + write_1_size) * 2 + (int)odd;
+			const int offset = (i + write_1_size) * 2 + static_cast<int>(odd);
 
 			buffer[i] = data[offset];
 		}
@@ -44,20 +44,20 @@ public:
 		mutex.unlock();
 	}
 
-	size_t get_size() {
+	[[nodiscard]] size_t get_size() const {
 		return buffer.size();
 	}
 
 	void copy_buffer(float* dest) {
 		mutex.lock();
 
-		int space_left = static_cast<int>(buffer.size()) - end;
+		const int space_left = static_cast<int>(buffer.size()) - end;
 
-		int copy_1_size = space_left;
-		int copy_2_size = static_cast<int>(buffer.size()) - space_left;
+		const int copy_1_size = space_left;
+		const int copy_2_size = static_cast<int>(buffer.size()) - space_left;
 
 		for (int i = 0; i < copy_1_size; i++) {
-			int offset = end + i;
+			const int offset = end + i;
 
 			dest[i] = buffer[offset];
 		}
