@@ -19,7 +19,7 @@ struct AppState {
 	float audio_volume;
 	bool is_playing;
 
-	std::array<float, ROLLING_BUFFER_SIZE> buffer;
+	std::array<float, ROLLING_BUFFER_SIZE> buffer{};
 
 	Graphics graphics;
 

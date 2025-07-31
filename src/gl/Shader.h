@@ -33,5 +33,9 @@ public:
 
 	[[nodiscard]] GLuint name() const;
 	[[nodiscard]] std::optional<GLint> get_uniform_location(const std::string& uniform_name) const;
+
+	void set_uniform(const std::string& uniform_name, int v) const;
+	void set_uniform(const std::string& uniform_name, float v) const;
+	void set_uniform(const std::string& uniform_name, float v1, float v2) const;
 };
 

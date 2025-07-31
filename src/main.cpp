@@ -55,6 +55,11 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	state->graphics.texture.upload_texture(GL_RED, GL_FLOAT, state->buffer.data());
 	state->graphics.texture.generate_mipmap();
 
+	int width = 0;
+	int height = 0;
+
+	SDL_GetWindowSize(state->main_window, &width, &height);
+
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -63,12 +68,8 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	state->graphics.texture.bind(0);
 	state->graphics.sampler.bind(0);
 
-	if(const auto location = state->graphics.fragment_shader.get_uniform_location(std::string("t")); location.has_value()) {
-		glProgramUniform1i(state->graphics.fragment_shader.name(), location.value(), 0);
-	}
-	else {
-		SDL_Log("Could not find uniform location");
-	}
+	state->graphics.fragment_shader.set_uniform("t", 0);
+	state->graphics.fragment_shader.set_uniform("screen_size", static_cast<float>(width), static_cast<float>(height));
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

@@ -182,3 +182,33 @@ std::optional<GLint> Shader::get_uniform_location(const std::string& uniform_nam
 	return std::make_optional(location);
 }
 
+void Shader::set_uniform(const std::string& uniform_name, const int v) const {
+	const auto location = get_uniform_location(uniform_name);
+
+	if(!location.has_value()) {
+		return;
+	}
+
+	glProgramUniform1i(gl_name, location.value(), v);
+}
+
+void Shader::set_uniform(const std::string& uniform_name, const float v) const {
+	const auto location = get_uniform_location(uniform_name);
+
+	if(!location.has_value()) {
+		return;
+	}
+
+	glProgramUniform1f(gl_name, location.value(), v);
+}
+
+void Shader::set_uniform(const std::string& uniform_name, const float v1, const float v2) const {
+	const auto location = get_uniform_location(uniform_name);
+
+	if(!location.has_value()) {
+		return;
+	}
+
+	glProgramUniform2f(gl_name, location.value(), v1, v2);
+}
+
