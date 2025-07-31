@@ -13,7 +13,7 @@ static ma_node_vtable process_node_vtable = {
 	MA_NODE_FLAG_PASSTHROUGH,
 };
 
-AnalysisNode::AnalysisNode() = default;
+AnalysisNode::AnalysisNode(const size_t buffer_size) : rolling_buffer(buffer_size) { }
 
 AnalysisNode::~AnalysisNode() {
 	ma_node_uninit(&base, nullptr);
@@ -23,7 +23,7 @@ void AnalysisNode::copy_buffer(float *dest) {
 	rolling_buffer.copy_buffer(dest);
 }
 
-std::unique_ptr<AnalysisNode> AnalysisNode::create(ma_node_graph *node_graph, const ma_uint32 channel_count) {
+std::unique_ptr<AnalysisNode> AnalysisNode::create(ma_node_graph *node_graph, const size_t buffer_size, const ma_uint32 channel_count) {
 	const ma_uint32 input_channels[1] = { channel_count };
 	const ma_uint32 output_channels[1] = { channel_count };
 
@@ -32,7 +32,7 @@ std::unique_ptr<AnalysisNode> AnalysisNode::create(ma_node_graph *node_graph, co
 	node_config.pInputChannels = input_channels;
 	node_config.pOutputChannels = output_channels;
 
-	auto analysis_node = std::make_unique<AnalysisNode>();
+	auto analysis_node = std::make_unique<AnalysisNode>(buffer_size);
 
 	if (ma_node_init(node_graph, &node_config, nullptr, &analysis_node->base) != MA_SUCCESS) {
 		SDL_Log("Failed to initialize analysis node");

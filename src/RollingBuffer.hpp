@@ -1,6 +1,6 @@
 #pragma once
 
-#include <array>
+#include <vector>
 #include <algorithm>
 #include <mutex>
 
@@ -8,14 +8,12 @@
 
 class RollingBuffer
 {
-	std::array<float, ROLLING_BUFFER_SIZE> buffer;
+	std::vector<float> buffer;
 	int end;
 	std::mutex mutex;
 
 public:
-	RollingBuffer() : buffer(), end(0) {
-		buffer.fill(0.0);
-	}
+	explicit RollingBuffer(const size_t buffer_size) : buffer(buffer_size, 0.0), end(0) { }
 
 	void write_interleaved(const float* data, int frame_count, const bool odd) {
 		mutex.lock();
@@ -44,7 +42,7 @@ public:
 		mutex.unlock();
 	}
 
-	[[nodiscard]] size_t get_size() const {
+	[[nodiscard]] size_t size() const {
 		return buffer.size();
 	}
 
