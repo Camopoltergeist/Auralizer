@@ -60,6 +60,16 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	state->graphics.pipeline.bind();
 	state->graphics.texture.bind(0);
 	state->graphics.sampler.bind(0);
+
+	auto location = state->graphics.fragment_shader.get_uniform_location(std::string("t"));
+
+	if(location.has_value()) {
+		glProgramUniform1i(state->graphics.fragment_shader.name(), location.value(), 0);
+	}
+	else {
+		SDL_Log("Could not find uniform location");
+	}
+
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 	draw_gui(state);

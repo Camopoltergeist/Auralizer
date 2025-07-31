@@ -1,5 +1,6 @@
 #include "Shader.h"
 
+#include <stdexcept>
 #include <vector>
 
 #include <SDL3/SDL.h>
@@ -64,6 +65,9 @@ void Shader::populate_uniforms() {
 
 		glGetActiveUniform(gl_name, i, static_cast<GLsizei>(buffer.size()), &_length, &_size, &_type, buffer.data());
 
+		// Remove the extra (and unneeded at this point) null character from the end
+		buffer.pop_back();
+
 		const GLint location = glGetUniformLocation(gl_name, buffer.c_str());
 
 		if(location == -1) {
@@ -84,6 +88,8 @@ Shader::Shader(Shader&& other) noexcept : gl_name(0)
 {
 	gl_name = other.gl_name;
 	other.gl_name = 0;
+
+	uniform_locations = std::move(other.uniform_locations);
 }
 
 Shader::~Shader()
@@ -105,6 +111,8 @@ Shader& Shader::operator=(Shader&& other) noexcept
 
 	gl_name = other.gl_name;
 	other.gl_name = 0;
+
+	uniform_locations = std::move(other.uniform_locations);
 
 	return *this;
 }
@@ -159,5 +167,18 @@ std::optional<Shader> Shader::create(const GLenum shader_type, const std::string
 GLuint Shader::name() const
 {
 	return gl_name;
+}
+
+std::optional<GLint> Shader::get_uniform_location(const std::string& uniform_name) const {
+	GLint location = 0;
+
+	try {
+		location = uniform_locations.at(uniform_name);
+	}
+	catch (const std::out_of_range& e) {
+		return std::nullopt;
+	}
+
+	return std::make_optional(location);
 }
 

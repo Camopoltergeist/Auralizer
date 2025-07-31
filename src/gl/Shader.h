@@ -9,7 +9,10 @@ class Shader
 {
 private:
 	GLuint gl_name;
+
+public:
 	std::map<std::string, GLint> uniform_locations;
+private:
 
 	explicit Shader(GLuint gl_name);
 
@@ -29,5 +32,6 @@ public:
 	static std::optional<Shader> create(GLenum shader_type, const std::string& shader_source);
 
 	[[nodiscard]] GLuint name() const;
+	[[nodiscard]] std::optional<GLint> get_uniform_location(const std::string& uniform_name) const;
 };
 
