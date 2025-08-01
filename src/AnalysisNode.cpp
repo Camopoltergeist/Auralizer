@@ -34,22 +34,21 @@ AnalysisNode::~AnalysisNode() {
 
 const std::vector<float> &AnalysisNode::get_fft_data() {
 	copy_audio_data();
-
-	float m = 0;
 	apply_hann_window();
 
 	fftwf_execute(fft_plan);
 
-	const float max_mag = static_cast<float>(fft_in_buffer.size()) / 8.f;
+	const float max_mag = static_cast<float>(fft_in_buffer.size()) / 1.f;
 
 	for (int i = 0; i < fft_out_buffer.size(); i++) {
 		const float mag = std::sqrt(fft_out_buffer[i][0] * fft_out_buffer[i][0] + fft_out_buffer[i][1] * fft_out_buffer[i][1]);
-		mag_buffer[i] = mag / max_mag;
+		const float db = 20.f * std::log10(mag / max_mag + 0.000001f);
 
-		m = std::max(m, mag);
+		const float max = -10.f;
+		const float min = -90.f;
+
+		mag_buffer[i] = (db - min) / (max - min);
 	}
-
-	// SDL_Log("%f", m);
 
 	return mag_buffer;
 }
