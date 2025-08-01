@@ -22,7 +22,7 @@ AnalysisNode::AnalysisNode(const size_t buffer_size) :
 	hann_window(buffer_size, 0.0),
 	fft_plan(nullptr)
 {
-	fft_plan = fftwf_plan_dft_r2c_1d(static_cast<int>(buffer_size), fft_in_buffer.data(), fft_out_buffer.data(), FFTW_ESTIMATE);
+	fft_plan = fftwf_plan_dft_r2c_1d(static_cast<int>(buffer_size), fft_in_buffer.data(), reinterpret_cast<fftwf_complex*>(fft_out_buffer.data()), FFTW_ESTIMATE);
 
 	for (int i = 0; i < buffer_size; i++) {
 		hann_window[i] = static_cast<float>(0.5 * (1 - std::cos(2 * std::numbers::pi * i / static_cast<double>(buffer_size - 1))));
@@ -42,7 +42,7 @@ const std::vector<float> &AnalysisNode::get_fft_data() {
 	const float max_mag = static_cast<float>(fft_in_buffer.size()) / 1.f;
 
 	for (int i = 0; i < fft_out_buffer.size(); i++) {
-		const float mag = std::sqrt(fft_out_buffer[i][0] * fft_out_buffer[i][0] + fft_out_buffer[i][1] * fft_out_buffer[i][1]);
+		const float mag = std::sqrt(fft_out_buffer[i].a * fft_out_buffer[i].a + fft_out_buffer[i].b * fft_out_buffer[i].b);
 		const float db = 20.f * std::log10(mag / max_mag + 0.000001f);
 
 		const float max = -5.f;

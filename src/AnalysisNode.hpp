@@ -7,12 +7,17 @@
 #include <miniaudio.h>
 #include <fftw3.h>
 
+struct fuckyou {
+	float a = 0.f;
+	float b = 0.f;
+};
+
 class AnalysisNode {
 private:
 	ma_node_base base{};
 	RollingBuffer rolling_buffer;
 	std::vector<float> fft_in_buffer;
-	std::vector<fftwf_complex> fft_out_buffer;
+	std::vector<fuckyou> fft_out_buffer;
 	std::vector<float> mag_buffer;
 	std::vector<float> hann_window;
 	fftwf_plan fft_plan;
