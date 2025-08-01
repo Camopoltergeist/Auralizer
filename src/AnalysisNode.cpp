@@ -4,6 +4,7 @@
 #include <SDL3/SDL.h>
 
 #include <cmath>
+#include <numbers>
 
 static ma_node_vtable process_node_vtable = {
 	AnalysisNode::process_node,
