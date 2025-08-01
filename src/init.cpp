@@ -213,7 +213,7 @@ bool init_audio(AppState* app_state) {
 	app_state->audio_engine = audio_engine;
 	ma_engine_set_volume(app_state->audio_engine, app_state->audio_volume);
 
-	auto analysis_node_opt = AnalysisNode::create(ma_engine_get_node_graph(app_state->audio_engine), app_state->buffer.size(), 2);
+	auto analysis_node_opt = AnalysisNode::create(ma_engine_get_node_graph(app_state->audio_engine), 2048, 2);
 
 	if (!analysis_node_opt) {
 		return false;

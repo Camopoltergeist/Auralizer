@@ -47,22 +47,14 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 		return SDL_APP_FAILURE;
 	}
 
-	const int FFT_SIZE = 1024;
-
-	float in[FFT_SIZE];
-	fftwf_complex out[FFT_SIZE / 2 + 1];
-	fftwf_plan plan;
-
-	plan = fftwf_plan_dft_r2c_1d(FFT_SIZE, in, out, FFTW_ESTIMATE);
-
 	return SDL_APP_CONTINUE;
 }
 
 SDL_AppResult SDL_AppIterate(void* app_state) {
 	AppState* state = static_cast<AppState*>(app_state);
 
-	state->analysis_node->copy_buffer(state->buffer.data());
-	state->graphics.texture.upload_texture(GL_RED, GL_FLOAT, state->buffer.data());
+	auto& fft_data = state->analysis_node->get_fft_data();
+	state->graphics.texture.upload_texture(GL_RED, GL_FLOAT, fft_data.data());
 	state->graphics.texture.generate_mipmap();
 
 	int width = 0;

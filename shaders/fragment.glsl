@@ -11,9 +11,9 @@ void main() {
 	const vec2 pixel_size = 1.0 / screen_size;
 	const float line_height = pixel_size.y * 10.0;
 
-	float mag = (texture(t, v_uv).r + 1.0) / 2.0;
-	float dist = abs(v_uv.y - mag);
-	float mult = step(dist, line_height);
+	float mag = texture(t, v_uv).r;
+	// float dist = abs(v_uv.y - mag);
+	float mult = step(v_uv.y, mag);
 
 	vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
 
