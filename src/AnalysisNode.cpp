@@ -44,10 +44,10 @@ const std::vector<float> &AnalysisNode::get_fft_data() {
 		const float mag = std::sqrt(fft_out_buffer[i][0] * fft_out_buffer[i][0] + fft_out_buffer[i][1] * fft_out_buffer[i][1]);
 		const float db = 20.f * std::log10(mag / max_mag + 0.000001f);
 
-		const float max = -10.f;
-		const float min = -90.f;
+		const float max = -5.f;
+		const float min = -100.f;
 
-		mag_buffer[i] = (db - min) / (max - min);
+		mag_buffer[i] = std::clamp((db - min) / (max - min), 0.f, 1.f);
 	}
 
 	return mag_buffer;

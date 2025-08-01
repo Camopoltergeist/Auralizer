@@ -71,7 +71,7 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	state->graphics.sampler.bind(0);
 
 	state->graphics.fragment_shader.set_uniform("t", 0);
-	state->graphics.fragment_shader.set_uniform("screen_size", static_cast<float>(width), static_cast<float>(height));
+	state->graphics.fragment_shader.set_uniform("viewport_size", static_cast<float>(width), static_cast<float>(height));
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

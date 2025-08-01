@@ -26,7 +26,7 @@ bool init_video_subsystem() {
 bool init_window(AppState* app_state) {
 	SDL_WindowFlags window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
 
-	SDL_Window* main_window = SDL_CreateWindow("Hello Window!", 1280, 720, window_flags);
+	SDL_Window* main_window = SDL_CreateWindow("Auralizer", 1280, 720, window_flags);
 
 	if (main_window == nullptr) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create window: %s", SDL_GetError());
@@ -81,88 +81,6 @@ bool init_opengl(AppState* app_state) {
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
 	
 	SDL_GL_SetSwapInterval(1);
-
-	/*GLuint vertex_array_object = 0;
-
-	glCreateVertexArrays(1, &vertex_array_object);
-
-	if (vertex_array_object == 0) {
-		SDL_Log("Failed to create vertex array object");
-		return false;
-	}
-
-	glEnableVertexArrayAttrib(vertex_array_object, 0);
-	glEnableVertexArrayAttrib(vertex_array_object, 1);
-
-	glVertexArrayAttribFormat(vertex_array_object, 0, 2, GL_FLOAT, GL_FALSE, 0);
-	glVertexArrayAttribFormat(vertex_array_object, 1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2);
-
-	app_state->vertex_array_object = vertex_array_object;
-
-	GLuint vertex_buffer = 0;
-
-	glCreateBuffers(1, &vertex_buffer);
-
-	if (vertex_buffer == 0) {
-		SDL_Log("Failed to create vertex buffer");
-		return false;
-	}
-
-	GLfloat vertices[] = {
-		-1.f, -1.f, 0.f, 0.f,
-		1.f, -1.f, 1.f, 0.f,
-		1.f, 1.f, 1.f, 1.f,
-		-1.f, 1.f, 0.f, 1.f
-	};
-
-	glNamedBufferStorage(vertex_buffer, sizeof(vertices), vertices, 0);
-
-	glVertexArrayVertexBuffer(vertex_array_object, 0, vertex_buffer, 0, sizeof(GLfloat) * 4);
-	glVertexArrayAttribBinding(vertex_array_object, 0, 0);
-	glVertexArrayAttribBinding(vertex_array_object, 1, 0);
-
-	GLuint index_buffer = 0;
-
-	glCreateBuffers(1, &index_buffer);
-
-	if (index_buffer == 0) {
-		SDL_Log("Failed to create index buffer");
-		return false;
-	}
-
-	GLuint indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	glNamedBufferStorage(index_buffer, sizeof(indices), indices, 0);
-
-	glVertexArrayElementBuffer(vertex_array_object, index_buffer);
-
-	app_state->vertex_buffer = vertex_buffer;
-
-	GLuint vertex_shader = load_shader("./shaders/vertex.glsl", GL_VERTEX_SHADER);
-	
-	if (vertex_shader == 0) {
-		return false;
-	}
-
-	GLuint fragment_shader = load_shader("./shaders/fragment.glsl", GL_FRAGMENT_SHADER);
-
-	if (fragment_shader == 0) {
-		return false;
-	}
-
-	app_state->vertex_shader = vertex_shader;
-	app_state->fragment_shader = fragment_shader;
-
-	GLuint pipeline = 0;
-	glCreateProgramPipelines(1, &pipeline);
-
-	glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, vertex_shader);
-	glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, fragment_shader);
-
-	app_state->pipeline = pipeline;*/
 
 	return true;
 }
