@@ -5,44 +5,24 @@
 #include "RollingBuffer.hpp"
 
 #include <miniaudio.h>
-#include <fftw3.h>
 
-// fftwf_complex is defined as the following:
-//
-// typedef float fftwf_complex[2]
-//
-// which worked fine with MinGW, but not with MSVC.
-// Apparently you're not supposed to store fixed size arrays in vectors, so this struct circumvents that.
-struct fuckyou {
-	float a = 0.f;
-	float b = 0.f;
-};
+#include "Analyser.hpp"
 
 class AnalyserNode {
 private:
 	ma_node_base base{};
 	RollingBuffer rolling_buffer;
-	std::vector<float> fft_in_buffer;
-	std::vector<fuckyou> fft_out_buffer;
-	std::vector<float> mag_buffer;
-	std::vector<float> hann_window;
-	fftwf_plan fft_plan;
+	Analyser analyser;
 
 	void copy_audio_data();
 
-	void apply_hann_window();
-
 public:
-	float min_db = -100.f;
-	float max_db = -5.f;
-
 	explicit AnalyserNode(size_t buffer_size);
-
 	AnalyserNode(const AnalyserNode&) = delete;
-
 	AnalyserNode(AnalyserNode&&) = delete;
-
 	~AnalyserNode();
+
+	Analyser& get_analyser();
 
 	const std::vector<float>& get_fft_data();
 

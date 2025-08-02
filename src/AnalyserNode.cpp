@@ -4,7 +4,6 @@
 #include <SDL3/SDL.h>
 
 #include <cmath>
-#include <numbers>
 
 static ma_node_vtable process_node_vtable = {
 	AnalyserNode::process_node,
@@ -16,53 +15,28 @@ static ma_node_vtable process_node_vtable = {
 
 AnalyserNode::AnalyserNode(const size_t buffer_size) :
 	rolling_buffer(buffer_size),
-	fft_in_buffer(buffer_size, 0.0),
-	fft_out_buffer(buffer_size / 2 + 1),
-	mag_buffer(buffer_size / 2 + 1),
-	hann_window(buffer_size, 0.0),
-	fft_plan(nullptr)
-{
-	fft_plan = fftwf_plan_dft_r2c_1d(static_cast<int>(buffer_size), fft_in_buffer.data(), reinterpret_cast<fftwf_complex*>(fft_out_buffer.data()), FFTW_ESTIMATE);
-
-	for (int i = 0; i < buffer_size; i++) {
-		hann_window[i] = static_cast<float>(0.5 * (1 - std::cos(2 * std::numbers::pi * i / static_cast<double>(buffer_size - 1))));
-	}
-}
+	analyser(buffer_size)
+{ }
 
 AnalyserNode::~AnalyserNode()
 {
 	ma_node_uninit(&base, nullptr);
 }
 
+Analyser& AnalyserNode::get_analyser()
+{
+	return analyser;
+}
+
 const std::vector<float>& AnalyserNode::get_fft_data()
 {
 	copy_audio_data();
-	apply_hann_window();
-
-	fftwf_execute(fft_plan);
-
-	const float max_mag = static_cast<float>(fft_in_buffer.size()) / 1.f;
-
-	for (int i = 0; i < fft_out_buffer.size(); i++) {
-		const float mag = std::sqrt(fft_out_buffer[i].a * fft_out_buffer[i].a + fft_out_buffer[i].b * fft_out_buffer[i].b);
-		const float db = 20.f * std::log10(mag / max_mag + 0.000001f);
-
-		mag_buffer[i] = std::clamp((db - min_db) / (max_db - min_db), 0.f, 1.f);
-	}
-
-	return mag_buffer;
+	return analyser.get_fft_data();
 }
 
 void AnalyserNode::copy_audio_data()
 {
-	rolling_buffer.copy_buffer(fft_in_buffer.data());
-}
-
-void AnalyserNode::apply_hann_window()
-{
-	for (int i = 0; i < fft_in_buffer.size(); i++) {
-		fft_in_buffer[i] *= hann_window[i];
-	}
+	rolling_buffer.copy_buffer(analyser.in_buffer().data());
 }
 
 std::unique_ptr<AnalyserNode> AnalyserNode::create(ma_node_graph* node_graph, const size_t buffer_size, const ma_uint32 channel_count)
