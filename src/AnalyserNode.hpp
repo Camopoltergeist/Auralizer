@@ -18,7 +18,7 @@ struct fuckyou {
 	float b = 0.f;
 };
 
-class AnalysisNode {
+class AnalyserNode {
 private:
 	ma_node_base base{};
 	RollingBuffer rolling_buffer;
@@ -36,19 +36,19 @@ public:
 	float min_db = -100.f;
 	float max_db = -5.f;
 
-	explicit AnalysisNode(size_t buffer_size);
+	explicit AnalyserNode(size_t buffer_size);
 
-	AnalysisNode(const AnalysisNode&) = delete;
+	AnalyserNode(const AnalyserNode&) = delete;
 
-	AnalysisNode(AnalysisNode&&) = delete;
+	AnalyserNode(AnalyserNode&&) = delete;
 
-	~AnalysisNode();
+	~AnalyserNode();
 
 	const std::vector<float>& get_fft_data();
 
-	static std::unique_ptr<AnalysisNode> create(ma_node_graph* node_graph, size_t buffer_size, ma_uint32 channel_count);
+	static std::unique_ptr<AnalyserNode> create(ma_node_graph* node_graph, size_t buffer_size, ma_uint32 channel_count);
 
 	static void process_node(ma_node* node, const float** frames_in, ma_uint32* frame_count_in, float** frames_out, ma_uint32* frame_count_out);
 };
 
-AnalysisNode* initialize_analysis_node(ma_node_graph* node_graph);
+AnalyserNode* initialize_analysis_node(ma_node_graph* node_graph);

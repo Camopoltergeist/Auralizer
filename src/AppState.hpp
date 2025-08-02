@@ -4,7 +4,7 @@
 #include <SDL3/SDL.h>
 
 #include "miniaudio.h"
-#include "AnalysisNode.hpp"
+#include "AnalyserNode.hpp"
 #include "Graphics.hpp"
 #include "Window.hpp"
 
@@ -13,7 +13,7 @@ struct AppState {
 
 	ma_engine* audio_engine;
 	ma_sound* sound;
-	std::unique_ptr<AnalysisNode> analysis_node;
+	std::unique_ptr<AnalyserNode> analysis_node;
 	float audio_volume;
 	bool is_playing;
 

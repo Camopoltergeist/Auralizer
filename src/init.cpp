@@ -7,11 +7,7 @@
 
 #include "AppState.hpp"
 #include "miniaudio.h"
-#include "AnalysisNode.hpp"
-
-void debug_message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
-	SDL_Log("GL Message: %s", message);
-}
+#include "AnalyserNode.hpp"
 
 bool init_video_subsystem() {
 	if (!SDL_InitSubSystem(SDL_INIT_VIDEO)) {
@@ -68,7 +64,7 @@ bool init_audio(AppState* app_state) {
 	app_state->audio_engine = audio_engine;
 	ma_engine_set_volume(app_state->audio_engine, app_state->audio_volume);
 
-	auto analysis_node_opt = AnalysisNode::create(ma_engine_get_node_graph(app_state->audio_engine), 2048, 2);
+	auto analysis_node_opt = AnalyserNode::create(ma_engine_get_node_graph(app_state->audio_engine), 2048, 2);
 
 	if (!analysis_node_opt) {
 		return false;
