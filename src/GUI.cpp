@@ -85,7 +85,8 @@ void draw_gui(AppState* app_state) {
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport()->ID, nullptr, ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_AutoHideTabBar);
 
 	if (app_state->is_imgui_window_open) {
-		ImGui::Begin("Hello ImGui!", &app_state->is_imgui_window_open);
+		ImGui::Begin("Inspector", &app_state->is_imgui_window_open);
+		ImGui::SeparatorText("Inspector (F10 to toggle)");
 
 		if (app_state->is_audio_file_selected) {
 			ImGui::Text(app_state->audio_file_name.c_str());
@@ -144,6 +145,10 @@ void draw_gui(AppState* app_state) {
 			ma_engine_set_volume(app_state->audio_engine, volume);
 			app_state->audio_volume = volume;
 		}
+
+		ImGui::SeparatorText("Analyzer");
+		ImGui::SliderFloat("Min dB", &app_state->analysis_node->min_db, -200.f, 0.f);
+		ImGui::SliderFloat("Max dB", &app_state->analysis_node->max_db, -200.f, 0.f);
 
 		ImGui::End();
 	}

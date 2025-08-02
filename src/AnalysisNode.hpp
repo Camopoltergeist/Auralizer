@@ -33,6 +33,9 @@ private:
 	void apply_hann_window();
 
 public:
+	float min_db = -100.f;
+	float max_db = -5.f;
+
 	explicit AnalysisNode(size_t buffer_size);
 
 	AnalysisNode(const AnalysisNode&) = delete;
