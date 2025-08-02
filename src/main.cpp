@@ -33,10 +33,6 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 
 	new_state->main_window = std::move(main_window.value());
 
-	if (!init_opengl(new_state)) {
-		return SDL_APP_FAILURE;
-	}
-
 	auto graphics = Graphics::init();
 
 	if (!graphics.has_value()) {

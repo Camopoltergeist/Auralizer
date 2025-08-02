@@ -22,53 +22,6 @@ bool init_video_subsystem() {
 	return true;
 }
 
-bool init_opengl(AppState* app_state) {
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
-
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-	SDL_GLContext gl_context = SDL_GL_CreateContext(app_state->main_window.get_window_ptr());
-
-	if (gl_context == nullptr) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create OpenGL context: %s", SDL_GetError());
-		return false;
-	}
-
-	app_state->gl_context = gl_context;
-
-	int version = gladLoadGL();
-
-	if (version == 0) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load OpenGL functions");
-		return false;
-	}
-
-	int opengl_major_version = 0;
-	int opengl_minor_version = 0;
-	int context_flags = 0;
-
-	SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &opengl_major_version);
-	SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &opengl_minor_version);
-	SDL_GL_GetAttribute(SDL_GL_CONTEXT_FLAGS, &context_flags);
-
-	SDL_Log("OpenGL %i.%i", opengl_major_version, opengl_minor_version);
-
-	if ((context_flags & SDL_GL_CONTEXT_DEBUG_FLAG) != 0) {
-		SDL_Log("Debug Context");
-	}
-
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-
-	glDebugMessageCallback(debug_message_callback, nullptr);
-	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
-
-	SDL_GL_SetSwapInterval(1);
-
-	return true;
-}
-
 void init_imgui(AppState* app_state) {
 	IMGUI_CHECKVERSION();
 

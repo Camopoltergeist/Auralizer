@@ -2,6 +2,7 @@
 #include <optional>
 
 #include <SDL3/SDL.h>
+#include <glad.h>
 
 struct WindowSize {
 	int width;
@@ -10,8 +11,13 @@ struct WindowSize {
 
 class Window {
 	SDL_Window* window = nullptr;
+	SDL_GLContext gl_context = nullptr;
 
-	explicit Window(SDL_Window* window);
+	Window(SDL_Window* window, SDL_GLContext gl_context);
+
+	static std::optional<SDL_GLContext> create_context(SDL_Window* window);
+	static void debug_message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
+
 public:
 	Window() = default;
 	Window(const Window&) = delete;

@@ -1,11 +1,68 @@
 #include "Window.hpp"
 
-Window::Window(SDL_Window* window) : window(window) { }
+static bool is_opengl_loaded = false;
 
-Window::Window(Window&& other) noexcept : window(nullptr)
+Window::Window(SDL_Window* window, SDL_GLContext gl_context) : window(window), gl_context(gl_context) { }
+
+std::optional<SDL_GLContext> Window::create_context(SDL_Window* window)
+{
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+	SDL_GLContext gl_context = SDL_GL_CreateContext(window);
+
+	if (gl_context == nullptr) {
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create OpenGL context: %s", SDL_GetError());
+		return std::nullopt;
+	}
+
+	if(!is_opengl_loaded) {
+		if (const int version = gladLoadGL(); version == 0) {
+			SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load OpenGL functions");
+			return std::nullopt;
+		}
+	}
+
+	is_opengl_loaded = true;
+
+	int opengl_major_version = 0;
+	int opengl_minor_version = 0;
+	int context_flags = 0;
+
+	SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &opengl_major_version);
+	SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &opengl_minor_version);
+	SDL_GL_GetAttribute(SDL_GL_CONTEXT_FLAGS, &context_flags);
+
+	SDL_Log("OpenGL %i.%i", opengl_major_version, opengl_minor_version);
+
+	if ((context_flags & SDL_GL_CONTEXT_DEBUG_FLAG) != 0) {
+		SDL_Log("Debug Context");
+	}
+
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+	glDebugMessageCallback(debug_message_callback, nullptr);
+	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+
+	SDL_GL_SetSwapInterval(1);
+
+	return gl_context;
+}
+
+void Window::debug_message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+	SDL_Log("GL Message: %s", message);
+}
+
+Window::Window(Window&& other) noexcept : window(nullptr), gl_context(nullptr)
 {
 	window = other.window;
+	gl_context = other.gl_context;
+
 	other.window = nullptr;
+	other.gl_context = nullptr;
 }
 
 Window& Window::operator=(Window&& other) noexcept
@@ -14,18 +71,23 @@ Window& Window::operator=(Window&& other) noexcept
 		return *this;
 	}
 
-	if (window != nullptr) {
-		SDL_DestroyWindow(window);
-	}
+	this->~Window();
 
 	window = other.window;
+	gl_context = other.gl_context;
+
 	other.window = nullptr;
+	other.gl_context = nullptr;
 
 	return *this;
 }
 
 Window::~Window()
 {
+	if(gl_context != nullptr) {
+		SDL_GL_DestroyContext(gl_context);
+	}
+
 	if(window != nullptr) {
 		SDL_DestroyWindow(window);
 	}
@@ -42,7 +104,13 @@ std::optional<Window> Window::create()
 		return std::nullopt;
 	}
 
-	return std::make_optional<Window>(Window(main_window));
+	const auto gl_context = Window::create_context(main_window);
+
+	if(!gl_context.has_value()) {
+		return std::nullopt;
+	}
+
+	return std::make_optional<Window>(Window(main_window, gl_context.value()));
 }
 
 SDL_Window* Window::get_window_ptr() const
