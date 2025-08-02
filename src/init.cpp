@@ -22,21 +22,6 @@ bool init_video_subsystem() {
 	return true;
 }
 
-bool init_window(AppState* app_state) {
-	SDL_WindowFlags window_flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
-
-	SDL_Window* main_window = SDL_CreateWindow("Auralizer", 1280, 720, window_flags);
-
-	if (main_window == nullptr) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create window: %s", SDL_GetError());
-		return false;
-	}
-
-	app_state->main_window = main_window;
-
-	return true;
-}
-
 bool init_opengl(AppState* app_state) {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
@@ -44,7 +29,7 @@ bool init_opengl(AppState* app_state) {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-	SDL_GLContext gl_context = SDL_GL_CreateContext(app_state->main_window);
+	SDL_GLContext gl_context = SDL_GL_CreateContext(app_state->main_window.get_window_ptr());
 
 	if (gl_context == nullptr) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create OpenGL context: %s", SDL_GetError());
@@ -98,7 +83,7 @@ void init_imgui(AppState* app_state) {
 	style.Colors[ImGuiCol_WindowBg] = ImVec4(0.f, 0.f, 0.f, 0.5f);
 	style.Colors[ImGuiCol_ChildBg] = ImVec4(0.f, 0.f, 0.f, 0.5f);
 
-	ImGui_ImplSDL3_InitForOpenGL(app_state->main_window, app_state->gl_context);
+	ImGui_ImplSDL3_InitForOpenGL(app_state->main_window.get_window_ptr(), app_state->gl_context);
 	ImGui_ImplOpenGL3_Init("#version 460 core");
 
 	ImFontConfig font_config;

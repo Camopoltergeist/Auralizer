@@ -25,9 +25,13 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 		return SDL_APP_FAILURE;
 	}
 
-	if (!init_window(new_state)) {
+	auto main_window = Window::create();
+
+	if(!main_window.has_value()) {
 		return SDL_APP_FAILURE;
 	}
+
+	new_state->main_window = std::move(main_window.value());
 
 	if (!init_opengl(new_state)) {
 		return SDL_APP_FAILURE;
@@ -57,10 +61,7 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	state->graphics.texture.upload_texture(GL_RED, GL_FLOAT, fft_data.data());
 	state->graphics.texture.generate_mipmap();
 
-	int width = 0;
-	int height = 0;
-
-	SDL_GetWindowSize(state->main_window, &width, &height);
+	auto [width, height] = state->main_window.get_window_size();
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -77,7 +78,7 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 
 	draw_gui(state);
 
-	SDL_GL_SwapWindow(state->main_window);
+	state->main_window.swap_window();
 
 	return SDL_APP_CONTINUE;
 }

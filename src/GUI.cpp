@@ -100,7 +100,7 @@ void draw_gui(AppState* app_state) {
 		};
 
 		if (ImGui::Button("Select Audio File")) {
-			SDL_ShowOpenFileDialog(file_dialog_callback, app_state, app_state->main_window, file_filters, 1, nullptr, false);
+			SDL_ShowOpenFileDialog(file_dialog_callback, app_state, app_state->main_window.get_window_ptr(), file_filters, 1, nullptr, false);
 		}
 
 		float sound_length = 0.00001f;
@@ -120,7 +120,7 @@ void draw_gui(AppState* app_state) {
 		if (app_state->sound == nullptr) {
 			ImGui::BeginDisabled();
 		}
-		
+
 		const char* play_button_string = app_state->is_playing ? "Pause" : "Play";
 
 		if (ImGui::Button(play_button_string)) {

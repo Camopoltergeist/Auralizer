@@ -6,9 +6,10 @@
 #include "miniaudio.h"
 #include "AnalysisNode.hpp"
 #include "Graphics.hpp"
+#include "Window.hpp"
 
 struct AppState {
-	SDL_Window* main_window;
+	Window main_window;
 	SDL_GLContext gl_context;
 
 	ma_engine* audio_engine;

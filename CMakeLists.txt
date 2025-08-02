@@ -55,6 +55,8 @@ add_executable(Auralizer src/main.cpp
         src/gl/Texture.hpp
         src/gl/VertexArray.cpp
         src/gl/VertexArray.hpp
-        libs/glad/glad.c)
+        libs/glad/glad.c
+        src/Window.cpp
+        src/Window.hpp)
 
 target_link_libraries(Auralizer SDL3-shared miniaudio fftw3)
