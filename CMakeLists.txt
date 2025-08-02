@@ -42,8 +42,6 @@ add_executable(Auralizer src/main.cpp
         src/GUI.hpp
         src/init.cpp
         src/init.hpp
-        src/load_shader.cpp
-        src/load_shader.hpp
         src/RollingBuffer.hpp
         src/gl/GLBuffer.cpp
         src/gl/GLBuffer.hpp
