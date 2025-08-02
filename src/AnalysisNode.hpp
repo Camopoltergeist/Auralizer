@@ -7,6 +7,12 @@
 #include <miniaudio.h>
 #include <fftw3.h>
 
+// fftwf_complex is defined as the following:
+//
+// typedef float fftwf_complex[2]
+//
+// which worked fine with MinGW, but not with MSVC.
+// Apparently you're not supposed to store fixed size arrays in vectors, so this struct circumvents that.
 struct fuckyou {
 	float a = 0.f;
 	float b = 0.f;
