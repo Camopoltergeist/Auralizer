@@ -1,7 +1,6 @@
 #include "AppState.hpp"
 
 AppState::AppState() {
-	gl_context = nullptr;
 	is_audio_file_selected = false;
 	audio_file_path = "";
 	audio_volume = 0.5f;

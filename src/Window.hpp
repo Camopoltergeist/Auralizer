@@ -30,6 +30,7 @@ public:
 	static std::optional<Window> create();
 
 	[[nodiscard]] SDL_Window* get_window_ptr() const;
+	[[nodiscard]] SDL_GLContext get_gl_context() const;
 	[[nodiscard]] WindowSize get_window_size() const;
 
 	void swap_window() const;

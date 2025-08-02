@@ -118,6 +118,11 @@ SDL_Window* Window::get_window_ptr() const
 	return window;
 }
 
+SDL_GLContext Window::get_gl_context() const
+{
+	return gl_context;
+}
+
 WindowSize Window::get_window_size() const
 {
 	WindowSize size{};

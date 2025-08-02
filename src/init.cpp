@@ -36,7 +36,7 @@ void init_imgui(AppState* app_state) {
 	style.Colors[ImGuiCol_WindowBg] = ImVec4(0.f, 0.f, 0.f, 0.5f);
 	style.Colors[ImGuiCol_ChildBg] = ImVec4(0.f, 0.f, 0.f, 0.5f);
 
-	ImGui_ImplSDL3_InitForOpenGL(app_state->main_window.get_window_ptr(), app_state->gl_context);
+	ImGui_ImplSDL3_InitForOpenGL(app_state->main_window.get_window_ptr(), app_state->main_window.get_gl_context());
 	ImGui_ImplOpenGL3_Init("#version 460 core");
 
 	ImFontConfig font_config;

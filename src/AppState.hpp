@@ -10,7 +10,6 @@
 
 struct AppState {
 	Window main_window;
-	SDL_GLContext gl_context;
 
 	ma_engine* audio_engine;
 	ma_sound* sound;
