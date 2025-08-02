@@ -27,14 +27,16 @@ void main() {
 	float s = step(abs(column_y - pixel_pos.y), half_thickness);
 
 	vec2 right_uv = vec2(v_uv.x + sep * channel_separation * sample_width, v_uv.y);
+	float off_screen_mult_right = step(right_uv.x, 1.0);
 	float right = textureLod(t, right_uv, lod_level).r * viewport_size.y;
 	vec2 right_pixel_pos = right_uv * viewport_size;
-	float right_s = step(abs(right - right_pixel_pos.y), half_thickness);
+	float right_s = step(abs(right - right_pixel_pos.y), half_thickness) * off_screen_mult_right;
 
 	vec2 left_uv = vec2(v_uv.x - sep * channel_separation * sample_width, v_uv.y);
+	float off_screen_mult_left = step(0.0, left_uv.x);
 	float left = textureLod(t, left_uv, lod_level).r * viewport_size.y;
 	vec2 left_pixel_pos = left_uv * viewport_size;
-	float left_s = step(abs(left - left_pixel_pos.y), half_thickness);
+	float left_s = step(abs(left - left_pixel_pos.y), half_thickness) * off_screen_mult_left;
 
 	frag_color = color * s + right_color * right_s + left_color * left_s;
 }
