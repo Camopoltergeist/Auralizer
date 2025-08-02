@@ -1,13 +1,11 @@
 #pragma once
+#include <string>
 
-#include <glad.h>
 #include <SDL3/SDL.h>
+
 #include "miniaudio.h"
 #include "AnalysisNode.hpp"
-#include "Graphics.h"
-
-#include <string>
-#include <array>
+#include "Graphics.hpp"
 
 struct AppState {
 	SDL_Window* main_window;
@@ -18,8 +16,6 @@ struct AppState {
 	std::unique_ptr<AnalysisNode> analysis_node;
 	float audio_volume;
 	bool is_playing;
-
-	std::array<float, ROLLING_BUFFER_SIZE> buffer{};
 
 	Graphics graphics;
 

@@ -2,12 +2,12 @@
 #include <glad.h>
 #include <optional>
 
-#include "gl/VertexArray.h"
-#include "gl/GLBuffer.h"
-#include "gl/Shader.h"
-#include "gl/Pipeline.h"
-#include "gl/Texture.h"
-#include "gl/Sampler.h"
+#include "gl/VertexArray.hpp"
+#include "gl/GLBuffer.hpp"
+#include "gl/Shader.hpp"
+#include "gl/Pipeline.hpp"
+#include "gl/Texture.hpp"
+#include "gl/Sampler.hpp"
 
 class Graphics
 {

@@ -1,4 +1,4 @@
-#include "GLBuffer.h"
+#include "GLBuffer.hpp"
 
 GLBuffer::GLBuffer(GLuint gl_name) : gl_name(gl_name) { }
 

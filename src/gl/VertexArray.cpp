@@ -1,4 +1,4 @@
-#include "VertexArray.h"
+#include "VertexArray.hpp"
 
 #include <SDL3/SDL.h>
 

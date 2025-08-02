@@ -37,7 +37,7 @@ add_executable(Auralizer src/main.cpp
         src/AppState.hpp
         src/AppState.cpp
         src/Graphics.cpp
-        src/Graphics.h
+        src/Graphics.hpp
         src/GUI.cpp
         src/GUI.hpp
         src/init.cpp
@@ -46,17 +46,17 @@ add_executable(Auralizer src/main.cpp
         src/load_shader.hpp
         src/RollingBuffer.hpp
         src/gl/GLBuffer.cpp
-        src/gl/GLBuffer.h
+        src/gl/GLBuffer.hpp
         src/gl/Pipeline.cpp
-        src/gl/Pipeline.h
+        src/gl/Pipeline.hpp
         src/gl/Sampler.cpp
-        src/gl/Sampler.h
+        src/gl/Sampler.hpp
         src/gl/Shader.cpp
-        src/gl/Shader.h
+        src/gl/Shader.hpp
         src/gl/Texture.cpp
-        src/gl/Texture.h
+        src/gl/Texture.hpp
         src/gl/VertexArray.cpp
-        src/gl/VertexArray.h
+        src/gl/VertexArray.hpp
         libs/glad/glad.c)
 
 target_link_libraries(Auralizer SDL3-shared miniaudio fftw3)

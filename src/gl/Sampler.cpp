@@ -1,4 +1,4 @@
-#include "Sampler.h"
+#include "Sampler.hpp"
 
 #include <SDL3/SDL.h>
 

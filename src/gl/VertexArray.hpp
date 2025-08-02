@@ -3,7 +3,7 @@
 
 #include <glad.h>
 
-#include "GLBuffer.h"
+#include "GLBuffer.hpp"
 
 class VertexArray
 {

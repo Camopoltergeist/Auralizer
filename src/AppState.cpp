@@ -12,8 +12,6 @@ AppState::AppState() {
 	is_playing = false;
 	audio_file_name = "";
 	analysis_node = nullptr;
-	buffer = std::array<float, ROLLING_BUFFER_SIZE>();
-	buffer.fill(1.f);
 }
 
 AppState::~AppState() {

@@ -3,7 +3,7 @@
 
 #include <glad.h>
 
-#include "Shader.h"
+#include "Shader.hpp"
 
 class Pipeline
 {
