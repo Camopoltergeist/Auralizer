@@ -34,6 +34,7 @@ add_executable(Auralizer src/main.cpp
         libs/imgui/backends/imgui_impl_opengl3.cpp
         src/AnalysisNode.cpp
         src/AnalysisNode.hpp
+        src/AppState.hpp
         src/AppState.cpp
         src/Graphics.cpp
         src/Graphics.h
