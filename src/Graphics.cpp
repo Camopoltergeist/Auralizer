@@ -33,10 +33,11 @@ Graphics::Graphics(
 	sampler(std::move(sampler))
 { }
 
-std::optional<std::string> load_text_file(const std::string& file_path) {
+std::optional<std::string> load_text_file(const std::string& file_path)
+{
 	const std::ifstream file(file_path);
 
-	if(!file.is_open()) {
+	if (!file.is_open()) {
 		SDL_Log("Could not open file: %s", file_path.c_str());
 		return std::nullopt;
 	}
@@ -98,7 +99,7 @@ std::optional<Graphics> Graphics::init()
 	auto vertex_opt = load_text_file("./shaders/vertex.glsl");
 	auto fragment_opt = load_text_file("./shaders/fragment.glsl");
 
-	if(!vertex_opt.has_value() || !fragment_opt.has_value()) {
+	if (!vertex_opt.has_value() || !fragment_opt.has_value()) {
 		return std::nullopt;
 	}
 
@@ -145,7 +146,8 @@ std::optional<Graphics> Graphics::init()
 	);
 }
 
-Graphics& Graphics::operator=(Graphics &&other) noexcept {
+Graphics& Graphics::operator=(Graphics&& other) noexcept
+{
 	if (this == &other) {
 		return *this;
 	}

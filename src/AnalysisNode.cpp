@@ -29,11 +29,13 @@ AnalysisNode::AnalysisNode(const size_t buffer_size) :
 	}
 }
 
-AnalysisNode::~AnalysisNode() {
+AnalysisNode::~AnalysisNode()
+{
 	ma_node_uninit(&base, nullptr);
 }
 
-const std::vector<float> &AnalysisNode::get_fft_data() {
+const std::vector<float>& AnalysisNode::get_fft_data()
+{
 	copy_audio_data();
 	apply_hann_window();
 
@@ -54,19 +56,22 @@ const std::vector<float> &AnalysisNode::get_fft_data() {
 	return mag_buffer;
 }
 
-void AnalysisNode::copy_audio_data() {
+void AnalysisNode::copy_audio_data()
+{
 	rolling_buffer.copy_buffer(fft_in_buffer.data());
 }
 
-void AnalysisNode::apply_hann_window() {
+void AnalysisNode::apply_hann_window()
+{
 	for (int i = 0; i < fft_in_buffer.size(); i++) {
 		fft_in_buffer[i] *= hann_window[i];
 	}
 }
 
-std::unique_ptr<AnalysisNode> AnalysisNode::create(ma_node_graph *node_graph, const size_t buffer_size, const ma_uint32 channel_count) {
-	const ma_uint32 input_channels[1] = { channel_count };
-	const ma_uint32 output_channels[1] = { channel_count };
+std::unique_ptr<AnalysisNode> AnalysisNode::create(ma_node_graph* node_graph, const size_t buffer_size, const ma_uint32 channel_count)
+{
+	const ma_uint32 input_channels[1] = {channel_count};
+	const ma_uint32 output_channels[1] = {channel_count};
 
 	ma_node_config node_config = ma_node_config_init();
 	node_config.vtable = &process_node_vtable;
@@ -84,7 +89,9 @@ std::unique_ptr<AnalysisNode> AnalysisNode::create(ma_node_graph *node_graph, co
 }
 
 // ReSharper disable once CppParameterMayBeConstPtrOrRef
-void AnalysisNode::process_node(ma_node *node, const float **frames_in, ma_uint32 *frame_count_in, float **frames_out, ma_uint32 *frame_count_out) { // NOLINT(*-non-const-parameter)
+void AnalysisNode::process_node(ma_node* node, const float** frames_in, ma_uint32* frame_count_in, float** frames_out, ma_uint32* frame_count_out)
+{
+	// NOLINT(*-non-const-parameter)
 	const float* frames_in_0 = frames_in[0];
 
 	auto* analysis_node = static_cast<AnalysisNode*>(node);

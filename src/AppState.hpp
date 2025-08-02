@@ -30,5 +30,6 @@ struct AppState {
 	bool is_imgui_window_open;
 
 	AppState();
+
 	~AppState();
 };

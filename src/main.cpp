@@ -87,8 +87,7 @@ SDL_AppResult SDL_AppEvent(void* app_state, SDL_Event* event) {
 
 	ImGui_ImplSDL3_ProcessEvent(event);
 
-	switch (event->type)
-	{
+	switch (event->type) {
 		case SDL_EVENT_QUIT: {
 			return SDL_APP_SUCCESS;
 		}
@@ -101,7 +100,7 @@ SDL_AppResult SDL_AppEvent(void* app_state, SDL_Event* event) {
 
 			return SDL_APP_CONTINUE;
 		}
-		
+
 		case SDL_EVENT_KEY_DOWN: {
 			if (event->key.key == SDLK_F10) {
 				state->is_imgui_window_open = !state->is_imgui_window_open;
