@@ -10,6 +10,7 @@ AppState::AppState() {
 	is_playing = false;
 	audio_file_name = "";
 	analysis_node = nullptr;
+	audio_mode = AudioMode::AudioFile;
 }
 
 AppState::~AppState() {

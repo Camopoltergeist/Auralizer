@@ -77,6 +77,63 @@ void generate_time_text(std::stringstream& time_stream, float cursor_pos, float 
 		<< std::setfill('0') << std::setw(5) << total_seconds;
 }
 
+void audio_file_player(AppState* app_state)
+{
+	if (app_state->is_audio_file_selected) {
+		ImGui::Text(app_state->audio_file_name.c_str());
+	}
+	else {
+		ImGui::Text("No file selected");
+	}
+
+	constexpr SDL_DialogFileFilter file_filters[] = {
+		{ "Audio files (*.wav, *.flac, *.mp3)", "wav;flac;mp3" }
+	};
+
+	if (ImGui::Button("Select Audio File")) {
+		SDL_ShowOpenFileDialog(file_dialog_callback, app_state, app_state->main_window.get_window_ptr(), file_filters, 1, nullptr, false);
+	}
+
+	float sound_length = 0.00001f;
+	float cursor = 0.f;
+
+	if (app_state->sound != nullptr) {
+		ma_sound_get_length_in_seconds(app_state->sound, &sound_length);
+		ma_sound_get_cursor_in_seconds(app_state->sound, &cursor);
+	}
+
+	std::stringstream time_stream;
+
+	generate_time_text(time_stream, cursor, sound_length);
+
+	ImGui::SliderFloat("##time_slider", &cursor, 0.f, sound_length, time_stream.str().c_str());
+
+	if (app_state->sound == nullptr) {
+		ImGui::BeginDisabled();
+	}
+
+	const char* play_button_string = app_state->is_playing ? "Pause" : "Play";
+
+	if (ImGui::Button(play_button_string)) {
+		if (app_state->is_playing) {
+			ma_sound_stop(app_state->sound);
+		}
+		else {
+			ma_sound_start(app_state->sound);
+		}
+
+		app_state->is_playing = !app_state->is_playing;
+	}
+
+	if (app_state->sound == nullptr) {
+		ImGui::EndDisabled();
+	}
+
+	if (ImGui::SliderFloat("Volume", &app_state->audio_volume, 0.f, 1.f)) {
+		ma_engine_set_volume(app_state->audio_engine, app_state->audio_volume);
+	}
+}
+
 void draw_gui(AppState* app_state) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
@@ -88,67 +145,29 @@ void draw_gui(AppState* app_state) {
 		ImGui::Begin("Inspector", &app_state->is_imgui_window_open);
 		ImGui::SeparatorText("Inspector (F10 to toggle)");
 
-		if (app_state->is_audio_file_selected) {
-			ImGui::Text(app_state->audio_file_name.c_str());
-		}
-		else {
-			ImGui::Text("No file selected");
-		}
+		const AudioMode last_mode = app_state->audio_mode;
 
-		const SDL_DialogFileFilter file_filters[] = {
-			{ "Audio files (*.wav, *.flac, *.mp3)", "wav;flac;mp3" }
-		};
+		ImGui::RadioButton("Audio File", reinterpret_cast<int*>(&app_state->audio_mode), static_cast<int>(AudioMode::AudioFile));
+		ImGui::SameLine();
+		ImGui::RadioButton("Microphone", reinterpret_cast<int*>(&app_state->audio_mode), static_cast<int>(AudioMode::Microphone));
 
-		if (ImGui::Button("Select Audio File")) {
-			SDL_ShowOpenFileDialog(file_dialog_callback, app_state, app_state->main_window.get_window_ptr(), file_filters, 1, nullptr, false);
-		}
+		const bool mode_changed = app_state->audio_mode != last_mode;
 
-		float sound_length = 0.00001f;
-		float cursor = 0.f;
-
-		if (app_state->sound != nullptr) {
-			ma_sound_get_length_in_seconds(app_state->sound, &sound_length);
-			ma_sound_get_cursor_in_seconds(app_state->sound, &cursor);
-		}
-
-		std::stringstream time_stream;
-
-		generate_time_text(time_stream, cursor, sound_length);
-
-		ImGui::SliderFloat("##time_slider", &cursor, 0.f, sound_length, time_stream.str().c_str());
-
-		if (app_state->sound == nullptr) {
-			ImGui::BeginDisabled();
-		}
-
-		const char* play_button_string = app_state->is_playing ? "Pause" : "Play";
-
-		if (ImGui::Button(play_button_string)) {
-			if (app_state->is_playing) {
-				ma_sound_stop(app_state->sound);
-			}
-			else {
-				ma_sound_start(app_state->sound);
+		if(app_state->audio_mode == AudioMode::AudioFile) {
+			if(mode_changed) {
+				if(app_state->is_playing) {
+					ma_sound_start(app_state->sound);
+				}
 			}
 
-			app_state->is_playing = !app_state->is_playing;
+			audio_file_player(app_state);
 		}
-
-		if (app_state->sound == nullptr) {
-			ImGui::EndDisabled();
-		}
-
-		float volume = app_state->audio_volume;
-		ImGui::SliderFloat("Volume", &volume, 0.f, 1.f);
-
-		if (volume != app_state->audio_volume) {
-			ma_engine_set_volume(app_state->audio_engine, volume);
-			app_state->audio_volume = volume;
+		else if(mode_changed) {
+			ma_sound_stop(app_state->sound);
 		}
 
 		ImGui::SeparatorText("Analyzer");
-		ImGui::SliderFloat("Min dB", &app_state->analysis_node->min_db, -200.f, 0.f);
-		ImGui::SliderFloat("Max dB", &app_state->analysis_node->max_db, -200.f, 0.f);
+		ImGui::DragFloatRange2("dB range", &app_state->analysis_node->min_db, &app_state->analysis_node->max_db, 0.1f, -120.f, 0.f, "Min: %.1f dB", "Max: %.1f dB");
 
 		ImGui::End();
 	}

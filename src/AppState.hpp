@@ -8,6 +8,11 @@
 #include "Graphics.hpp"
 #include "Window.hpp"
 
+enum class AudioMode : int {
+	AudioFile,
+	Microphone
+};
+
 struct AppState {
 	Window main_window;
 
@@ -16,6 +21,7 @@ struct AppState {
 	std::unique_ptr<AnalyserNode> analysis_node;
 	float audio_volume;
 	bool is_playing;
+	AudioMode audio_mode;
 
 	Graphics graphics;
 
