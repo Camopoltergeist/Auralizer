@@ -51,12 +51,19 @@ void init_imgui(AppState* app_state) {
 }
 
 bool init_audio(AppState* app_state) {
-	ma_result result;
-	ma_engine* audio_engine = new ma_engine();
+	auto audio_context = AudioContext::create();
 
-	result = ma_engine_init(nullptr, audio_engine);
+	if(!audio_context) {
+		return false;
+	}
 
-	if (result != MA_SUCCESS) {
+	app_state->audio_context = std::move(audio_context);
+	ma_engine_config engine_config = ma_engine_config_init();
+	engine_config.pContext = app_state->audio_context->get_context();
+
+	auto* audio_engine = new ma_engine();
+
+	if (ma_engine_init(&engine_config, audio_engine) != MA_SUCCESS) {
 		SDL_Log("Failed to initialize audio engine");
 		return false;
 	}

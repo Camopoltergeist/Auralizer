@@ -13,6 +13,7 @@
 #include <fftw3.h>
 
 #include "AppState.hpp"
+#include "AudioContext.hpp"
 #include "init.hpp"
 #include "GUI.hpp"
 
