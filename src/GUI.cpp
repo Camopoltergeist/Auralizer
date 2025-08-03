@@ -13,18 +13,16 @@
 #include "AppState.hpp"
 
 void load_audio_file(AppState* app_state, const std::string& file_path) {
-	ma_sound* sound = new ma_sound();
-
-	ma_result result;
+	auto* sound = new ma_sound();
 
 	// Very deprecated, but no better option exists in C++ at the moment.
 	// Needed as SDL3's file dialog returns UTF8 string, but miniaudio expects either ASCII or UTF-16 on Windows.
 	// Just fucking shoot me.
 	// No idea how cross platform this piece of code is.
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-	std::wstring wide_path = converter.from_bytes(file_path);
+	const std::wstring wide_path = converter.from_bytes(file_path);
 
-	result = ma_sound_init_from_file_w(app_state->audio_engine->get_engine(), wide_path.c_str(), MA_SOUND_FLAG_NO_DEFAULT_ATTACHMENT | MA_SOUND_FLAG_DECODE, nullptr, nullptr, sound);
+	ma_result result = ma_sound_init_from_file_w(app_state->audio_engine->get_engine(), wide_path.c_str(), MA_SOUND_FLAG_NO_DEFAULT_ATTACHMENT | MA_SOUND_FLAG_DECODE, nullptr, nullptr, sound);
 
 	if (result != MA_SUCCESS) {
 		SDL_Log("Failed to load %s", file_path.c_str());
@@ -36,7 +34,7 @@ void load_audio_file(AppState* app_state, const std::string& file_path) {
 		ma_sound_uninit(app_state->sound);
 	}
 
-	std::string audio_file_name = std::filesystem::path(file_path).stem().string();
+	const std::string audio_file_name = std::filesystem::path(file_path).stem().string();
 
 	app_state->sound = sound;
 	app_state->audio_file_path = file_path;
@@ -51,7 +49,7 @@ void load_audio_file(AppState* app_state, const std::string& file_path) {
 }
 
 void file_dialog_callback(void* userdata, const char* const* file_list, int filter) {
-	AppState* state = static_cast<AppState*>(userdata);
+	auto* state = static_cast<AppState*>(userdata);
 
 	if (file_list == nullptr || *file_list == nullptr) {
 		return;
@@ -61,11 +59,11 @@ void file_dialog_callback(void* userdata, const char* const* file_list, int filt
 }
 
 void generate_time_text(std::stringstream& time_stream, float cursor_pos, float sound_length) {
-	int total_minutes = static_cast<int>(std::floor(sound_length / 60.f));
-	float total_seconds = std::fmod(sound_length, 60.f);
+	const int total_minutes = static_cast<int>(std::floor(sound_length / 60.f));
+	const float total_seconds = std::fmod(sound_length, 60.f);
 
-	int current_minutes = static_cast<int>(std::floor(cursor_pos / 60.f));
-	float current_seconds = std::fmod(cursor_pos, 60.f);
+	const int current_minutes = static_cast<int>(std::floor(cursor_pos / 60.f));
+	const float current_seconds = std::fmod(cursor_pos, 60.f);
 
 	time_stream << std::setprecision(2) << std::fixed
 		<< std::setfill('0') << std::setw(2) << current_minutes
