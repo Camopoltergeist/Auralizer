@@ -15,7 +15,7 @@ public:
 	AudioContext(AudioContext&&) = delete;
 	~AudioContext();
 
-	ma_context* get_context();
+	[[nodiscard]] struct ma_context* get_context();
 	void update_device_list();
 
 	static std::unique_ptr<AudioContext> create();

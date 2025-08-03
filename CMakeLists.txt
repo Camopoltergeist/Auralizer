@@ -63,6 +63,8 @@ add_executable(Auralizer src/main.cpp
         src/Analyser.cpp
         src/Analyser.hpp
         src/audio/AudioContext.cpp
-        src/audio/AudioContext.hpp)
+        src/audio/AudioContext.hpp
+        src/audio/AudioEngine.cpp
+        src/audio/AudioEngine.hpp)
 
 target_link_libraries(Auralizer SDL3-shared miniaudio fftw3)

@@ -9,7 +9,7 @@ AudioContext::~AudioContext()
 	ma_context_uninit(&context);
 }
 
-ma_context* AudioContext::get_context()
+struct ma_context* AudioContext::get_context()
 {
 	return &context;
 }

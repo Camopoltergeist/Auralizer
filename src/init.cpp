@@ -58,28 +58,25 @@ bool init_audio(AppState* app_state) {
 	}
 
 	app_state->audio_context = std::move(audio_context);
-	ma_engine_config engine_config = ma_engine_config_init();
-	engine_config.pContext = app_state->audio_context->get_context();
 
-	auto* audio_engine = new ma_engine();
+	auto audio_engine = AudioEngine::create(*app_state->audio_context);
 
-	if (ma_engine_init(&engine_config, audio_engine) != MA_SUCCESS) {
-		SDL_Log("Failed to initialize audio engine");
+	if (!audio_engine) {
 		return false;
 	}
 
-	app_state->audio_engine = audio_engine;
-	ma_engine_set_volume(app_state->audio_engine, app_state->audio_volume);
+	app_state->audio_engine = std::move(audio_engine);
+	app_state->audio_engine->set_volume(app_state->audio_volume);
 
-	auto analysis_node_opt = AnalyserNode::create(ma_engine_get_node_graph(app_state->audio_engine), 2048, 2);
+	auto analysis_node = AnalyserNode::create(app_state->audio_engine->get_node_graph(), 2048, 2);
 
-	if (!analysis_node_opt) {
+	if (!analysis_node) {
 		return false;
 	}
 
-	ma_node_attach_output_bus(analysis_node_opt.get(), 0, ma_engine_get_endpoint(app_state->audio_engine), 0);
+	ma_node_attach_output_bus(analysis_node.get(), 0, ma_engine_get_endpoint(app_state->audio_engine->get_engine()), 0);
 
-	app_state->analysis_node = std::move(analysis_node_opt);
+	app_state->analysis_node = std::move(analysis_node);
 
 	auto capture_device = CaptureDevice::create();
 

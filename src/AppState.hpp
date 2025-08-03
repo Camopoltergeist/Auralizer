@@ -7,6 +7,7 @@
 #include "Window.hpp"
 #include "Analyser.hpp"
 #include "audio/AudioContext.hpp"
+#include "audio/AudioEngine.hpp"
 #include "audio/CaptureDevice.hpp"
 
 enum class AudioMode : int {
@@ -18,7 +19,7 @@ struct AppState {
 	Window main_window;
 
 	std::unique_ptr<AudioContext> audio_context;
-	ma_engine* audio_engine;
+	std::unique_ptr<AudioEngine> audio_engine;
 	ma_sound* sound;
 	std::unique_ptr<AnalyserNode> analysis_node;
 	Analyser analyser;

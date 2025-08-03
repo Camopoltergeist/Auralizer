@@ -17,8 +17,4 @@ AppState::~AppState() {
 	if (sound != nullptr) {
 		ma_sound_uninit(sound);
 	}
-
-	if (audio_engine != nullptr) {
-		ma_engine_uninit(audio_engine);
-	}
 }

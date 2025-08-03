@@ -24,7 +24,7 @@ void load_audio_file(AppState* app_state, const std::string& file_path) {
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 	std::wstring wide_path = converter.from_bytes(file_path);
 
-	result = ma_sound_init_from_file_w(app_state->audio_engine, wide_path.c_str(), MA_SOUND_FLAG_NO_DEFAULT_ATTACHMENT | MA_SOUND_FLAG_DECODE, nullptr, nullptr, sound);
+	result = ma_sound_init_from_file_w(app_state->audio_engine->get_engine(), wide_path.c_str(), MA_SOUND_FLAG_NO_DEFAULT_ATTACHMENT | MA_SOUND_FLAG_DECODE, nullptr, nullptr, sound);
 
 	if (result != MA_SUCCESS) {
 		SDL_Log("Failed to load %s", file_path.c_str());
@@ -130,7 +130,7 @@ void audio_file_player(AppState* app_state)
 	}
 
 	if (ImGui::SliderFloat("Volume", &app_state->audio_volume, 0.f, 1.f)) {
-		ma_engine_set_volume(app_state->audio_engine, app_state->audio_volume);
+		app_state->audio_engine->set_volume(app_state->audio_volume);
 	}
 }
 
