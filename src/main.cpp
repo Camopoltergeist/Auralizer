@@ -53,7 +53,13 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 SDL_AppResult SDL_AppIterate(void* app_state) {
 	AppState* state = static_cast<AppState*>(app_state);
 
-	state->analysis_node->copy_buffer(state->analyser.in_buffer());
+	if(state->audio_mode == AudioMode::AudioFile) {
+		state->analysis_node->copy_buffer(state->analyser.in_buffer());
+	}
+	else if (state->audio_mode == AudioMode::Microphone) {
+		state->capture_device->copy_buffer(state->analyser.in_buffer());
+	}
+
 
 	auto& fft_data = state->analyser.get_fft_data();
 

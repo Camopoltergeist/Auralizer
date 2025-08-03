@@ -74,5 +74,15 @@ bool init_audio(AppState* app_state) {
 
 	app_state->analysis_node = std::move(analysis_node_opt);
 
+	auto capture_device = CaptureDevice::create();
+
+	if(!capture_device) {
+		return false;
+	}
+
+	capture_device->start();
+
+	app_state->capture_device = std::move(capture_device);
+
 	return true;
 }

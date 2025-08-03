@@ -6,8 +6,6 @@
 
 #include <miniaudio.h>
 
-#include "Analyser.hpp"
-
 class AnalyserNode {
 private:
 	ma_node_base base{};

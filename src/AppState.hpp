@@ -1,12 +1,12 @@
 #pragma once
 #include <string>
 
-#include <SDL3/SDL.h>
-
 #include "miniaudio.h"
 #include "AnalyserNode.hpp"
 #include "Graphics.hpp"
 #include "Window.hpp"
+#include "Analyser.hpp"
+#include "CaptureDevice.hpp"
 
 enum class AudioMode : int {
 	AudioFile,
@@ -23,6 +23,7 @@ struct AppState {
 	float audio_volume;
 	bool is_playing;
 	AudioMode audio_mode;
+	std::unique_ptr<CaptureDevice> capture_device;
 
 	Graphics graphics;
 

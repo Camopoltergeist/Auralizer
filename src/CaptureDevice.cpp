@@ -17,6 +17,21 @@ CaptureDevice::~CaptureDevice()
 	ma_device_uninit(&device);
 }
 
+void CaptureDevice::copy_buffer(std::vector<float>& dest)
+{
+	buffer.copy_buffer(dest.data());
+}
+
+void CaptureDevice::start()
+{
+	ma_device_start(&device);
+}
+
+void CaptureDevice::stop()
+{
+	ma_device_stop(&device);
+}
+
 std::unique_ptr<CaptureDevice> CaptureDevice::create()
 {
 	ma_device_config capture_config = ma_device_config_init(ma_device_type_capture);
