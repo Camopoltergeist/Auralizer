@@ -2,12 +2,12 @@
 #include <string>
 
 #include "miniaudio.h"
-#include "AnalyserNode.hpp"
+#include "audio/AnalyserNode.hpp"
 #include "Graphics.hpp"
 #include "Window.hpp"
 #include "Analyser.hpp"
-#include "AudioContext.hpp"
-#include "CaptureDevice.hpp"
+#include "audio/AudioContext.hpp"
+#include "audio/CaptureDevice.hpp"
 
 enum class AudioMode : int {
 	AudioFile,

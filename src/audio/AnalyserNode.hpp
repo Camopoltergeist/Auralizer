@@ -2,7 +2,7 @@
 #include <memory>
 #include <vector>
 
-#include "RollingBuffer.hpp"
+#include "../RollingBuffer.hpp"
 
 #include <miniaudio.h>
 

@@ -32,8 +32,8 @@ add_executable(Auralizer src/main.cpp
         libs/imgui/backends/imgui_impl_sdl3.h
         libs/imgui/backends/imgui_impl_opengl3.h
         libs/imgui/backends/imgui_impl_opengl3.cpp
-        src/AnalyserNode.cpp
-        src/AnalyserNode.hpp
+        src/audio/AnalyserNode.cpp
+        src/audio/AnalyserNode.hpp
         src/AppState.hpp
         src/AppState.cpp
         src/Graphics.cpp
@@ -58,11 +58,11 @@ add_executable(Auralizer src/main.cpp
         libs/glad/glad.c
         src/Window.cpp
         src/Window.hpp
-        src/CaptureDevice.cpp
-        src/CaptureDevice.hpp
+        src/audio/CaptureDevice.cpp
+        src/audio/CaptureDevice.hpp
         src/Analyser.cpp
         src/Analyser.hpp
-        src/AudioContext.cpp
-        src/AudioContext.hpp)
+        src/audio/AudioContext.cpp
+        src/audio/AudioContext.hpp)
 
 target_link_libraries(Auralizer SDL3-shared miniaudio fftw3)

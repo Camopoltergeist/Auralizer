@@ -2,7 +2,7 @@
 #include <memory>
 #include <miniaudio.h>
 
-#include "RollingBuffer.hpp"
+#include "../RollingBuffer.hpp"
 
 class CaptureDevice {
 	ma_device device{};

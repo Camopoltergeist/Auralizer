@@ -13,7 +13,6 @@
 #include <fftw3.h>
 
 #include "AppState.hpp"
-#include "AudioContext.hpp"
 #include "init.hpp"
 #include "GUI.hpp"
 
@@ -60,7 +59,6 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	else if (state->audio_mode == AudioMode::Microphone) {
 		state->capture_device->copy_buffer(state->analyser.in_buffer());
 	}
-
 
 	auto& fft_data = state->analyser.get_fft_data();
 

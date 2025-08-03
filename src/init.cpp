@@ -7,7 +7,7 @@
 
 #include "AppState.hpp"
 #include "miniaudio.h"
-#include "AnalyserNode.hpp"
+#include "audio/AnalyserNode.hpp"
 
 bool init_video_subsystem() {
 	if (!SDL_InitSubSystem(SDL_INIT_VIDEO)) {
