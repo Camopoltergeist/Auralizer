@@ -12,9 +12,6 @@ class AnalyserNode {
 private:
 	ma_node_base base{};
 	RollingBuffer rolling_buffer;
-	Analyser analyser;
-
-	void copy_audio_data();
 
 public:
 	explicit AnalyserNode(size_t buffer_size);
@@ -22,9 +19,7 @@ public:
 	AnalyserNode(AnalyserNode&&) = delete;
 	~AnalyserNode();
 
-	Analyser& get_analyser();
-
-	const std::vector<float>& get_fft_data();
+	void copy_buffer(std::vector<float>& dest);
 
 	static std::unique_ptr<AnalyserNode> create(ma_node_graph* node_graph, size_t buffer_size, ma_uint32 channel_count);
 

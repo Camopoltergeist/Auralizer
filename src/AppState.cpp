@@ -1,6 +1,6 @@
 #include "AppState.hpp"
 
-AppState::AppState() {
+AppState::AppState() : analyser(2048) {
 	is_audio_file_selected = false;
 	audio_file_path = "";
 	audio_volume = 0.5f;

@@ -167,7 +167,7 @@ void draw_gui(AppState* app_state) {
 		}
 
 		ImGui::SeparatorText("Analyzer");
-		ImGui::DragFloatRange2("dB range", &app_state->analysis_node->get_analyser().min_db, &app_state->analysis_node->get_analyser().max_db, 0.1f, -120.f, 0.f, "Min: %.1f dB", "Max: %.1f dB");
+		ImGui::DragFloatRange2("dB range", &app_state->analyser.min_db, &app_state->analyser.max_db, 0.1f, -120.f, 0.f, "Min: %.1f dB", "Max: %.1f dB");
 
 		ImGui::End();
 	}

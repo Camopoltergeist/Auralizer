@@ -53,7 +53,10 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 SDL_AppResult SDL_AppIterate(void* app_state) {
 	AppState* state = static_cast<AppState*>(app_state);
 
-	auto& fft_data = state->analysis_node->get_fft_data();
+	state->analysis_node->copy_buffer(state->analyser.in_buffer());
+
+	auto& fft_data = state->analyser.get_fft_data();
+
 	state->graphics.texture.upload_texture(GL_RED, GL_FLOAT, fft_data.data());
 	state->graphics.texture.generate_mipmap();
 

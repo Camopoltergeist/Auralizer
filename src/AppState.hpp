@@ -19,6 +19,7 @@ struct AppState {
 	ma_engine* audio_engine;
 	ma_sound* sound;
 	std::unique_ptr<AnalyserNode> analysis_node;
+	Analyser analyser;
 	float audio_volume;
 	bool is_playing;
 	AudioMode audio_mode;

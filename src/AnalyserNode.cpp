@@ -14,8 +14,7 @@ static ma_node_vtable process_node_vtable = {
 };
 
 AnalyserNode::AnalyserNode(const size_t buffer_size) :
-	rolling_buffer(buffer_size),
-	analyser(buffer_size)
+	rolling_buffer(buffer_size)
 { }
 
 AnalyserNode::~AnalyserNode()
@@ -23,20 +22,9 @@ AnalyserNode::~AnalyserNode()
 	ma_node_uninit(&base, nullptr);
 }
 
-Analyser& AnalyserNode::get_analyser()
+void AnalyserNode::copy_buffer(std::vector<float>& dest)
 {
-	return analyser;
-}
-
-const std::vector<float>& AnalyserNode::get_fft_data()
-{
-	copy_audio_data();
-	return analyser.get_fft_data();
-}
-
-void AnalyserNode::copy_audio_data()
-{
-	rolling_buffer.copy_buffer(analyser.in_buffer().data());
+	rolling_buffer.copy_buffer(dest.data());
 }
 
 std::unique_ptr<AnalyserNode> AnalyserNode::create(ma_node_graph* node_graph, const size_t buffer_size, const ma_uint32 channel_count)
@@ -60,9 +48,8 @@ std::unique_ptr<AnalyserNode> AnalyserNode::create(ma_node_graph* node_graph, co
 }
 
 // ReSharper disable once CppParameterMayBeConstPtrOrRef
-void AnalyserNode::process_node(ma_node* node, const float** frames_in, ma_uint32* frame_count_in, float** frames_out, ma_uint32* frame_count_out)
+void AnalyserNode::process_node(ma_node* node, const float** frames_in, ma_uint32* frame_count_in, float** frames_out, ma_uint32* frame_count_out) // NOLINT(*-non-const-parameter)
 {
-	// NOLINT(*-non-const-parameter)
 	const float* frames_in_0 = frames_in[0];
 
 	auto* analysis_node = static_cast<AnalyserNode*>(node);
