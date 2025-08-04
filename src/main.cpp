@@ -53,6 +53,11 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 SDL_AppResult SDL_AppIterate(void* app_state) {
 	AppState* state = static_cast<AppState*>(app_state);
 
+	const auto now = std::chrono::high_resolution_clock::now();
+
+	state->last_frame_time = now - state->last_frame;
+	state->last_frame = now;
+
 	if(state->audio_mode == AudioMode::AudioFile) {
 		state->analysis_node->copy_buffer(state->analyser.in_buffer());
 	}

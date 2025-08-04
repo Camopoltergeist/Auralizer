@@ -169,6 +169,7 @@ void draw_gui(AppState* app_state) {
 	if (app_state->is_imgui_window_open) {
 		ImGui::Begin("Inspector", &app_state->is_imgui_window_open);
 		ImGui::SeparatorText("Inspector (F10 to toggle)");
+		ImGui::Text("Frame time: %.3f ms",  app_state->last_frame_time.count() * 1000.f);
 
 		const AudioMode last_mode = app_state->audio_mode;
 

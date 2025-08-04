@@ -29,6 +29,9 @@ struct AppState {
 	std::unique_ptr<CaptureDevice> capture_device;
 	int capture_device_selection;
 
+	std::chrono::time_point<std::chrono::high_resolution_clock> last_frame;
+	std::chrono::duration<float> last_frame_time;
+
 	Graphics graphics;
 
 	bool is_audio_file_selected;

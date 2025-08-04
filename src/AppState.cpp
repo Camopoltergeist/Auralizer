@@ -12,6 +12,8 @@ AppState::AppState() : analyser(2048) {
 	analysis_node = nullptr;
 	audio_mode = AudioMode::AudioFile;
 	capture_device_selection = 0;
+	last_frame = std::chrono::high_resolution_clock::now();
+	last_frame_time = std::chrono::duration<float>::zero();
 }
 
 AppState::~AppState() {
