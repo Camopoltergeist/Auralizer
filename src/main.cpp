@@ -40,7 +40,7 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 	}
 
 	new_state->graphics = std::move(graphics.value());
-	new_state->graphics.load_shader(new_state->fragment_shader_file_path);
+	new_state->reload_shader();
 
 	init_imgui(new_state);
 
@@ -124,7 +124,7 @@ SDL_AppResult SDL_AppEvent(void* app_state, SDL_Event* event) {
 				}
 
 				case SDLK_F5: {
-					state->graphics.load_shader(state->fragment_shader_file_path);
+					state->reload_shader();
 					break;
 				}
 

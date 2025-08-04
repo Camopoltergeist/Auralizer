@@ -49,28 +49,30 @@ std::optional<std::string> load_text_file(const std::string& file_path)
 	return std::make_optional<std::string>(sstream.str());
 }
 
-void Graphics::load_shader(const std::string& file_path)
+bool Graphics::load_shader(const std::string& file_path)
 {
 	const auto fragment_source_opt = load_text_file(file_path);
 
 	if(!fragment_source_opt.has_value()) {
-		return;
+		return false;
 	}
 
 	auto shader_opt = Shader::create(GL_FRAGMENT_SHADER, fragment_source_opt.value());
 
 	if(!shader_opt.has_value()) {
-		return;
+		return false;
 	}
 
 	auto pipeline_opt = Pipeline::create(vertex_shader, shader_opt.value());
 
 	if(!pipeline_opt.has_value()) {
-		return;
+		return false;
 	}
 
 	fragment_shader = std::move(shader_opt.value());
 	pipeline = std::move(pipeline_opt.value());
+
+	return true;
 }
 
 std::optional<Graphics> Graphics::init()

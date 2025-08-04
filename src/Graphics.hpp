@@ -34,7 +34,7 @@ public:
 		Sampler sampler
 	);
 
-	void load_shader(const std::string& file_path);
+	bool load_shader(const std::string& file_path);
 
 	static std::optional<Graphics> init();
 

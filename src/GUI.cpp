@@ -206,7 +206,11 @@ void draw_gui(AppState* app_state) {
 		ImGui::SameLine();
 
 		if(ImGui::Button("Reload Shader (F5)")) {
-			app_state->graphics.load_shader(app_state->fragment_shader_file_path);
+			app_state->reload_shader();
+		}
+
+		if(app_state->shader_reload_failure) {
+			ImGui::Text("Shader failed to load, see console");
 		}
 
 		ImGui::End();

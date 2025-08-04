@@ -15,10 +15,16 @@ AppState::AppState() : analyser(2048) {
 	last_frame = std::chrono::high_resolution_clock::now();
 	last_frame_time = std::chrono::duration<float>::zero();
 	fragment_shader_file_path = "./shaders/fragment.glsl";
+	shader_reload_failure = false;
 }
 
 AppState::~AppState() {
 	if (sound != nullptr) {
 		ma_sound_uninit(sound);
 	}
+}
+
+void AppState::reload_shader()
+{
+	shader_reload_failure = !graphics.load_shader(fragment_shader_file_path);
 }
