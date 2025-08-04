@@ -9,7 +9,39 @@ AudioContext::~AudioContext()
 	ma_context_uninit(&context);
 }
 
-struct ma_context* AudioContext::get_context()
+std::vector<ma_device_info>& AudioContext::get_capture_devices()
+{
+	return capture_devices;
+}
+
+std::vector<const char*> AudioContext::get_capture_device_names()
+{
+	std::vector<const char*> names;
+
+	for(const auto& device: capture_devices) {
+		names.push_back(device.name);
+	}
+
+	return names;
+}
+
+std::vector<ma_device_info>& AudioContext::get_playback_devices()
+{
+	return playback_devices;
+}
+
+std::vector<const char*> AudioContext::get_playback_device_names()
+{
+	std::vector<const char*> names;
+
+	for(const auto& device: playback_devices) {
+		names.push_back(device.name);
+	}
+
+	return names;
+}
+
+ma_context* AudioContext::get_context()
 {
 	return &context;
 }
@@ -38,10 +70,6 @@ void AudioContext::update_device_list()
 
 	for(int i = 0; i < capture_count; i++) {
 		capture_devices.push_back(capture[i]);
-	}
-
-	for(auto& d : playback_devices) {
-		SDL_Log("Device: %s", d.name);
 	}
 }
 

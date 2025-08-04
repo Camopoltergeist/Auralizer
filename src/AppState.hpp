@@ -27,6 +27,7 @@ struct AppState {
 	bool is_playing;
 	AudioMode audio_mode;
 	std::unique_ptr<CaptureDevice> capture_device;
+	int capture_device_selection;
 
 	Graphics graphics;
 

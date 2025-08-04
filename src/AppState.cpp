@@ -11,6 +11,7 @@ AppState::AppState() : analyser(2048) {
 	audio_file_name = "";
 	analysis_node = nullptr;
 	audio_mode = AudioMode::AudioFile;
+	capture_device_selection = 0;
 }
 
 AppState::~AppState() {

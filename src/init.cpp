@@ -58,6 +58,7 @@ bool init_audio(AppState* app_state) {
 	}
 
 	app_state->audio_context = std::move(audio_context);
+	app_state->audio_context->update_device_list();
 
 	auto audio_engine = AudioEngine::create(*app_state->audio_context);
 
@@ -77,16 +78,6 @@ bool init_audio(AppState* app_state) {
 	ma_node_attach_output_bus(analysis_node.get(), 0, ma_engine_get_endpoint(app_state->audio_engine->get_engine()), 0);
 
 	app_state->analysis_node = std::move(analysis_node);
-
-	auto capture_device = CaptureDevice::create();
-
-	if(!capture_device) {
-		return false;
-	}
-
-	capture_device->start();
-
-	app_state->capture_device = std::move(capture_device);
 
 	return true;
 }

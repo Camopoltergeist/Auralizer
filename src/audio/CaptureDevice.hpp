@@ -2,6 +2,7 @@
 #include <memory>
 #include <miniaudio.h>
 
+#include "AudioContext.hpp"
 #include "../RollingBuffer.hpp"
 
 class CaptureDevice {
@@ -20,5 +21,5 @@ public:
 	void start();
 	void stop();
 
-	static std::unique_ptr<CaptureDevice> create();
+	static std::unique_ptr<CaptureDevice> create(AudioContext& context, const ma_device_id& device_id);
 };

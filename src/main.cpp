@@ -57,7 +57,9 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 		state->analysis_node->copy_buffer(state->analyser.in_buffer());
 	}
 	else if (state->audio_mode == AudioMode::Microphone) {
-		state->capture_device->copy_buffer(state->analyser.in_buffer());
+		if(state->capture_device) {
+			state->capture_device->copy_buffer(state->analyser.in_buffer());
+		}
 	}
 
 	auto& fft_data = state->analyser.get_fft_data();

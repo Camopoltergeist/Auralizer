@@ -75,8 +75,14 @@ void generate_time_text(std::stringstream& time_stream, float cursor_pos, float 
 		<< std::setfill('0') << std::setw(5) << total_seconds;
 }
 
-void audio_file_player(AppState* app_state)
+void audio_file_mode(AppState* app_state, const bool mode_changed)
 {
+	if(mode_changed) {
+		if(app_state->is_playing) {
+			ma_sound_start(app_state->sound);
+		}
+	}
+
 	if (app_state->is_audio_file_selected) {
 		ImGui::Text(app_state->audio_file_name.c_str());
 	}
@@ -132,6 +138,15 @@ void audio_file_player(AppState* app_state)
 	}
 }
 
+void microphone_mode(AppState* app_state, const bool mode_changed)
+{
+	if(mode_changed) {
+		ma_sound_stop(app_state->sound);
+	}
+
+	bool changed = ImGui::Combo("Select device", &app_state->capture_device_selection, app_state->audio_context->get_capture_device_names().data(), static_cast<int>(app_state->audio_context->get_capture_device_names().size()));
+}
+
 void draw_gui(AppState* app_state) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL3_NewFrame();
@@ -151,17 +166,16 @@ void draw_gui(AppState* app_state) {
 
 		const bool mode_changed = app_state->audio_mode != last_mode;
 
-		if(app_state->audio_mode == AudioMode::AudioFile) {
-			if(mode_changed) {
-				if(app_state->is_playing) {
-					ma_sound_start(app_state->sound);
-				}
+		switch (app_state->audio_mode) {
+			case AudioMode::AudioFile: {
+				audio_file_mode(app_state, mode_changed);
+				break;
 			}
 
-			audio_file_player(app_state);
-		}
-		else if(mode_changed) {
-			ma_sound_stop(app_state->sound);
+			case AudioMode::Microphone: {
+				microphone_mode(app_state, mode_changed);
+				break;
+			}
 		}
 
 		ImGui::SeparatorText("Analyzer");
