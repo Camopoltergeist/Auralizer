@@ -30,9 +30,10 @@ struct AppState {
 	int capture_device_selection;
 
 	std::chrono::time_point<std::chrono::high_resolution_clock> last_frame;
-	std::chrono::duration<float> last_frame_time;
+	std::chrono::duration<float> last_frame_time{};
 
 	Graphics graphics;
+	std::string fragment_shader_file_path;
 
 	bool is_audio_file_selected;
 	std::string audio_file_path;

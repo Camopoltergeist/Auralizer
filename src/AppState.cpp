@@ -14,6 +14,7 @@ AppState::AppState() : analyser(2048) {
 	capture_device_selection = 0;
 	last_frame = std::chrono::high_resolution_clock::now();
 	last_frame_time = std::chrono::duration<float>::zero();
+	fragment_shader_file_path = "./shaders/fragment.glsl";
 }
 
 AppState::~AppState() {

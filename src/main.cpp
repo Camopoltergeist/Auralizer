@@ -40,6 +40,7 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 	}
 
 	new_state->graphics = std::move(graphics.value());
+	new_state->graphics.load_shader(new_state->fragment_shader_file_path);
 
 	init_imgui(new_state);
 
@@ -77,15 +78,17 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	state->graphics.vertex_array.bind();
-	state->graphics.pipeline.bind();
-	state->graphics.texture.bind(0);
-	state->graphics.sampler.bind(0);
+	if(state->graphics.pipeline.has_value()) {
+		state->graphics.vertex_array.bind();
+		state->graphics.pipeline.value().bind();
+		state->graphics.texture.bind(0);
+		state->graphics.sampler.bind(0);
 
-	state->graphics.fragment_shader.set_uniform("t", 0);
-	state->graphics.fragment_shader.set_uniform("viewport_size", static_cast<float>(width), static_cast<float>(height));
+		state->graphics.fragment_shader.value().set_uniform("t", 0);
+		state->graphics.fragment_shader.value().set_uniform("viewport_size", static_cast<float>(width), static_cast<float>(height));
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	}
 
 	draw_gui(state);
 

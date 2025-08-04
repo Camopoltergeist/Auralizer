@@ -194,6 +194,21 @@ void draw_gui(AppState* app_state) {
 		ImGui::SeparatorText("Analyzer");
 		ImGui::DragFloatRange2("dB range", &app_state->analyser.min_db, &app_state->analyser.max_db, 0.1f, -120.f, 0.f, "Min: %.1f dB", "Max: %.1f dB");
 
+		ImGui::SeparatorText("Shader");
+
+		if(app_state->graphics.fragment_shader.has_value()) {
+			ImGui::Text(app_state->fragment_shader_file_path.c_str());
+		}
+		else {
+			ImGui::Text("No shader loaded");
+		}
+
+		ImGui::SameLine();
+
+		if(ImGui::Button("Reload Shader")) {
+			app_state->graphics.load_shader(app_state->fragment_shader_file_path);
+		}
+
 		ImGui::End();
 	}
 	

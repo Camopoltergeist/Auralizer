@@ -18,8 +18,8 @@ Graphics::Graphics(
 	GLBuffer vertex_buffer,
 	GLBuffer index_buffer,
 	Shader vertex_shader,
-	Shader fragment_shader,
-	Pipeline pipeline,
+	std::optional<Shader> fragment_shader,
+	std::optional<Pipeline> pipeline,
 	Texture texture,
 	Sampler sampler
 ) :
@@ -47,6 +47,30 @@ std::optional<std::string> load_text_file(const std::string& file_path)
 	sstream << file.rdbuf();
 
 	return std::make_optional<std::string>(sstream.str());
+}
+
+void Graphics::load_shader(const std::string& file_path)
+{
+	const auto fragment_source_opt = load_text_file(file_path);
+
+	if(!fragment_source_opt.has_value()) {
+		return;
+	}
+
+	auto shader_opt = Shader::create(GL_FRAGMENT_SHADER, fragment_source_opt.value());
+
+	if(!shader_opt.has_value()) {
+		return;
+	}
+
+	auto pipeline_opt = Pipeline::create(vertex_shader, shader_opt.value());
+
+	if(!pipeline_opt.has_value()) {
+		return;
+	}
+
+	fragment_shader = std::move(shader_opt.value());
+	pipeline = std::move(pipeline_opt.value());
 }
 
 std::optional<Graphics> Graphics::init()
@@ -97,25 +121,16 @@ std::optional<Graphics> Graphics::init()
 	vertex_array.bind_element_buffer(index_buffer_opt.value());
 
 	auto vertex_opt = load_text_file("./shaders/vertex.glsl");
-	auto fragment_opt = load_text_file("./shaders/fragment.glsl");
 
-	if (!vertex_opt.has_value() || !fragment_opt.has_value()) {
+	if (!vertex_opt.has_value()) {
 		return std::nullopt;
 	}
 
 	const std::string& vertex_source = vertex_opt.value();
-	const std::string& fragment_source = fragment_opt.value();
 
 	auto vertex_shader_opt = Shader::create(GL_VERTEX_SHADER, vertex_source);
-	auto fragment_shader_opt = Shader::create(GL_FRAGMENT_SHADER, fragment_source);
 
-	if (!vertex_shader_opt.has_value() || !fragment_shader_opt.has_value()) {
-		return std::nullopt;
-	}
-
-	auto pipeline_opt = Pipeline::create(vertex_shader_opt.value(), fragment_shader_opt.value());
-
-	if (!pipeline_opt.has_value()) {
+	if (!vertex_shader_opt.has_value()) {
 		return std::nullopt;
 	}
 
@@ -139,8 +154,8 @@ std::optional<Graphics> Graphics::init()
 		std::move(vertex_buffer),
 		std::move(index_buffer_opt.value()),
 		std::move(vertex_shader_opt.value()),
-		std::move(fragment_shader_opt.value()),
-		std::move(pipeline_opt.value()),
+		std::nullopt,
+		std::nullopt,
 		std::move(texture_opt.value()),
 		std::move(sampler_opt.value())
 	);

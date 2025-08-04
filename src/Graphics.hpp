@@ -16,8 +16,8 @@ public:
 	GLBuffer vertex_buffer;
 	GLBuffer index_buffer;
 	Shader vertex_shader;
-	Shader fragment_shader;
-	Pipeline pipeline;
+	std::optional<Shader> fragment_shader;
+	std::optional<Pipeline> pipeline;
 	Texture texture;
 	Sampler sampler;
 
@@ -28,11 +28,13 @@ public:
 		GLBuffer vertex_buffer,
 		GLBuffer index_buffer,
 		Shader vertex_shader,
-		Shader fragment_shader,
-		Pipeline pipeline,
+		std::optional<Shader> fragment_shader,
+		std::optional<Pipeline> pipeline,
 		Texture texture,
 		Sampler sampler
 	);
+
+	void load_shader(const std::string& file_path);
 
 	static std::optional<Graphics> init();
 
