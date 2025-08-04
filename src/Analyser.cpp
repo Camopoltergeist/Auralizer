@@ -70,7 +70,7 @@ const std::vector<float>& Analyser::get_fft_data()
 		const float mag = std::sqrt(fft_out_buffer[i].a * fft_out_buffer[i].a + fft_out_buffer[i].b * fft_out_buffer[i].b);
 		const float db = 20.f * std::log10(mag / max_mag + 0.000001f);
 
-		mag_buffer[i] = std::clamp((db - min_db) / (max_db - min_db), 0.f, 1.f);
+		mag_buffer[i] = std::clamp((db - min_db) / (max_db - min_db), -1.f, 1.f);
 	}
 
 	return mag_buffer;
