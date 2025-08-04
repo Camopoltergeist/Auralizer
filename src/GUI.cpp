@@ -81,6 +81,8 @@ void audio_file_mode(AppState* app_state, const bool mode_changed)
 		if(app_state->is_playing) {
 			ma_sound_start(app_state->sound);
 		}
+
+		app_state->capture_device = nullptr;
 	}
 
 	if (app_state->is_audio_file_selected) {
@@ -145,6 +147,16 @@ void microphone_mode(AppState* app_state, const bool mode_changed)
 	}
 
 	bool changed = ImGui::Combo("Select device", &app_state->capture_device_selection, app_state->audio_context->get_capture_device_names().data(), static_cast<int>(app_state->audio_context->get_capture_device_names().size()));
+	ImGui::SameLine();
+
+	if(ImGui::Button("Refresh")) {
+		app_state->audio_context->update_device_list();
+	}
+	else if(changed || !app_state->capture_device) {
+		if(!app_state->audio_context->get_capture_devices().empty()) {
+			app_state->capture_device = CaptureDevice::create(*app_state->audio_context, app_state->audio_context->get_capture_devices().at(app_state->capture_device_selection).id);
+		}
+	}
 }
 
 void draw_gui(AppState* app_state) {
