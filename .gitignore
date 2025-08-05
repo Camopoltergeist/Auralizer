@@ -6,3 +6,12 @@
 /imgui.ini
 
 cmake-build-*
+
+.vs
+Auralizer.dir
+CMakeFiles
+*.vcxproj
+*.vcxproj.filters
+*.sln
+CMakeCache.txt
+cmake_install.cmake
