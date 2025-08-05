@@ -10,6 +10,14 @@ set(OGG_LIBRARY "${PROJECT_SOURCE_DIR}/libs/libogg-1.3.6")
 set(OGG_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/libogg-1.3.6/include")
 
 add_subdirectory("libs/libvorbis-1.3.7")
+
+set(OP_DISABLE_EXAMPLES "yes")
+set(OP_DISABLE_HTTP "yes")
+set(OP_DISABLE_DOCS "yes")
+
+add_subdirectory("libs/opus-1.5.2")
+add_subdirectory("libs/opusfile-main")
+
 add_subdirectory("libs/SDL/")
 add_subdirectory("libs/miniaudio")
 include_directories("libs/glad/" "libs/imgui" "libs/miniaudio" "libs/stb" "libs/fftw3/win32-x64" "libs/libvorbis-1.3.7/include" "libs/libogg-1.3.6/include")
@@ -74,4 +82,4 @@ add_executable(Auralizer src/main.cpp
         src/audio/AudioEngine.hpp
 )
 
-target_link_libraries(Auralizer SDL3-shared miniaudio miniaudio_libvorbis fftw3)
+target_link_libraries(Auralizer SDL3-shared miniaudio miniaudio_libvorbis miniaudio_libopus fftw3)

@@ -3,9 +3,11 @@
 
 #include <SDL3/SDL_log.h>
 #include "extras/decoders/libvorbis/miniaudio_libvorbis.h"
+#include "extras/decoders/libopus/miniaudio_libopus.h"
 
 static std::vector<ma_decoding_backend_vtable*> custom_backend_vtables = {
-	ma_decoding_backend_libvorbis
+	ma_decoding_backend_libvorbis,
+	ma_decoding_backend_libopus
 };
 
 AudioEngine::AudioEngine() = default;
