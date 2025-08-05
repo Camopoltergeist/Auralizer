@@ -93,7 +93,7 @@ void audio_file_mode(AppState* app_state, const bool mode_changed)
 	}
 
 	constexpr SDL_DialogFileFilter file_filters[] = {
-		{ "Audio files (*.wav, *.flac, *.mp3)", "wav;flac;mp3" }
+		{ "Audio files (*.wav, *.flac, *.mp3, *.ogg)", "wav;flac;mp3;ogg" }
 	};
 
 	if (ImGui::Button("Select Audio File")) {

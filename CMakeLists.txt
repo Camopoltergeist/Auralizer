@@ -4,9 +4,15 @@ project(Auralizer)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 
+add_subdirectory("libs/libogg-1.3.6")
+
+set(OGG_LIBRARY "${PROJECT_SOURCE_DIR}/libs/libogg-1.3.6")
+set(OGG_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/libogg-1.3.6/include")
+
+add_subdirectory("libs/libvorbis-1.3.7")
 add_subdirectory("libs/SDL/")
 add_subdirectory("libs/miniaudio")
-include_directories("libs/glad/" "libs/imgui" "libs/miniaudio" "libs/stb" "libs/fftw3/win32-x64")
+include_directories("libs/glad/" "libs/imgui" "libs/miniaudio" "libs/stb" "libs/fftw3/win32-x64" "libs/libvorbis-1.3.7/include" "libs/libogg-1.3.6/include")
 
 add_library(fftw3 SHARED IMPORTED)
 set_target_properties(fftw3 PROPERTIES
@@ -65,6 +71,7 @@ add_executable(Auralizer src/main.cpp
         src/audio/AudioContext.cpp
         src/audio/AudioContext.hpp
         src/audio/AudioEngine.cpp
-        src/audio/AudioEngine.hpp)
+        src/audio/AudioEngine.hpp
+)
 
-target_link_libraries(Auralizer SDL3-shared miniaudio fftw3)
+target_link_libraries(Auralizer SDL3-shared miniaudio miniaudio_libvorbis fftw3)

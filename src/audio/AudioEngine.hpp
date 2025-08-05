@@ -6,6 +6,7 @@
 
 class AudioEngine {
 	ma_engine engine{};
+	ma_resource_manager resource_manager{};
 
 public:
 	AudioEngine();
