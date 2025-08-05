@@ -22,7 +22,7 @@ void load_audio_file(AppState* app_state, const std::string& file_path) {
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 	const std::wstring wide_path = converter.from_bytes(file_path);
 
-	ma_result result = ma_sound_init_from_file_w(app_state->audio_engine->get_engine(), wide_path.c_str(), MA_SOUND_FLAG_NO_DEFAULT_ATTACHMENT | MA_SOUND_FLAG_DECODE, nullptr, nullptr, sound);
+	ma_result result = ma_sound_init_from_file_w(app_state->audio_engine->get_engine(), wide_path.c_str(), MA_SOUND_FLAG_NO_DEFAULT_ATTACHMENT | MA_SOUND_FLAG_DECODE | MA_SOUND_FLAG_NO_PITCH | MA_SOUND_FLAG_NO_SPATIALIZATION, nullptr, nullptr, sound);
 
 	if (result != MA_SUCCESS) {
 		SDL_Log("Failed to load %s", file_path.c_str());
