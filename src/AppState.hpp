@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <chrono>
 
 #include "miniaudio.h"
 #include "audio/AnalyserNode.hpp"

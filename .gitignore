@@ -12,7 +12,9 @@ Auralizer.dir
 CMakeFiles
 *.vcxproj
 *.vcxproj.filters
+*.vcxproj.user
 *.sln
 CMakeCache.txt
 cmake_install.cmake
 /Debug
+x64

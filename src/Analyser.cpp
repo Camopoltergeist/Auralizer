@@ -1,6 +1,7 @@
 #include "Analyser.hpp"
 #include <cmath>
 #include <algorithm>
+#include <numbers>
 
 void Analyser::initialize_hann_window()
 {
