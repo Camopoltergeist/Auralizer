@@ -86,6 +86,7 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 
 		state->graphics.fragment_shader.value().set_uniform("t", 0);
 		state->graphics.fragment_shader.value().set_uniform("viewport_size", static_cast<float>(width), static_cast<float>(height));
+		state->graphics.fragment_shader.value().set_uniform("fft_size", state->graphics.texture.get_width(), state->graphics.texture.get_height());
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 	}

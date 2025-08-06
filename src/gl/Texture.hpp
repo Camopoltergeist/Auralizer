@@ -30,5 +30,8 @@ public:
 	void generate_mipmap() const;
 
 	void bind(GLuint texture_unit) const;
+
+	[[nodiscard]] float get_width() const;
+	[[nodiscard]] float get_height() const;
 };
 

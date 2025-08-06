@@ -75,3 +75,13 @@ void Texture::bind(const GLuint texture_unit) const
 {
 	glBindTextureUnit(texture_unit, gl_name);
 }
+
+float Texture::get_width() const
+{
+	return static_cast<float>(width);
+}
+
+float Texture::get_height() const
+{
+	return static_cast<float>(height);
+}
