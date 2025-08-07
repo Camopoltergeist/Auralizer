@@ -14,7 +14,8 @@ static ma_node_vtable process_node_vtable = {
 };
 
 AnalyserNode::AnalyserNode(const size_t buffer_size) :
-	rolling_buffer(buffer_size)
+	left_channel_buffer(buffer_size),
+	right_channel_buffer(buffer_size)
 { }
 
 AnalyserNode::~AnalyserNode()
@@ -22,9 +23,14 @@ AnalyserNode::~AnalyserNode()
 	ma_node_uninit(&base, nullptr);
 }
 
-void AnalyserNode::copy_buffer(std::vector<float>& dest)
+void AnalyserNode::copy_left_channel_buffer(std::vector<float>& dest)
 {
-	rolling_buffer.copy_buffer(dest.data());
+	left_channel_buffer.copy_buffer(dest.data());
+}
+
+void AnalyserNode::copy_right_channel_buffer(std::vector<float>& dest)
+{
+	right_channel_buffer.copy_buffer(dest.data());
 }
 
 std::unique_ptr<AnalyserNode> AnalyserNode::create(ma_node_graph* node_graph, const size_t buffer_size, const ma_uint32 channel_count)
@@ -54,5 +60,6 @@ void AnalyserNode::process_node(ma_node* node, const float** frames_in, ma_uint3
 
 	auto* analysis_node = static_cast<AnalyserNode*>(node);
 
-	analysis_node->rolling_buffer.write_interleaved(frames_in_0, *frame_count_in, false);
+	analysis_node->left_channel_buffer.write_interleaved(frames_in_0, static_cast<int>(*frame_count_in), false);
+	analysis_node->right_channel_buffer.write_interleaved(frames_in_0, static_cast<int>(*frame_count_in), true);
 }

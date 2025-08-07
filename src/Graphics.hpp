@@ -36,7 +36,7 @@ public:
 
 	bool load_shader(const std::string& file_path);
 
-	static std::optional<Graphics> init();
+	static std::optional<Graphics> init(size_t buffer_size);
 
 	Graphics& operator=(Graphics&& other) noexcept;
 

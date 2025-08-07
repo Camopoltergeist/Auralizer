@@ -69,7 +69,7 @@ bool init_audio(AppState* app_state) {
 	app_state->audio_engine = std::move(audio_engine);
 	app_state->audio_engine->set_volume(app_state->audio_volume);
 
-	auto analysis_node = AnalyserNode::create(app_state->audio_engine->get_node_graph(), 2048, 2);
+	auto analysis_node = AnalyserNode::create(app_state->audio_engine->get_node_graph(), app_state->audio_buffer_size, 2);
 
 	if (!analysis_node) {
 		return false;

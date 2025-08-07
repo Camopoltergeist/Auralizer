@@ -75,7 +75,7 @@ bool Graphics::load_shader(const std::string& file_path)
 	return true;
 }
 
-std::optional<Graphics> Graphics::init()
+std::optional<Graphics> Graphics::init(size_t buffer_size)
 {
 	auto vertex_array_opt = VertexArray::create();
 
@@ -145,7 +145,7 @@ std::optional<Graphics> Graphics::init()
 	sampler_opt.value().set_min_filtering(GL_LINEAR_MIPMAP_LINEAR);
 	sampler_opt.value().set_wrapping(GL_CLAMP_TO_EDGE);
 
-	auto texture_opt = Texture::create(1024, 1, GL_R32F);
+	auto texture_opt = Texture::create(static_cast<int>(buffer_size) / 2 + 1 , 2, GL_R32F);
 
 	if (!texture_opt.has_value()) {
 		return std::nullopt;

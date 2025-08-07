@@ -154,7 +154,7 @@ void microphone_mode(AppState* app_state, const bool mode_changed)
 	}
 	else if(changed || !app_state->capture_device) {
 		if(!app_state->audio_context->get_capture_devices().empty()) {
-			app_state->capture_device = CaptureDevice::create(*app_state->audio_context, app_state->audio_context->get_capture_devices().at(app_state->capture_device_selection).id);
+			app_state->capture_device = CaptureDevice::create(app_state->audio_buffer_size, *app_state->audio_context, app_state->audio_context->get_capture_devices().at(app_state->capture_device_selection).id);
 		}
 	}
 }

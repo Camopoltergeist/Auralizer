@@ -9,7 +9,8 @@
 class AnalyserNode {
 private:
 	ma_node_base base{};
-	RollingBuffer rolling_buffer;
+	RollingBuffer left_channel_buffer;
+	RollingBuffer right_channel_buffer;
 
 public:
 	explicit AnalyserNode(size_t buffer_size);
@@ -17,7 +18,8 @@ public:
 	AnalyserNode(AnalyserNode&&) = delete;
 	~AnalyserNode();
 
-	void copy_buffer(std::vector<float>& dest);
+	void copy_left_channel_buffer(std::vector<float>& dest);
+	void copy_right_channel_buffer(std::vector<float>& dest);
 
 	static std::unique_ptr<AnalyserNode> create(ma_node_graph* node_graph, size_t buffer_size, ma_uint32 channel_count);
 

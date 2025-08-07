@@ -1,6 +1,6 @@
 #include "AppState.hpp"
 
-AppState::AppState() : analyser(2048) {
+AppState::AppState() : analyser(AUDIO_BUFFER_SIZE) {
 	is_audio_file_selected = false;
 	audio_file_path = "";
 	audio_volume = 0.5f;
@@ -16,6 +16,7 @@ AppState::AppState() : analyser(2048) {
 	last_frame_time = std::chrono::duration<float>::zero();
 	fragment_shader_file_path = "./shaders/fragment.glsl";
 	shader_reload_failure = false;
+	audio_buffer_size = AUDIO_BUFFER_SIZE;
 }
 
 AppState::~AppState() {

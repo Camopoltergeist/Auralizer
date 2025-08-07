@@ -33,7 +33,7 @@ SDL_AppResult SDL_AppInit(void** app_state, int argc, char** argv) {
 
 	new_state->main_window = std::move(main_window.value());
 
-	auto graphics = Graphics::init();
+	auto graphics = Graphics::init(new_state->audio_buffer_size);
 
 	if (!graphics.has_value()) {
 		return SDL_APP_FAILURE;
@@ -60,17 +60,30 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	state->last_frame = now;
 
 	if(state->audio_mode == AudioMode::AudioFile) {
-		state->analysis_node->copy_buffer(state->analyser.in_buffer());
+		state->analysis_node->copy_left_channel_buffer(state->analyser.in_buffer());
+
+		auto& left_fft_data = state->analyser.get_fft_data();
+		state->graphics.texture.upload_texture_sub_image(0, 0, static_cast<int>(left_fft_data.size()), 1, GL_RED, GL_FLOAT, left_fft_data.data());
+
+		state->analysis_node->copy_right_channel_buffer(state->analyser.in_buffer());
+
+		auto& right_fft_data = state->analyser.get_fft_data();
+		state->graphics.texture.upload_texture_sub_image(0, 1, static_cast<int>(right_fft_data.size()), 1, GL_RED, GL_FLOAT, right_fft_data.data());
 	}
 	else if (state->audio_mode == AudioMode::Microphone) {
 		if(state->capture_device) {
-			state->capture_device->copy_buffer(state->analyser.in_buffer());
+			state->capture_device->copy_left_channel_buffer(state->analyser.in_buffer());
+
+			auto& left_fft_data = state->analyser.get_fft_data();
+			state->graphics.texture.upload_texture_sub_image(0, 0, static_cast<int>(left_fft_data.size()), 1, GL_RED, GL_FLOAT, left_fft_data.data());
+
+			state->capture_device->copy_right_channel_buffer(state->analyser.in_buffer());
+
+			auto& right_fft_data = state->analyser.get_fft_data();
+			state->graphics.texture.upload_texture_sub_image(0, 1, static_cast<int>(right_fft_data.size()), 1, GL_RED, GL_FLOAT, right_fft_data.data());
 		}
 	}
 
-	auto& fft_data = state->analyser.get_fft_data();
-
-	state->graphics.texture.upload_texture(GL_RED, GL_FLOAT, fft_data.data());
 	state->graphics.texture.generate_mipmap();
 
 	auto [width, height] = state->main_window.get_window_size();

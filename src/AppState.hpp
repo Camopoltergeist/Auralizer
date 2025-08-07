@@ -11,6 +11,8 @@
 #include "audio/AudioEngine.hpp"
 #include "audio/CaptureDevice.hpp"
 
+constexpr size_t AUDIO_BUFFER_SIZE = 2048;
+
 enum class AudioMode : int {
 	AudioFile,
 	Microphone
@@ -42,6 +44,8 @@ struct AppState {
 	std::string audio_file_name;
 
 	bool is_imgui_window_open;
+
+	size_t audio_buffer_size;
 
 	AppState();
 
