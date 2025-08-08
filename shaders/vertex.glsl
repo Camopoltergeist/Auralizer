@@ -10,9 +10,9 @@ out gl_PerVertex
   float gl_ClipDistance[];
 };
 
-out vec2 v_uv;
+out vec2 v_screen_uv;
 
 void main() {
 	gl_Position = vec4(pos, 0.0, 1.0);
-	v_uv = uv;
+	v_screen_uv = uv;
 }
