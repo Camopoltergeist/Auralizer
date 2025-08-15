@@ -60,6 +60,8 @@ Window::Window(Window&& other) noexcept : window(nullptr), gl_context(nullptr)
 {
 	window = other.window;
 	gl_context = other.gl_context;
+	is_fullscreen = other.is_fullscreen;
+	restore_rectangle = other.restore_rectangle;
 
 	other.window = nullptr;
 	other.gl_context = nullptr;
@@ -75,6 +77,8 @@ Window& Window::operator=(Window&& other) noexcept
 
 	window = other.window;
 	gl_context = other.gl_context;
+	is_fullscreen = other.is_fullscreen;
+	restore_rectangle = other.restore_rectangle;
 
 	other.window = nullptr;
 	other.gl_context = nullptr;
@@ -135,4 +139,41 @@ WindowSize Window::get_window_size() const
 void Window::swap_window() const
 {
 	SDL_GL_SwapWindow(window);
+}
+
+void Window::set_fullscreen()
+{
+	const SDL_DisplayID current_display = SDL_GetDisplayForWindow(window);
+	SDL_Rect display_bounds{};
+
+	SDL_Rect window_rect{};
+
+	SDL_GetWindowPosition(window, &window_rect.x, &window_rect.y);
+	SDL_GetWindowSize(window, &window_rect.w, &window_rect.h);
+
+	SDL_GetDisplayBounds(current_display, &display_bounds);
+
+	SDL_SetWindowBordered(window, false);
+	SDL_SetWindowPosition(window, display_bounds.x, display_bounds.y);
+	// The + 1 prevents the window from going into exclusive fullscreen mode on the next SDL_GL_SwapWindow call
+	// https://github.com/libsdl-org/SDL/issues/12791
+	// https://github.com/dosbox-staging/dosbox-staging/pull/4415
+	SDL_SetWindowSize(window, display_bounds.w, display_bounds.h + 1);
+
+	is_fullscreen = true;
+	restore_rectangle = window_rect;
+}
+
+void Window::set_windowed()
+{
+	SDL_SetWindowBordered(window, true);
+	SDL_SetWindowPosition(window, restore_rectangle.x, restore_rectangle.y);
+	SDL_SetWindowSize(window, restore_rectangle.w, restore_rectangle.h);
+
+	is_fullscreen = false;
+}
+
+bool Window::get_fullscreen() const
+{
+	return is_fullscreen;
 }

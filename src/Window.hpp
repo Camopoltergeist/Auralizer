@@ -12,6 +12,8 @@ struct WindowSize {
 class Window {
 	SDL_Window* window = nullptr;
 	SDL_GLContext gl_context = nullptr;
+	SDL_Rect restore_rectangle{};
+	bool is_fullscreen = false;
 
 	Window(SDL_Window* window, SDL_GLContext gl_context);
 
@@ -34,4 +36,9 @@ public:
 	[[nodiscard]] WindowSize get_window_size() const;
 
 	void swap_window() const;
+
+	void set_fullscreen();
+	void set_windowed();
+
+	[[nodiscard]] bool get_fullscreen() const;
 };

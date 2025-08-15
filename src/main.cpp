@@ -132,13 +132,18 @@ SDL_AppResult SDL_AppEvent(void* app_state, SDL_Event* event) {
 
 		case SDL_EVENT_KEY_DOWN: {
 			switch (event->key.key) {
+				case SDLK_F5: {
+					state->reload_shader();
+					break;
+				}
+
 				case SDLK_F10: {
 					state->is_imgui_window_open = !state->is_imgui_window_open;
 					break;
 				}
 
-				case SDLK_F5: {
-					state->reload_shader();
+				case SDLK_F11: {
+					state->main_window.get_fullscreen() ? state->main_window.set_windowed() : state->main_window.set_fullscreen();
 					break;
 				}
 
