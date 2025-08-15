@@ -13,6 +13,7 @@ class Window {
 	SDL_Window* window = nullptr;
 	SDL_GLContext gl_context = nullptr;
 	SDL_Rect restore_rectangle{};
+	bool restore_maximized = false;
 	bool is_fullscreen = false;
 
 	Window(SDL_Window* window, SDL_GLContext gl_context);

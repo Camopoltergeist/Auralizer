@@ -2,7 +2,14 @@
 
 static bool is_opengl_loaded = false;
 
-Window::Window(SDL_Window* window, SDL_GLContext gl_context) : window(window), gl_context(gl_context) { }
+Window::Window(SDL_Window* window, SDL_GLContext gl_context) : window(window), gl_context(gl_context)
+{
+	SDL_Rect window_rect{};
+	SDL_GetWindowPosition(window, &window_rect.x, &window_rect.y);
+	SDL_GetWindowSize(window, &window_rect.w, &window_rect.h);
+
+	restore_rectangle = window_rect;
+}
 
 std::optional<SDL_GLContext> Window::create_context(SDL_Window* window)
 {
@@ -62,6 +69,7 @@ Window::Window(Window&& other) noexcept : window(nullptr), gl_context(nullptr)
 	gl_context = other.gl_context;
 	is_fullscreen = other.is_fullscreen;
 	restore_rectangle = other.restore_rectangle;
+	restore_maximized = other.restore_maximized;
 
 	other.window = nullptr;
 	other.gl_context = nullptr;
@@ -79,6 +87,7 @@ Window& Window::operator=(Window&& other) noexcept
 	gl_context = other.gl_context;
 	is_fullscreen = other.is_fullscreen;
 	restore_rectangle = other.restore_rectangle;
+	restore_maximized = other.restore_maximized;
 
 	other.window = nullptr;
 	other.gl_context = nullptr;
@@ -146,13 +155,20 @@ void Window::set_fullscreen()
 	const SDL_DisplayID current_display = SDL_GetDisplayForWindow(window);
 	SDL_Rect display_bounds{};
 
-	SDL_Rect window_rect{};
+	const bool is_maximized = SDL_GetWindowFlags(window) & SDL_WINDOW_MAXIMIZED;
 
-	SDL_GetWindowPosition(window, &window_rect.x, &window_rect.y);
-	SDL_GetWindowSize(window, &window_rect.w, &window_rect.h);
+	if(!is_maximized) {
+		SDL_Rect window_rect{};
+		SDL_GetWindowPosition(window, &window_rect.x, &window_rect.y);
+		SDL_GetWindowSize(window, &window_rect.w, &window_rect.h);
+
+		restore_rectangle = window_rect;
+	}
 
 	SDL_GetDisplayBounds(current_display, &display_bounds);
 
+	SDL_RestoreWindow(window);
+	SDL_SetWindowResizable(window, false);
 	SDL_SetWindowBordered(window, false);
 	SDL_SetWindowPosition(window, display_bounds.x, display_bounds.y);
 	// The + 1 prevents the window from going into exclusive fullscreen mode on the next SDL_GL_SwapWindow call
@@ -161,14 +177,19 @@ void Window::set_fullscreen()
 	SDL_SetWindowSize(window, display_bounds.w, display_bounds.h + 1);
 
 	is_fullscreen = true;
-	restore_rectangle = window_rect;
+	restore_maximized = is_maximized;
 }
 
 void Window::set_windowed()
 {
+	SDL_SetWindowResizable(window, true);
 	SDL_SetWindowBordered(window, true);
 	SDL_SetWindowPosition(window, restore_rectangle.x, restore_rectangle.y);
 	SDL_SetWindowSize(window, restore_rectangle.w, restore_rectangle.h);
+
+	if(restore_maximized) {
+		SDL_MaximizeWindow(window);
+	}
 
 	is_fullscreen = false;
 }
