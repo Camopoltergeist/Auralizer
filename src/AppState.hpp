@@ -38,6 +38,7 @@ struct AppState {
 	Graphics graphics;
 	std::string fragment_shader_file_path;
 	bool shader_reload_failure;
+	bool reload_pending;
 
 	bool is_audio_file_selected;
 	std::string audio_file_path;

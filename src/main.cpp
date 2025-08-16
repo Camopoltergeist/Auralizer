@@ -59,6 +59,10 @@ SDL_AppResult SDL_AppIterate(void* app_state) {
 	state->last_frame_time = now - state->last_frame;
 	state->last_frame = now;
 
+	if(state->reload_pending) {
+		state->reload_shader();
+	}
+
 	if(state->audio_mode == AudioMode::AudioFile) {
 		state->analysis_node->copy_left_channel_buffer(state->analyser.in_buffer());
 

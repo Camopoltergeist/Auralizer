@@ -17,6 +17,7 @@ AppState::AppState() : analyser(AUDIO_BUFFER_SIZE) {
 	fragment_shader_file_path = "./shaders/fragment.glsl";
 	shader_reload_failure = false;
 	audio_buffer_size = AUDIO_BUFFER_SIZE;
+	reload_pending = false;
 }
 
 AppState::~AppState() {
@@ -28,4 +29,5 @@ AppState::~AppState() {
 void AppState::reload_shader()
 {
 	shader_reload_failure = !graphics.load_shader(fragment_shader_file_path);
+	reload_pending = false;
 }

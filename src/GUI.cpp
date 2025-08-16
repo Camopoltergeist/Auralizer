@@ -48,7 +48,7 @@ void load_audio_file(AppState* app_state, const std::string& file_path) {
 	app_state->is_playing = true;
 }
 
-void file_dialog_callback(void* userdata, const char* const* file_list, int filter) {
+void audio_file_dialog_callback(void* userdata, const char* const* file_list, int filter) {
 	auto* state = static_cast<AppState*>(userdata);
 
 	if (file_list == nullptr || *file_list == nullptr) {
@@ -56,6 +56,18 @@ void file_dialog_callback(void* userdata, const char* const* file_list, int filt
 	}
 
 	load_audio_file(state, *file_list);
+}
+
+void shader_file_dialog_callback(void* userdata, const char* const* file_list, int filter)
+{
+	auto* state = static_cast<AppState*>(userdata);
+
+	if (file_list == nullptr || *file_list == nullptr) {
+		return;
+	}
+
+	state->fragment_shader_file_path = *file_list;
+	state->reload_pending = true;
 }
 
 void generate_time_text(std::stringstream& time_stream, float cursor_pos, float sound_length) {
@@ -97,7 +109,7 @@ void audio_file_mode(AppState* app_state, const bool mode_changed)
 	};
 
 	if (ImGui::Button("Select Audio File")) {
-		SDL_ShowOpenFileDialog(file_dialog_callback, app_state, app_state->main_window.get_window_ptr(), file_filters, 1, nullptr, false);
+		SDL_ShowOpenFileDialog(audio_file_dialog_callback, app_state, app_state->main_window.get_window_ptr(), file_filters, 1, nullptr, false);
 	}
 
 	float sound_length = 0.00001f;
@@ -207,6 +219,14 @@ void draw_gui(AppState* app_state) {
 
 		if(ImGui::Button("Reload Shader (F5)")) {
 			app_state->reload_shader();
+		}
+
+		constexpr SDL_DialogFileFilter shader_file_filters[] = {
+			{ "Fragment shader files (*.glsl, *.fragment)", "glsl;fragment" }
+		};
+
+		if(ImGui::Button("Select Shader")) {
+			SDL_ShowOpenFileDialog(shader_file_dialog_callback, app_state, app_state->main_window.get_window_ptr(), shader_file_filters, 1, "./shaders", false);
 		}
 
 		if(app_state->shader_reload_failure) {
