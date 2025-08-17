@@ -1,0 +1,26 @@
+#extension GL_ARB_gpu_shader_int64 : enable
+
+const int FIXED_SHIFT = 16;
+const int FIXED_ONE = 1 << FIXED_SHIFT;
+
+int to_fixed(float f) {
+    return int(f * float(FIXED_ONE));
+}
+
+float to_float(int f) {
+    return float(f) / float(FIXED_ONE);
+}
+
+int fixed_mult(int a, int b) {
+    int64_t temp = int64_t(a) * int64_t(b);
+    return int(temp >> FIXED_SHIFT);
+}
+
+int fixed_div(int a, int b) {
+    int64_t temp = int64_t(a) << FIXED_SHIFT;
+    return int(temp / int64_t(b));
+}
+
+int fixed_floor(int a) {
+    return a & 0xFFFF0000;
+}
