@@ -3,7 +3,7 @@
 /Auralizer.exe
 /test.png
 /test.wav
-/imgui.ini
+imgui.ini
 
 cmake-build-*
 
