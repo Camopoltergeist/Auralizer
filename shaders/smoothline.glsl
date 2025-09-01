@@ -24,7 +24,15 @@ float get_sampling_uv_x_from_index(float bar_index, float bar_count) {
 float sample_index(float bar_index, float bar_count, float uv_y) {
     float uv_x = get_sampling_uv_x_from_index(bar_index, bar_count);
 
-    return textureLod(t, vec2(uv_x, uv_y), 0.0).r;
+    float base = pow(1.0 / (2.0 / fft_size.x), 1.0);
+    float dlogdu = uv_x * log(base);
+
+    float dudx = dFdx(v_screen_uv.x), dudy = dFdy(v_screen_uv.x);
+    vec2 gradX = vec2(dlogdu * dudx, 0.0);
+    vec2 gradY = vec2(dlogdu * dudy, 0.0);
+
+//    return textureLod(t, vec2(uv_x, uv_y), 0.0).r;
+    return textureGrad(t, vec2(uv_x, uv_y), gradX, gradY).r;
 }
 
 float get_relative_position_on_bar(float bar_index, float bar_count, float screen_uv_x) {
@@ -99,8 +107,8 @@ void main() {
     const vec4 right_color_high = vec4(0.0, 1.0, 0.5, 1.0);
 
     const vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
-    const float bar_count = 100.0;
-    const float thickness = 20.0;
+    const float bar_count = 500.0;
+    const float thickness = 10.0;
     const float half_thickness = thickness / 2.0;
 
     float bar_index = floor(bar_count * v_screen_uv.x);

@@ -11,7 +11,7 @@
 #include "audio/AudioEngine.hpp"
 #include "audio/CaptureDevice.hpp"
 
-constexpr size_t AUDIO_BUFFER_SIZE = 2048;
+constexpr size_t AUDIO_BUFFER_SIZE = 4096;
 
 enum class AudioMode : int {
 	AudioFile,
